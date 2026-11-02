@@ -1,0 +1,3160 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GYM GUIDE</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#05090c">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GYM GUIDE">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>
+/* نفس القاعدة الأساسية اللي تحطها منصة Claude حول الصفحة، عشان يطلع الشكل مطابقًا */
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; font: 14px system-ui, -apple-system, "Segoe UI", sans-serif; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* التصميم: تطبيق جوال بعمود واحد، شريط علوي ثابت فيه ثلاث تبويبات (الدليل، تماريني، السجل).
+   الخطوط: Cairo للعناوين وIBM Plex Sans Arabic للنص. اللون الأساسي أخضر مزرق (فولاذ)، وألوان الحالة منفصلة عنه. */
+:root {
+  --bg:#05090c; --surface:rgba(12,17,21,.64); --surface-2:rgba(255,255,255,.08); --fg:#ffffff; --muted:rgba(255,255,255,.70); --line:rgba(255,255,255,.15);
+  --accent:#3fd8cc; --accent-fg:#03211f; --accent-soft:rgba(63,216,204,.18);
+  --ok:#62e3a0; --ok-soft:rgba(98,227,160,.16); --warn:#f3c969; --warn-soft:rgba(243,201,105,.16); --bad:#ff948a; --bad-soft:rgba(255,148,138,.16);
+  --font-display:'Cairo','Geeza Pro','Segoe UI',Tahoma,sans-serif;
+  --font-body:'IBM Plex Sans Arabic','Geeza Pro','Segoe UI',Tahoma,sans-serif;
+  --radius:12px;
+  color-scheme: dark; /* الثيم الشخصي داكن فقط */
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 40px; -webkit-text-size-adjust: 100%;
+}
+body::before { content:""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+#app { max-width: 640px; margin: 0 auto; }
+h1,h2,h3 { font-family: var(--font-display); line-height: 1.35; margin: 0; text-wrap: balance; }
+.ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+button, select { font-family: inherit; }
+
+/* الشريط العلوي */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding-top: 12px; border-bottom: 1px solid var(--line); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.brand h1 { font-size: 22px; letter-spacing: .06em; font-weight: 800; }
+.brand .ver { font-size: 12px; color: var(--muted); }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 10px; }
+.tab { appearance: none; border: 0; background: transparent; color: var(--muted); font-size: 15px; font-weight: 600; padding: 10px 4px 12px; border-bottom: 3px solid transparent; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; min-height: 44px; }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.badge { background: var(--accent); color: var(--accent-fg); border-radius: 99px; font-size: 12px; min-width: 20px; height: 20px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+.tab:focus-visible, .btn:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+main { padding-top: 16px; display: flex; flex-direction: column; gap: 16px; }
+section[hidden] { display: none; }
+
+.notice { background: var(--warn-soft); color: var(--warn); border-radius: var(--radius); padding: 10px 14px; font-size: 14px; }
+.notice.bad { background: var(--bad-soft); color: var(--bad); }
+.notice.ok { background: var(--ok-soft); color: var(--ok); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+
+/* القوائم */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field + .field { margin-top: 12px; }
+.field label { font-size: 14px; font-weight: 600; color: var(--muted); }
+.field label .n { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--surface-2); color: var(--fg); font-size: 12px; align-items: center; justify-content: center; margin-inline-end: 6px; font-variant-numeric: tabular-nums; }
+select { width: 100%; min-height: 48px; font-size: 16px; color: var(--fg); background-color: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+select:disabled { opacity: .55; background-color: var(--surface-2); }
+.hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+/* مشاهدة الجهاز */
+.detail { display: flex; flex-direction: column; gap: 16px; }
+.detail > h2 { font-size: 20px; }
+.names h3 { font-size: 22px; }
+.names .en { color: var(--muted); font-size: 15px; }
+.imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.imgbox { margin: 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.imgbox img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; border-radius: 10px; background: #fff; display: block; }
+.imgbox figcaption { font-size: 12px; color: var(--muted); text-align: center; }
+.noimg { grid-column: 1 / -1; aspect-ratio: 16 / 7; background: var(--surface-2); border: 1.5px dashed var(--line); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--muted); padding: 12px; gap: 2px; }
+.noimg strong { color: var(--fg); font-family: var(--font-display); }
+.imgnote { font-size: 12px; color: var(--muted); margin: 0; }
+.imgnote a { color: #8ff3ea; text-underline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--surface-2); border-radius: 99px; padding: 2px 12px; font-size: 14px; }
+.chip.main { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.row-label { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 6px; }
+.block h4 { font-family: var(--font-display); font-size: 16px; margin: 0 0 6px; }
+.block p { margin: 0; }
+.steps { margin: 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 6px; }
+.mist { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.mist li { background: var(--surface-2); border-radius: 10px; padding: 8px 12px; }
+.mist .m { color: var(--bad); font-weight: 600; display: block; }
+.mist .f { display: block; }
+.video { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.video .t { font-weight: 600; }
+.video .meta { font-size: 13px; color: var(--muted); }
+.video .small { font-size: 13px; color: var(--muted); margin: 0; }
+
+.btn { appearance: none; border: 0; border-radius: 10px; min-height: 48px; padding: 10px 16px; font-size: 16px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.btn.primary { background: var(--accent); color: var(--accent-fg); }
+.btn.second { background: var(--surface-2); color: var(--fg); }
+.btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+.btn.danger { background: var(--bad); color: #fff; }
+.btn.full { width: 100%; }
+.btn[disabled] { opacity: .55; cursor: default; }
+.btn.ok { background: var(--ok-soft); color: var(--ok); }
+
+/* قائمة تماريني */
+.listhead { display: flex; flex-direction: column; gap: 10px; }
+.listhead .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.listhead h2 { font-size: 20px; }
+.status { font-size: 13px; color: var(--muted); }
+.status.err { color: var(--bad); font-weight: 600; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.item.done { border-color: var(--ok); }
+.item .hd { display: flex; align-items: flex-start; gap: 10px; }
+.tick { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 17px; margin-top: 2px; }
+.item.done .tick { border-color: var(--ok); background: var(--ok-soft); }
+.item .nm { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 1.4; }
+.item .sub { font-size: 13px; color: var(--muted); }
+.sets { display: flex; flex-direction: column; gap: 10px; }
+.setrow { display: grid; grid-template-columns: 70px 1fr 1fr; gap: 8px; align-items: end; }
+.setrow .lab { font-weight: 600; padding-bottom: 12px; font-size: 14px; }
+.setrow .field label { font-size: 12px; }
+.setrow select { min-height: 44px; padding-inline: 8px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.actions .btn { flex: 1 1 140px; }
+.empty { text-align: center; color: var(--muted); padding: 28px 12px; }
+.empty strong { display: block; color: var(--fg); font-family: var(--font-display); font-size: 18px; margin-bottom: 4px; }
+.confirm { background: var(--warn-soft); border: 1.5px solid var(--warn); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.confirm p { margin: 0; color: var(--fg); }
+
+/* السجل */
+.rec { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.rec > summary { list-style: none; cursor: pointer; padding: 14px; display: flex; flex-direction: column; gap: 2px; min-height: 48px; }
+.rec > summary::-webkit-details-marker { display: none; }
+.rec .d { font-family: var(--font-display); font-weight: 700; font-size: 17px; }
+.rec .s { font-size: 13px; color: var(--muted); }
+.rec .body { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+.rec .ex .n { font-weight: 600; }
+.rec .ex ul { margin: 4px 0 0; padding-inline-start: 20px; font-variant-numeric: tabular-nums; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 99px; font-size: 15px; z-index: 40; max-width: calc(100% - 32px); text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+@media (prefers-reduced-motion: no-preference) { .toast { animation: pop .18s ease-out; } @keyframes pop { from { opacity: 0; transform: translate(-50%, 8px); } } }
+
+/* ===== ثيم Dark Glass (الهوية البصرية الشخصية) =====
+   الخلفية: عنصر .bg وملف img/hero.jpg. في النسخة العامة تُستبدل الصورة بتدرّج عام (انظر tools/build_page.py --public). */
+body { background: transparent; }
+body::before { background: transparent; }
+.bg { position: fixed; inset: 0; z-index: -1; background: #05090c url(img/hero.jpg) no-repeat 47% -70px / auto 109%; }
+.bg::after { content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(4,8,11,.40) 0%, rgba(4,8,11,.10) 24%, rgba(4,8,11,.10) 48%, rgba(4,8,11,.58) 68%, rgba(4,8,11,.82) 100%),
+    linear-gradient(to right, rgba(4,8,11,.55) 0%, rgba(4,8,11,0) 52%); }
+.top { padding-top: 16px; direction: ltr; text-align: left; }
+.top h1 { font-size: 26px; font-weight: 800; letter-spacing: .08em; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,.5); line-height: 1.15; }
+.top .tag { font-family: var(--font-display); font-weight: 600; font-size: 14px; direction: rtl; display: inline-block; color: #8ff3ea; margin-top: 2px; }
+.bar { top: calc(env(safe-area-inset-top, 0px) + 8px); margin: 10px 0 0; padding: 4px; border: 1px solid var(--line); border-radius: 16px; background: rgba(8,12,16,.80); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); }
+.tabs { margin-top: 0; gap: 4px; }
+.tab { padding: 8px 4px; min-height: 40px; border-bottom: 0; border-radius: 12px; font-size: 14.5px; color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--accent-soft); color: #8ff3ea; box-shadow: inset 0 0 0 1px rgba(63,216,204,.45); }
+.spacer { height: 290px; }
+main { padding-top: 0; gap: 12px; }
+.card, .item, .rec, .confirm, .empty { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+.card { padding: 14px; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .card, .item, .rec, .confirm, .empty, .bar { background: rgba(10,14,18,.92); } }
+.field + .field { margin-top: 8px; }
+.field label { font-size: 12.5px; color: var(--muted); }
+select { min-height: 42px; border-radius: 12px; background-color: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.20); color: #fff; }
+select option { background: #11171c; color: #fff; }
+select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); box-shadow: 0 4px 16px rgba(63,216,204,.28); }
+.btn.ghost { border-color: rgba(63,216,204,.7); color: #8ff3ea; background: rgba(63,216,204,.06); }
+.btn.second { background: rgba(255,255,255,.10); color: #fff; }
+.mist li, .video, .noimg { background: rgba(255,255,255,.06); border-color: var(--line); }
+.chip { background: rgba(255,255,255,.10); }
+.chip.main { background: var(--accent-soft); color: #8ff3ea; }
+.imgbox img { background: #fff; }
+.listhead h2, .detail > h2 { color: #fff; }
+
+/* النسخ الاحتياطي والاستعادة */
+.backup { margin-top: 4px; display: flex; flex-direction: column; gap: 12px; }
+.backup h3 { font-family: var(--font-display); font-size: 18px; margin: 0; }
+.bk-note { margin: 0; font-size: 13.5px; color: var(--muted); }
+.bk-panel { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; }
+.bk-lab { font-size: 13px; color: var(--muted); }
+.bk-text { width: 100%; box-sizing: border-box; border-radius: 12px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.20); color: #fff; padding: 10px; font: 12px/1.5 ui-monospace, Menlo, monospace; resize: vertical; text-align: left; }
+.backup input[type=file] { color: var(--muted); font-size: 14px; max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<div id="app" dir="rtl" lang="ar">
+  <div class="top"><h1>GYM GUIDE</h1><div class="tag">دليلك التدريبي</div></div>
+  <header class="bar">
+    <nav class="tabs" role="tablist" aria-label="أقسام التطبيق">
+      <button class="tab" role="tab" id="tab-guide" data-tab="guide" aria-selected="true" aria-controls="v-guide">الدليل</button>
+      <button class="tab" role="tab" id="tab-list" data-tab="list" aria-selected="false" aria-controls="v-list">تماريني <span class="badge" id="badge" hidden>0</span></button>
+      <button class="tab" role="tab" id="tab-history" data-tab="history" aria-selected="false" aria-controls="v-history">سجل تماريني</button>
+    </nav>
+  </header>
+  <div class="spacer" aria-hidden="true"></div>
+
+  <main>
+    <div class="notice bad" id="storeWarn" hidden>التخزين على هذا الجهاز غير متاح الحين. تقدّمك ما راح ينحفظ بعد إغلاق الصفحة.</div>
+
+    <!-- الدليل -->
+    <section id="v-guide" role="tabpanel" aria-labelledby="tab-guide">
+      <div class="card">
+        <div class="field"><label for="selDay"><span class="n">1</span>اليوم</label><select id="selDay"></select></div>
+        <div class="field"><label for="selGroup"><span class="n">2</span>المجموعة العضلية</label><select id="selGroup"></select></div>
+        <div class="field"><label for="selPart"><span class="n">3</span>الجزء المستهدف</label><select id="selPart"></select></div>
+        <div class="field"><label for="selEquip"><span class="n">4</span>نوع المعدات</label><select id="selEquip"></select></div>
+        <div class="field"><label for="selEx"><span class="n">5</span>التمرين</label><select id="selEx"></select></div>
+        <p class="hint" id="guideHint">اختر اليوم أول، وبعدها تنفتح القوائم الباقية وحدة وحدة.</p>
+      </div>
+      <div id="detail" class="card detail" hidden></div>
+    </section>
+
+    <!-- قائمة تماريني -->
+    <section id="v-list" role="tabpanel" aria-labelledby="tab-list" hidden>
+      <div class="listhead">
+        <div class="top"><h2>قائمة تماريني</h2><span class="status" id="saveStatus"></span></div>
+        <div class="status" id="sessionInfo"></div>
+      </div>
+      <div id="items" style="display:flex;flex-direction:column;gap:16px;margin-top:16px"></div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+        <div id="confirmBox" class="confirm" hidden>
+          <p><strong>متأكد تبي تبدأ حصة جديدة؟</strong><br>الحصة الحالية بتنحفظ في «سجل تماريني»، وبعدها تنفرغ القائمة.</p>
+          <div class="actions">
+            <button class="btn primary" id="confirmYes" type="button">نعم، ابدأ حصة جديدة</button>
+            <button class="btn second" id="confirmNo" type="button">إلغاء</button>
+          </div>
+        </div>
+        <div id="newMsg" class="notice" hidden></div>
+        <button class="btn ghost full" id="newSession" type="button">بدء حصة جديدة</button>
+      </div>
+    </section>
+
+    <!-- السجل -->
+    <section id="v-history" role="tabpanel" aria-labelledby="tab-history" hidden>
+      <div class="listhead"><div class="top"><h2>سجل تماريني</h2><span class="status" id="histCount"></span></div></div>
+      <div id="histList" style="display:flex;flex-direction:column;gap:12px;margin-top:16px"></div>
+
+      <div class="card backup" id="backupCard">
+        <h3>نسخة احتياطية</h3>
+        <p class="bk-note">تمارينك محفوظة على هذا الجهاز فقط. احفظ نسخة تقدر تستعيدها لو انمسحت بيانات Safari أو غيّرت الجهاز.</p>
+        <div class="actions">
+          <button class="btn ghost" id="bkExport" type="button">حفظ نسخة احتياطية</button>
+          <button class="btn second" id="bkImport" type="button">استعادة من نسخة</button>
+        </div>
+        <div id="bkMsg" class="notice" hidden></div>
+
+        <div id="bkExportPanel" class="bk-panel" hidden>
+          <p class="bk-note">اضغط «مشاركة / حفظ كملف» واختر «حفظ في الملفات». وإذا ما ظهر خيار الحفظ، انسخ النص واحتفظ فيه.</p>
+          <textarea id="bkText" class="bk-text ltr" readonly rows="5" aria-label="نص النسخة الاحتياطية"></textarea>
+          <div class="actions">
+            <button class="btn primary" id="bkShare" type="button">مشاركة / حفظ كملف</button>
+            <button class="btn second" id="bkCopy" type="button">نسخ النص</button>
+          </div>
+        </div>
+
+        <div id="bkImportPanel" class="bk-panel" hidden>
+          <label class="bk-lab" for="bkFile">اختر ملف النسخة (.json)</label>
+          <input type="file" id="bkFile" accept=".json,application/json,text/plain">
+          <label class="bk-lab" for="bkPaste">أو الصق نص النسخة هنا</label>
+          <textarea id="bkPaste" class="bk-text ltr" rows="4" placeholder="{ &quot;app&quot;: &quot;gym-guide&quot; ... }"></textarea>
+          <button class="btn ghost full" id="bkCheck" type="button">فحص النسخة</button>
+          <div id="bkConfirm" class="confirm" hidden>
+            <p id="bkSummary"></p>
+            <p><strong>الاستعادة تستبدل</strong> قائمة تماريني الحالية وسجل الحصص على هذا الجهاز بمحتوى النسخة. متأكد؟</p>
+            <div class="actions">
+              <button class="btn primary" id="bkYes" type="button">نعم، استعد</button>
+              <button class="btn second" id="bkNo" type="button">إلغاء</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</div>
+
+<script type="application/json" id="gg-data">{
+ "days": [
+  {
+   "id": "push",
+   "ar": "بوش",
+   "en": "Push",
+   "available": true,
+   "groups": [
+    "chest",
+    "shoulders",
+    "triceps"
+   ]
+  },
+  {
+   "id": "legs",
+   "ar": "ليق",
+   "en": "Legs",
+   "available": false,
+   "groups": []
+  },
+  {
+   "id": "pull",
+   "ar": "بول",
+   "en": "Pull",
+   "available": false,
+   "groups": []
+  },
+  {
+   "id": "upper",
+   "ar": "أبر",
+   "en": "Upper",
+   "available": false,
+   "groups": []
+  },
+  {
+   "id": "lower",
+   "ar": "لور",
+   "en": "Lower",
+   "available": false,
+   "groups": []
+  }
+ ],
+ "groups": [
+  {
+   "id": "chest",
+   "ar": "الصدر",
+   "en": "Chest",
+   "parts": [
+    "chest-upper",
+    "chest-mid",
+    "chest-lower"
+   ]
+  },
+  {
+   "id": "shoulders",
+   "ar": "الأكتاف",
+   "en": "Shoulders",
+   "parts": [
+    "shoulder-front",
+    "shoulder-lateral"
+   ]
+  },
+  {
+   "id": "triceps",
+   "ar": "الترايسبس",
+   "en": "Triceps",
+   "parts": [
+    "tri-long",
+    "tri-lateral",
+    "tri-medial"
+   ]
+  }
+ ],
+ "parts": {
+  "chest-upper": {
+   "ar": "صدر علوي",
+   "en": "Upper Chest"
+  },
+  "chest-mid": {
+   "ar": "صدر مستوي",
+   "en": "Mid Chest"
+  },
+  "chest-lower": {
+   "ar": "صدر سفلي",
+   "en": "Lower Chest"
+  },
+  "shoulder-front": {
+   "ar": "كتف أمامي",
+   "en": "Front Delt"
+  },
+  "shoulder-lateral": {
+   "ar": "كتف جانبي",
+   "en": "Lateral Delt"
+  },
+  "tri-long": {
+   "ar": "ترايسبس طويل",
+   "en": "Long Head"
+  },
+  "tri-lateral": {
+   "ar": "ترايسبس جانبي",
+   "en": "Lateral Head"
+  },
+  "tri-medial": {
+   "ar": "ترايسبس إنسي",
+   "en": "Medial Head"
+  }
+ },
+ "equipment": [
+  {
+   "id": "machine",
+   "ar": "أجهزة",
+   "en": "Machines"
+  },
+  {
+   "id": "dumbbell",
+   "ar": "دمبل",
+   "en": "Dumbbells"
+  },
+  {
+   "id": "barbell",
+   "ar": "بار",
+   "en": "Barbells"
+  },
+  {
+   "id": "cable",
+   "ar": "كيبل",
+   "en": "Cables"
+  },
+  {
+   "id": "bodyweight",
+   "ar": "وزن الجسم",
+   "en": "Bodyweight"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "incline-barbell-press",
+   "group": "chest",
+   "part": "chest-upper",
+   "equipment": "barbell",
+   "ar": "بنش بريس مائل بالبار",
+   "en": "Incline Barbell Bench Press",
+   "primary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط ظهر البنش على ميل متوسط (من 30 إلى 45 درجة تقريبًا). لا تزيد الميل كثير، لأن التمرين يتحول لكتف. ضع البار على الحامل بمستوى تفكه وذراعك شبه ممدودة، ويفضّل وجود مساعد (سبوتر) أو حامل أمان.",
+   "grip": "مسكة أعرض من الكتفين بشوي، والإبهام حول البار. الكتفين مسحوبين للخلف ولتحت، والقدمين ثابتة على الأرض، والظهر والأرداف ملتصقين بالبنش.",
+   "steps": [
+    "استلقِ على البنش وثبّت لوحي الكتف للخلف ولتحت، ثم فك البار من الحامل وثبّته فوق أعلى صدرك.",
+    "نزّل البار ببطء وتحكم لين يقرب من أعلى الصدر، والمرفقين مائلين للجسم شوي وليس مفتوحين تمامًا.",
+    "ادفع البار للأعلى بخط شبه مستقيم لين تمد ذراعيك، بدون قفل عنيف للمرفقين.",
+    "بعد ما تخلص رجّع البار للحامل بتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "رفع الأرداف أو تقويس الظهر بشكل مبالغ",
+     "fix": "خلّ الأرداف والظهر ملتصقين بالبنش طول الحركة."
+    },
+    {
+     "m": "ميل البنش عالي زيادة",
+     "fix": "خله متوسط، حتى يبقى الشغل على الصدر العلوي وليس الكتف."
+    },
+    {
+     "m": "ارتداد البار على الصدر",
+     "fix": "نزّل ببطء وتحكم، وابدأ الدفع بدون ارتداد."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0043-relaxation.png",
+     "img/ek-0043-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Barbell (Incline)",
+    "source_id": "0043",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0043-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0043-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "5kyLUGVq_pk",
+    "title": "How to PROPERLY Incline Barbell Bench Press (FIX YOUR FORM NOW)",
+    "channel": "Colossus Fitness",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=5kyLUGVq_pk",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "incline-db-press",
+   "group": "chest",
+   "part": "chest-upper",
+   "equipment": "dumbbell",
+   "ar": "ضغط دمبل مائل",
+   "en": "Incline Dumbbell Press",
+   "primary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط البنش على ميل متوسط (من 30 إلى 45 درجة تقريبًا). ابدأ بالدمبلات على فخذيك ثم ارفعها لمستوى الصدر.",
+   "grip": "مسكة عادية (الكفوف للأمام) أو محايدة (الكفوف تواجه بعض) حسب راحة كتفك. الظهر ملتصق بالبنش والقدمين ثابتة.",
+   "steps": [
+    "اجلس على البنش، ارفع الدمبلات لمستوى الصدر العلوي وثبّت الكتفين للخلف.",
+    "ادفع الدمبلات للأعلى لين تقترب من بعض فوق صدرك مع ذراعين شبه ممدودتين.",
+    "نزّلها ببطء للجانبين لين تحس بتمدد خفيف في الصدر، والمرفقين بزاوية مريحة.",
+    "كرر الحركة بنفس المسار وبتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح المرفقين بشكل زائد",
+     "fix": "خلّ المرفقين مائلين للجسم شوي حتى ما يتعب الكتف."
+    },
+    {
+     "m": "نزول عميق زيادة يضغط الكتف",
+     "fix": "انزل لين تحس بتمدد مريح فقط."
+    },
+    {
+     "m": "تحريك الدمبلات بشكل غير متوازن",
+     "fix": "تحكم بالدمبلين بنفس السرعة وبمسار متساوي."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0080-relaxation.png",
+     "img/ek-0080-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Incline Dumbbell Press",
+    "source_id": "0080",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0080-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0080-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "OC7Qs_SAO2E",
+    "title": "How To Do Incline Dumbbell Press Correctly",
+    "channel": "Jack Hanrahan Fitness",
+    "duration": "8:37",
+    "url": "https://www.youtube.com/watch?v=OC7Qs_SAO2E",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "incline-chest-press-machine",
+   "group": "chest",
+   "part": "chest-upper",
+   "equipment": "machine",
+   "ar": "جهاز ضغط صدر مائل",
+   "en": "Incline Chest Press Machine",
+   "primary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط ارتفاع المقعد بحيث تكون المقابض على مستوى أعلى الصدر تقريبًا. تأكد أن ظهرك ملتصق بالمسند.",
+   "grip": "امسك المقابض بمسكة ثابتة، والمعصمين مستقيمين، والكتفين للخلف ولتحت، والقدمين ثابتة على الأرض أو الداعم.",
+   "steps": [
+    "اجلس بظهر ملتصق بالمسند وامسك المقابض عند أعلى الصدر.",
+    "ادفع المقابض للأمام وللأعلى حتى تمتد الذراعين بدون قفل عنيف.",
+    "ارجع ببطء لين تحس بتمدد خفيف في الصدر، بدون ما ترتاح الأوزان على بعضها.",
+    "حافظ على الكتفين بعيد عن الأذنين."
+   ],
+   "mistakes": [
+    {
+     "m": "المقعد منخفض أو عالي فيصير المسار غير مريح",
+     "fix": "اضبط المقعد حتى تتحرك المقابض من أعلى الصدر."
+    },
+    {
+     "m": "رفع الأكتاف للأذنين",
+     "fix": "نزّل الكتفين وثبّتهما طول الحركة."
+    },
+    {
+     "m": "ترك الوزن يسقط على الرجوع",
+     "fix": "ارجع ببطء وتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "LiDArz1R2NU",
+    "title": "Incline Machine Chest Press | Proper Form Tutorial for Upper Chest",
+    "channel": "FIT.nl",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=LiDArz1R2NU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "smith-incline-press",
+   "group": "chest",
+   "part": "chest-upper",
+   "equipment": "machine",
+   "ar": "ضغط مائل على جهاز سميث",
+   "en": "Smith Machine Incline Press",
+   "primary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "ضع بنش مائل داخل جهاز سميث بحيث يكون البار فوق أعلى صدرك مباشرة وليس فوق وجهك. اضبط قفل الأمان على مستوى مناسب.",
+   "grip": "مسكة أعرض من الكتفين بشوي، والإبهام حول البار. القدمين ثابتة، والظهر ملتصق.",
+   "steps": [
+    "استلقِ على البنش المائل وضع عينيك تحت البار تقريبًا، وثبّت لوحي الكتف.",
+    "فك البار بإدارة المعصم، ثم نزّله ببطء نحو أعلى الصدر.",
+    "ادفع البار للأعلى في مسار الجهاز لين تمد الذراعين.",
+    "عند الانتهاء أدر المعصم لتثبيت البار على قفل الجهاز."
+   ],
+   "mistakes": [
+    {
+     "m": "وضع البنش بعيد فيكون الدفع للوجه أو للبطن",
+     "fix": "قرّب البنش حتى ينزل البار عند أعلى الصدر."
+    },
+    {
+     "m": "الاعتماد على مسار الجهاز وإهمال التحكم",
+     "fix": "تحكم بالنزول وكأنك بار حر."
+    },
+    {
+     "m": "نسيان ضبط قفل الأمان",
+     "fix": "اضبط القفل قبل أول تكرار."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0081-relaxation.png",
+     "img/ek-0081-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Smith Machine (Incline)",
+    "source_id": "0081",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0081-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0081-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "MqcS3CMGtwQ",
+    "title": "How to INCLINE BENCH PRESS with a Smith Machine",
+    "channel": "Irish Strength",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=MqcS3CMGtwQ",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "low-high-cable-fly",
+   "group": "chest",
+   "part": "chest-upper",
+   "equipment": "cable",
+   "ar": "كيبل فلاي من أسفل لأعلى",
+   "en": "Low-to-High Cable Fly",
+   "primary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "ضع البكرتين في أسفل جهاز الكيبل، وركّب مقبضين. قف في المنتصف وأمل الجذع للأمام شوي.",
+   "grip": "امسك المقبضين بكف للأعلى أو للجانب، والمرفقين مثنيين شوي طول الحركة، والجذع ثابت.",
+   "steps": [
+    "خذ خطوة للأمام وقدم رجل أمام الأخرى للثبات، وابدأ والذراعين مفتوحتين للجانبين وللأسفل.",
+    "ارفع المقبضين بقوس للأمام وللأعلى لين يتجهان لمستوى أعلى الصدر أو الذقن، ومرفقك ثابت الزاوية.",
+    "اضغط الصدر لحظة في الأعلى بدون تصادم عنيف.",
+    "ارجع ببطء بنفس القوس لين تحس بتمدد خفيف."
+   ],
+   "mistakes": [
+    {
+     "m": "تحويل الحركة إلى ضغط بثني المرفق",
+     "fix": "ثبّت زاوية المرفق وحرك الذراع كقوس."
+    },
+    {
+     "m": "تأرجح الجذع للمساعدة",
+     "fix": "ثبّت الجذع وخفف الوزن حتى تسيطر."
+    },
+    {
+     "m": "رفع الأكتاف",
+     "fix": "خلّ الكتفين للأسفل طول الحركة."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "Nx5DnrqA5yc",
+    "title": "Best Upper Chest Exercise: Low-to-High Cable Chest Fly — Tutorial",
+    "channel": "Fitness By Physio",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=Nx5DnrqA5yc",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "incline-db-fly",
+   "group": "chest",
+   "part": "chest-upper",
+   "equipment": "dumbbell",
+   "ar": "فلاي دمبل مائل",
+   "en": "Incline Dumbbell Fly",
+   "primary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "اضبط البنش على ميل خفيف إلى متوسط (من 30 إلى 45 درجة تقريبًا). ابدأ بالدمبلات فوق صدرك وكفوفك تواجه بعض.",
+   "grip": "كفوف محايدة تواجه بعض، والمرفقين مثنيين شوي ويبقى كذلك طول الحركة.",
+   "steps": [
+    "ارفع الدمبلات فوق أعلى صدرك والمرفقين مثنيين شوي.",
+    "افتح الذراعين للجانبين في قوس واسع ببطء لين تحس بتمدد في الصدر.",
+    "ارجع بنفس القوس واضغط الصدر لين تقترب الدمبلات من بعض.",
+    "لا تنزّل أكثر مما يسمح به كتفك."
+   ],
+   "mistakes": [
+    {
+     "m": "تحويل الفلاي إلى ضغط بثني المرفق كثير",
+     "fix": "ثبّت زاوية المرفق وتحرك بالقوس."
+    },
+    {
+     "m": "نزول عميق يشد الكتف",
+     "fix": "انزل لحد تمدد مريح."
+    },
+    {
+     "m": "وزن ثقيل يخسّر الشكل",
+     "fix": "خذ وزن تقدر تتحكم فيه طول المسار."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0062-relaxation.png",
+     "img/ek-0062-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Incline Dumbbell Fly's",
+    "source_id": "0062",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0062-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0062-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "idAvu2HvqSQ",
+    "title": "HOW TO: Incline Dumbbell Fly || PERFECT FORM (GROWTH & STRENGTH)",
+    "channel": "ScottHermanFitness",
+    "duration": "2:21",
+    "url": "https://www.youtube.com/watch?v=idAvu2HvqSQ",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "flat-barbell-press",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "barbell",
+   "ar": "بنش بريس مستوي بالبار",
+   "en": "Flat Barbell Bench Press",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "استلقِ بحيث تكون عينيك تحت البار تقريبًا. ضع القدمين ثابتتين على الأرض، ويفضّل وجود مساعد (سبوتر) أو حامل أمان.",
+   "grip": "مسكة أعرض من الكتفين بشوي، والإبهام حول البار. لوحي الكتف مسحوبين للخلف ولتحت، وقوس خفيف طبيعي في أسفل الظهر.",
+   "steps": [
+    "ثبّت الكتفين والقدمين، وفك البار وثبّته فوق صدرك.",
+    "نزّل البار ببطء لين يقرب من منتصف الصدر، والمرفقين مائلين للجسم شوي.",
+    "ادفع البار للأعلى بقوة وفي مسار شبه مستقيم لين تمد الذراعين.",
+    "رجّع البار للحامل بتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "ارتداد البار على الصدر",
+     "fix": "نزّل بتحكم وابدأ الدفع بدون ارتداد."
+    },
+    {
+     "m": "رفع الأرداف عن البنش",
+     "fix": "ثبّت الأرداف والقدمين طول الحركة."
+    },
+    {
+     "m": "فتح المرفقين للجانبين تمامًا",
+     "fix": "خلّ المرفقين مائلين للجسم شوي."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0042-relaxation.png",
+     "img/ek-0042-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Barbell",
+    "source_id": "0042",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0042-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0042-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "4Y2ZdHCOXok",
+    "title": "How to PROPERLY Bench Press for Growth (5 Easy Steps)",
+    "channel": "Jeremy Ethier",
+    "duration": "8:04",
+    "url": "https://www.youtube.com/watch?v=4Y2ZdHCOXok",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "flat-db-press",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "dumbbell",
+   "ar": "ضغط دمبل مستوي",
+   "en": "Flat Dumbbell Press",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اجلس على البنش والدمبلات على فخذيك، ثم استلقِ وارفع الدمبلات لمستوى الصدر.",
+   "grip": "مسكة عادية أو محايدة حسب راحة كتفك. الظهر والأرداف ملتصقين، والقدمين ثابتة.",
+   "steps": [
+    "ثبّت الكتفين للخلف ولتحت، وارفع الدمبلات فوق منتصف الصدر.",
+    "نزّلها للجانبين ببطء لين يصير مستوى المرفقين قريب من البنش.",
+    "ادفع للأعلى وقرّب الدمبلات من بعض فوق الصدر.",
+    "كرر بنفس المسار وبنفس سرعة اليدين."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح المرفقين زيادة",
+     "fix": "خلّهما مائلين للجسم شوي."
+    },
+    {
+     "m": "نزول عميق يضغط الكتف",
+     "fix": "انزل لحد تمدد مريح."
+    },
+    {
+     "m": "عدم توازن الدمبلين",
+     "fix": "تحكم بالجهتين بنفس السرعة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0055-relaxation.png",
+     "img/ek-0055-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Dumbbell",
+    "source_id": "0055",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0055-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0055-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "5Y3VZsLb1Ys",
+    "title": "How To Do Dumbbell Bench Press Correctly",
+    "channel": "Jack Hanrahan Fitness",
+    "duration": "10:02",
+    "url": "https://www.youtube.com/watch?v=5Y3VZsLb1Ys",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "seated-chest-press-machine",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "machine",
+   "ar": "جهاز ضغط الصدر (جالس)",
+   "en": "Seated Chest Press Machine",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط ارتفاع المقعد بحيث تكون المقابض على مستوى منتصف الصدر. ظهرك ملتصق بالمسند، والقدمين ثابتة.",
+   "grip": "امسك المقابض بكفوف للأسفل أو محايدة حسب الجهاز، والمعصمين مستقيمين، والكتفين للخلف ولتحت.",
+   "steps": [
+    "اجلس بظهر ملتصق وامسك المقابض عند منتصف الصدر.",
+    "ادفع المقابض للأمام حتى تمتد الذراعين بدون قفل عنيف.",
+    "ارجع ببطء لين تحس بتمدد خفيف في الصدر.",
+    "بدون ما تترك الأوزان تسقط على بعضها."
+   ],
+   "mistakes": [
+    {
+     "m": "ظهر مبتعد عن المسند",
+     "fix": "اجلس بحيث يبقى الظهر ملتصق."
+    },
+    {
+     "m": "رفع الأكتاف للأذنين",
+     "fix": "نزّل الكتفين وثبّتهما."
+    },
+    {
+     "m": "دفع سريع بدون تحكم",
+     "fix": "تحرك بسرعة ثابتة وبتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0066-relaxation.png",
+     "img/ek-0066-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Machine",
+    "source_id": "0066",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0066-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0066-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "zgP-UCKGe24",
+    "title": "How to PROPERLY Chest Press Machine Press (LEARN FAST)",
+    "channel": "Colossus Fitness",
+    "duration": "2:27",
+    "url": "https://www.youtube.com/watch?v=zgP-UCKGe24",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "smith-flat-press",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "machine",
+   "ar": "ضغط مستوي على جهاز سميث",
+   "en": "Smith Machine Flat Bench Press",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "ضع بنش مستوي داخل جهاز سميث بحيث ينزل البار على منتصف الصدر. اضبط قفل الأمان على مستوى مناسب.",
+   "grip": "مسكة أعرض من الكتفين بشوي، والإبهام حول البار، والكتفين مسحوبين للخلف ولتحت.",
+   "steps": [
+    "استلقِ وضع عينيك تحت البار تقريبًا، وثبّت الكتفين والقدمين.",
+    "فك البار بإدارة المعصم ثم نزّله ببطء لين يقرب من منتصف الصدر.",
+    "ادفع البار للأعلى لين تمد الذراعين.",
+    "عند الانتهاء أدر المعصم لتثبيت البار على القفل."
+   ],
+   "mistakes": [
+    {
+     "m": "وضع البنش بعيد عن مسار البار",
+     "fix": "قرّب البنش حتى ينزل البار عند منتصف الصدر."
+    },
+    {
+     "m": "الاعتماد على الجهاز وترك التحكم",
+     "fix": "تحكم بالنزول وكأنك بار حر."
+    },
+    {
+     "m": "نسيان قفل الأمان",
+     "fix": "اضبطه قبل أول تكرار."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0078-relaxation.png",
+     "img/ek-0078-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Smith Machine",
+    "source_id": "0078",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0078-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0078-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "7FyJdsXeta8",
+    "title": "Exercise Tutorial: Smith Machine Bench Press",
+    "channel": "Travis Tarrant",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=7FyJdsXeta8",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "pec-deck",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "machine",
+   "ar": "جهاز الفراشة",
+   "en": "Pec Deck / Machine Fly",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "اضبط ارتفاع المقعد بحيث يكون مفصل الكتف بنفس مستوى محور الجهاز تقريبًا. ظهرك ملتصق، والمقابض أو الوسادات على مستوى الصدر.",
+   "grip": "امسك المقابض أو ضع الساعدين على الوسادات حسب نوع الجهاز، والمرفقين مثنيين شوي والكتفين للأسفل.",
+   "steps": [
+    "اجلس بظهر ملتصق وضع اليدين أو الساعدين على المقابض.",
+    "قرّب الذراعين من بعض أمام الصدر بقوس واسع واضغط الصدر لحظة.",
+    "افتح ببطء لين تحس بتمدد خفيف، بدون ما تنزل الكتفين للخلف بقوة.",
+    "تحكم بالوزن في الاتجاهين."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح الذراعين أكثر من اللازم فيتعب الكتف",
+     "fix": "افتح لحد تمدد مريح."
+    },
+    {
+     "m": "رفع الأكتاف",
+     "fix": "ثبّت الكتفين للأسفل."
+    },
+    {
+     "m": "استخدام الزخم",
+     "fix": "تحرك بتحكم وببطء."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "ybi3NPUK47M",
+    "title": "How to Do Pec Flyes on the Pec Deck Machine (Full Tutorial)",
+    "channel": "Marcus Savard",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=ybi3NPUK47M",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-crossover",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "cable",
+   "ar": "كيبل كروس أوفر",
+   "en": "Cable Crossover",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "ضع البكرتين في أعلى جهاز الكيبل وركّب مقبضين. قف في المنتصف، وأمل الجذع للأمام شوي.",
+   "grip": "امسك المقبضين بكفوف للأسفل أو محايدة، والمرفقين مثنيين شوي طول الحركة.",
+   "steps": [
+    "خذ خطوة للأمام وابدأ والذراعين مفتوحتين للجانبين.",
+    "اسحب المقبضين بقوس للأمام وللأسفل لين يلتقيان أمام الصدر.",
+    "اضغط الصدر لحظة ثم ارجع ببطء لين تحس بتمدد خفيف.",
+    "حافظ على ثبات الجذع."
+   ],
+   "mistakes": [
+    {
+     "m": "تحويل الحركة إلى ضغط بثني المرفق",
+     "fix": "ثبّت زاوية المرفق وتحرك بقوس."
+    },
+    {
+     "m": "تأرجح الجذع",
+     "fix": "ثبّت الجذع وخفف الوزن."
+    },
+    {
+     "m": "رجوع سريع",
+     "fix": "ارجع ببطء وبتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0048-relaxation.png",
+     "img/ek-0048-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Cable Crossover",
+    "source_id": "0048",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0048-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0048-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "taI4XduLpTk",
+    "title": "How to Do Cable Crossovers",
+    "channel": "LIVESTRONG",
+    "duration": "1:27",
+    "url": "https://www.youtube.com/watch?v=taI4XduLpTk",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "push-up",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "bodyweight",
+   "ar": "تمرين الضغط",
+   "en": "Push-Up",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "لا يحتاج جهاز. ضع اليدين على الأرض أعرض من الكتفين بشوي، والجسم في خط مستقيم من الرأس للكعبين.",
+   "grip": "الكفوف على الأرض وأصابعك للأمام، والمرفقين مائلين للجسم شوي (ليس مفتوحين للجانبين تمامًا).",
+   "steps": [
+    "ابدأ بوضع اللوح مع شد البطن والأرداف، والنظر للأرض.",
+    "نزّل الصدر نحو الأرض ببطء وبتحكم، والجسم مستقيم.",
+    "ادفع الأرض بعيد عنك لين تمد الذراعين.",
+    "حافظ على الجسم مستقيم بدون ما ينزل الخصر."
+   ],
+   "mistakes": [
+    {
+     "m": "نزول الخصر أو رفع الأرداف",
+     "fix": "شد البطن والأرداف وخلّ الجسم خط مستقيم."
+    },
+    {
+     "m": "فتح المرفقين للجانبين",
+     "fix": "خلّ المرفقين مائلين للجسم شوي."
+    },
+    {
+     "m": "نزول قليل",
+     "fix": "انزل لين يقرب الصدر من الأرض بحدود قدرتك."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0077-relaxation.png",
+     "img/ek-0077-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Push Up: Body Weight",
+    "source_id": "0077",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0077-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0077-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "i9sTjhN4Z3M",
+    "title": "The RIGHT Way To Do Push-Ups (PERFECT FORM)",
+    "channel": "Mind Pump TV",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=i9sTjhN4Z3M",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "flat-db-fly",
+   "group": "chest",
+   "part": "chest-mid",
+   "equipment": "dumbbell",
+   "ar": "فلاي دمبل مستوي",
+   "en": "Flat Dumbbell Fly",
+   "primary": [
+    "الصدر الأوسط (Mid Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "استلقِ على بنش مستوي والدمبلات فوق صدرك والكفوف تواجه بعض، والمرفقين مثنيين شوي.",
+   "grip": "مسكة محايدة، والمرفقين مثنيين شوي ويبقى كذلك طول الحركة.",
+   "steps": [
+    "ثبّت الكتفين للخلف ولتحت وارفع الدمبلات فوق الصدر.",
+    "افتح الذراعين للجانبين بقوس واسع ببطء لين تحس بتمدد في الصدر.",
+    "ارجع بنفس القوس واضغط الصدر لين تقترب الدمبلات من بعض.",
+    "تحكم بالحركة طول الوقت."
+   ],
+   "mistakes": [
+    {
+     "m": "تحويل الفلاي لضغط بثني المرفق",
+     "fix": "ثبّت زاوية المرفق وتحرك بقوس."
+    },
+    {
+     "m": "نزول عميق يشد الكتف",
+     "fix": "انزل لحد تمدد مريح."
+    },
+    {
+     "m": "وزن زيادة يضيّع الشكل",
+     "fix": "اختر وزن تتحكم به طول المسار."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0056-relaxation.png",
+     "img/ek-0056-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Dumbbell Flys",
+    "source_id": "0056",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0056-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0056-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "iHa_7sMa8mU",
+    "title": "Flat Bench Dumbbell Fly | Chest Isolation Exercise | Proper Form Guide",
+    "channel": "Lean Physique Lab",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=iHa_7sMa8mU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "decline-barbell-press",
+   "group": "chest",
+   "part": "chest-lower",
+   "equipment": "barbell",
+   "ar": "بنش بريس مائل للأسفل بالبار",
+   "en": "Decline Barbell Bench Press",
+   "primary": [
+    "الصدر السفلي (Lower Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط البنش مائل للأسفل وثبّت القدمين في الداعم. ضع البار على الحامل بمستوى تقدر تفكه، ويفضّل وجود مساعد (سبوتر) أو حامل أمان.",
+   "grip": "مسكة أعرض من الكتفين بشوي، والإبهام حول البار، والكتفين مسحوبين للخلف ولتحت.",
+   "steps": [
+    "استلقِ وثبّت القدمين، وفك البار وثبّته فوق أسفل صدرك.",
+    "نزّل البار ببطء لين يقرب من أسفل الصدر.",
+    "ادفع البار للأعلى في مسار شبه مستقيم لين تمد الذراعين.",
+    "رجّع البار للحامل بتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "ارتداد البار على الصدر",
+     "fix": "نزّل بتحكم بدون ارتداد."
+    },
+    {
+     "m": "ميل البنش شديد",
+     "fix": "اجعل الميل متوسط لتفادي ضغط الرأس والرقبة."
+    },
+    {
+     "m": "تثبيت غير كافي للقدمين",
+     "fix": "تأكد أن القدمين محكمتين قبل فك البار."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0051-relaxation.png",
+     "img/ek-0051-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Barbell (Decline)",
+    "source_id": "0051",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0051-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0051-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "16yItsCGnsw",
+    "title": "How to Do Decline Bench Press",
+    "channel": "LIVESTRONG",
+    "duration": "1:42",
+    "url": "https://www.youtube.com/watch?v=16yItsCGnsw",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "decline-db-press",
+   "group": "chest",
+   "part": "chest-lower",
+   "equipment": "dumbbell",
+   "ar": "ضغط دمبل مائل للأسفل",
+   "en": "Decline Dumbbell Press",
+   "primary": [
+    "الصدر السفلي (Lower Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط البنش مائل للأسفل وثبّت القدمين. ابدأ بالدمبلات على الفخذين ثم استلقِ وارفعها بمساعدة إن لزم.",
+   "grip": "مسكة عادية أو محايدة حسب راحة الكتف. الكتفين مسحوبين للخلف ولتحت.",
+   "steps": [
+    "ارفع الدمبلات لمستوى أسفل الصدر وثبّت الكتفين.",
+    "ادفع الدمبلات للأعلى لين تقترب من بعض فوق الصدر.",
+    "نزّلها ببطء للجانبين لين يقرب مستوى المرفقين من البنش.",
+    "كرر بنفس المسار وبتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح المرفقين زيادة",
+     "fix": "خلّهما مائلين للجسم شوي."
+    },
+    {
+     "m": "ترك الدمبلات تسحبك للخلف",
+     "fix": "ابدأ بوزن يمكنك التحكم به، ويفضّل وجود مساعد."
+    },
+    {
+     "m": "ميل شديد للبنش",
+     "fix": "اجعل الميل متوسط."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0052-relaxation.png",
+     "img/ek-0052-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Dumbbell (Decline)",
+    "source_id": "0052",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0052-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0052-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "0xRvl4Qv3ZY",
+    "title": "Decline Dumbbell Bench Press - Chest Exercise",
+    "channel": "MyTraining App",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=0xRvl4Qv3ZY",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "chest-dips",
+   "group": "chest",
+   "part": "chest-lower",
+   "equipment": "bodyweight",
+   "ar": "ديبس للصدر (الجسم مائل للأمام)",
+   "en": "Chest Dips",
+   "primary": [
+    "الصدر السفلي (Lower Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "استخدم متوازي الديبس. ارفع نفسك لوضع الدعم على الذراعين الممدودتين، وأمل الجذع للأمام شوي وثنِ الركبتين وقدّم الكاحلين للخلف.",
+   "grip": "الكفوف على المقابض، والمرفقين مفتوحين شوي للجانبين، والجذع مائل للأمام طول الحركة.",
+   "steps": [
+    "ابدأ بذراعين ممدودتين بدون قفل عنيف، والجذع مائل للأمام.",
+    "نزّل الجسم ببطء بثني المرفقين لين تحس بتمدد في الصدر ويبقى الكتف مرتاح.",
+    "ادفع الجسم للأعلى بقوة الصدر حتى تعود لوضع البداية.",
+    "حافظ على ميل الجذع للأمام طول الحركة."
+   ],
+   "mistakes": [
+    {
+     "m": "نزول عميق زيادة يضغط الكتف",
+     "fix": "انزل لحد مريح للكتف."
+    },
+    {
+     "m": "جذع عمودي فيتحول الشغل للترايسبس",
+     "fix": "أمل الجذع للأمام شوي للصدر."
+    },
+    {
+     "m": "الارتداد في أسفل الحركة",
+     "fix": "تحكم بالنزول وبالدفع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0054-relaxation.png",
+     "img/ek-0054-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Chest Dips",
+    "source_id": "0054",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0054-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0054-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "yN6Q1UI_xkE",
+    "title": "How To Do Dips For A Bigger Chest and Shoulders (Fix Mistakes!)",
+    "channel": "Jeff Nippard",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=yN6Q1UI_xkE",
+    "status": "candidate",
+    "note": "الفيديو يشرح الديبس للصدر والكتف، وبعض شرحه يتكلم عن إضافة وزن، تجاهله إذا ما تحتاجه."
+   }
+  },
+  {
+   "id": "assisted-dip-machine",
+   "group": "chest",
+   "part": "chest-lower",
+   "equipment": "machine",
+   "ar": "جهاز ديبس مساعد",
+   "en": "Assisted Dip Machine",
+   "primary": [
+    "الصدر السفلي (Lower Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اختر مستوى المساعدة على الجهاز (الوزن المساعد يخفف من وزن جسمك). اركب على المنصة بركبة أو بالقدمين حسب تصميم الجهاز.",
+   "grip": "امسك المقابض بذراعين ممدودتين، وأمل الجذع للأمام شوي للتركيز على الصدر.",
+   "steps": [
+    "اضبط المساعدة وثبّت الركبة أو القدمين على المنصة.",
+    "نزّل الجسم ببطء بثني المرفقين لين تحس بتمدد في الصدر.",
+    "ادفع للأعلى حتى تمد الذراعين بدون قفل عنيف.",
+    "تقدر تقلل المساعدة تدريجيًا حسب تقدمك."
+   ],
+   "mistakes": [
+    {
+     "m": "نزول عميق يضغط الكتف",
+     "fix": "انزل لحد مريح."
+    },
+    {
+     "m": "جذع عمودي",
+     "fix": "أمل الجذع للأمام شوي إذا تبي الصدر."
+    },
+    {
+     "m": "اختيار مساعدة تفوق حاجتك",
+     "fix": "اضبطها حتى تبقى الحركة صعبة بشكل مناسب."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "8NDyPgEy84E",
+    "title": "How To: Assisted Dip Machine",
+    "channel": "Fitness Lab",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=8NDyPgEy84E",
+    "status": "candidate",
+    "note": "الفيديو يشرح الجهاز نفسه (ديبس مساعد)."
+   }
+  },
+  {
+   "id": "high-low-cable-fly",
+   "group": "chest",
+   "part": "chest-lower",
+   "equipment": "cable",
+   "ar": "كيبل فلاي من أعلى لأسفل",
+   "en": "High-to-Low Cable Fly",
+   "primary": [
+    "الصدر السفلي (Lower Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "ضع البكرتين في الأعلى وركّب مقبضين. قف في المنتصف وأمل الجذع للأمام شوي.",
+   "grip": "مقبضين بكفوف للأسفل، والمرفقين مثنيين شوي طول الحركة.",
+   "steps": [
+    "خذ خطوة للأمام وابدأ والذراعين مفتوحتين للجانبين وللأعلى.",
+    "اسحب المقبضين بقوس للأمام وللأسفل لين يلتقيان قرب أسفل الصدر.",
+    "اضغط الصدر لحظة ثم ارجع ببطء.",
+    "حافظ على ثبات الجذع."
+   ],
+   "mistakes": [
+    {
+     "m": "تأرجح الجذع",
+     "fix": "ثبّت الجذع وخفف الوزن."
+    },
+    {
+     "m": "تحويل الحركة إلى ضغط",
+     "fix": "ثبّت زاوية المرفق."
+    },
+    {
+     "m": "رفع الأكتاف",
+     "fix": "خلّ الكتفين للأسفل."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "cITkrjS-Lgw",
+    "title": "High to Low Cable Fly",
+    "channel": "Melita ReGen Lab + Performance Center",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=cITkrjS-Lgw",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "decline-chest-press-machine",
+   "group": "chest",
+   "part": "chest-lower",
+   "equipment": "machine",
+   "ar": "جهاز ضغط صدر مائل للأسفل",
+   "en": "Decline Chest Press Machine",
+   "primary": [
+    "الصدر السفلي (Lower Chest)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اجلس واضبط المقعد بحيث تكون المقابض عند أسفل الصدر، وثبّت القدمين. ظهرك ملتصق بالمسند.",
+   "grip": "امسك المقابض بمسكة ثابتة، والمعصمين مستقيمين، والكتفين للخلف ولتحت.",
+   "steps": [
+    "اجلس بظهر ملتصق وامسك المقابض عند أسفل الصدر.",
+    "ادفع المقابض للأمام وللأسفل قليلًا حتى تمتد الذراعين بدون قفل عنيف.",
+    "ارجع ببطء لين تحس بتمدد خفيف.",
+    "حافظ على الكتفين بعيد عن الأذنين."
+   ],
+   "mistakes": [
+    {
+     "m": "رفع الأكتاف",
+     "fix": "ثبّت الكتفين للأسفل."
+    },
+    {
+     "m": "ترك الوزن يسقط في الرجوع",
+     "fix": "ارجع ببطء وبتحكم."
+    },
+    {
+     "m": "ضبط المقعد غير مناسب",
+     "fix": "اضبطه حتى تتحرك المقابض من أسفل الصدر."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0085-relaxation.png",
+     "img/ek-0085-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Decline Chest Press",
+    "source_id": "0085",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0085-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0085-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "_DsWm45BCqg",
+    "title": "How To Do A MACHINE DECLINE CHEST PRESS",
+    "channel": "Live Lean TV Daily Exercises",
+    "duration": "0:36",
+    "url": "https://www.youtube.com/watch?v=_DsWm45BCqg",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "shoulder-press-machine",
+   "group": "shoulders",
+   "part": "shoulder-front",
+   "equipment": "machine",
+   "ar": "جهاز ضغط الكتف",
+   "en": "Shoulder Press Machine",
+   "primary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "secondary": [
+    "الكتف الجانبي (Lateral Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط ارتفاع المقعد بحيث تكون المقابض عند مستوى الكتفين تقريبًا. ظهرك ملتصق بالمسند.",
+   "grip": "امسك المقابض بمسكة ثابتة (عادية أو محايدة حسب الجهاز)، والمعصمين مستقيمين.",
+   "steps": [
+    "اجلس بظهر ملتصق وامسك المقابض عند مستوى الكتفين.",
+    "ادفع للأعلى حتى تمتد الذراعين بدون قفل عنيف.",
+    "نزّل ببطء لين ترجع المقابض لمستوى الكتفين.",
+    "حافظ على الرقبة مرتاحة وبدون رفع الكتفين للأذنين."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس الظهر بشكل زائد",
+     "fix": "خلّ الظهر ملتصق بالمسند وشد البطن."
+    },
+    {
+     "m": "رفع الأكتاف للأذنين",
+     "fix": "ثبّت الكتفين للأسفل."
+    },
+    {
+     "m": "نزول سريع بدون تحكم",
+     "fix": "ارجع ببطء وبتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "6-FxadmQrSM",
+    "title": "Machine Shoulder Press - Learn how to do Shoulder Press Workout",
+    "channel": "Health Hunt",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=6-FxadmQrSM",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "seated-db-shoulder-press",
+   "group": "shoulders",
+   "part": "shoulder-front",
+   "equipment": "dumbbell",
+   "ar": "ضغط دمبل للكتف (جالس)",
+   "en": "Seated Dumbbell Shoulder Press",
+   "primary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "secondary": [
+    "الكتف الجانبي (Lateral Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اضبط ظهر البنش شبه عمودي (مع مسند للظهر). ابدأ بالدمبلات على الفخذين ثم ارفعها لمستوى الكتفين.",
+   "grip": "مسكة عادية (الكفوف للأمام) أو محايدة حسب راحة الكتف. المرفقين أمام الجسم شوي وليس للجانبين تمامًا.",
+   "steps": [
+    "اجلس بظهر ملتصق وارفع الدمبلات لمستوى الكتفين والمرفقين بزاوية مريحة.",
+    "ادفع الدمبلات للأعلى لين تقترب من بعض فوق الرأس بدون قفل عنيف.",
+    "نزّلها ببطء لمستوى الكتفين.",
+    "حافظ على الجذع ثابت بدون تقويس مبالغ."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس الظهر ودفع الدمبلات للخلف",
+     "fix": "خلّ الظهر ملتصق وشد البطن."
+    },
+    {
+     "m": "فتح المرفقين للجانبين تمامًا",
+     "fix": "خلّهما أمام الجسم شوي."
+    },
+    {
+     "m": "نزول عميق يضغط الكتف",
+     "fix": "انزل لمستوى الكتفين فقط."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "fuQpuu--bMI",
+    "title": "Seated Dumbbell Shoulder Press Guide | Form, Tips, and Mistakes!",
+    "channel": "That Fit Friend",
+    "duration": "6:47",
+    "url": "https://www.youtube.com/watch?v=fuQpuu--bMI",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "overhead-barbell-press",
+   "group": "shoulders",
+   "part": "shoulder-front",
+   "equipment": "barbell",
+   "ar": "ضغط بار فوق الرأس",
+   "en": "Overhead Press (Barbell)",
+   "primary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "secondary": [
+    "الكتف الجانبي (Lateral Delt)",
+    "الترايسبس (Triceps)",
+    "الترابيس العلوي (Upper Traps)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "ضع البار على الحامل بمستوى الكتفين تقريبًا، وقف بقدمين بعرض الكتفين. يفضّل وجود مساعد (سبوتر) أو حامل أمان.",
+   "grip": "مسكة أعرض من الكتفين بشوي، والبار يستند على أعلى الصدر والكتفين الأماميين، والمرفقين أمام البار قليلًا.",
+   "steps": [
+    "فك البار وخلّه عند أعلى الصدر مع شد البطن والأرداف.",
+    "ادفع البار للأعلى في خط شبه مستقيم، وحرك الرأس للخلف شوي ليمر البار ثم رجّعه للأمام.",
+    "ثبّت البار فوق الرأس بذراعين ممدودتين.",
+    "نزّله ببطء لأعلى الصدر وبتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس أسفل الظهر",
+     "fix": "شد البطن والأرداف وخلّ الجذع ثابت."
+    },
+    {
+     "m": "دفع البار للأمام بدل الأعلى",
+     "fix": "ادفع بخط مستقيم فوق منتصف القدمين."
+    },
+    {
+     "m": "استخدام ركبتين كدفع",
+     "fix": "اجعل الحركة من الكتفين إذا كان الهدف عزل الكتف."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "3VpI0V_9D0Y",
+    "title": "How to Do the Standing Barbell Overhead Press",
+    "channel": "All Strength Training",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=3VpI0V_9D0Y",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "arnold-press",
+   "group": "shoulders",
+   "part": "shoulder-front",
+   "equipment": "dumbbell",
+   "ar": "أرنولد بريس",
+   "en": "Arnold Press",
+   "primary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "secondary": [
+    "الكتف الجانبي (Lateral Delt)",
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اجلس على بنش بمسند ظهر شبه عمودي. ابدأ بالدمبلات أمام الصدر وكفوفك تواجه وجهك.",
+   "grip": "تبدأ بكفوف تواجه الوجه (مثل ثني البايسبس)، وتدور اليدين أثناء الدفع حتى تواجه الكفوف للأمام في الأعلى.",
+   "steps": [
+    "ابدأ بالدمبلات أمام الصدر والكفوف تواجه الوجه والمرفقين للأسفل.",
+    "ابدأ الدفع للأعلى ومع الدفع دوّر اليدين لين تواجه الكفوف للأمام.",
+    "ثبّت الدمبلات فوق الرأس بذراعين ممدودتين بدون قفل عنيف.",
+    "ارجع ببطء وبنفس الدوران العكسي لين تعود لوضع البداية."
+   ],
+   "mistakes": [
+    {
+     "m": "حركة سريعة بدون تحكم",
+     "fix": "تحرك ببطء حتى ينسجم الدوران مع الدفع."
+    },
+    {
+     "m": "تقويس الظهر",
+     "fix": "خلّ الظهر ملتصق بالمسند."
+    },
+    {
+     "m": "وزن ثقيل يخرّب الدوران",
+     "fix": "اختر وزن تقدر تدوّر به بسلاسة."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "TUHL8dXFvTg",
+    "title": "How to do an Arnold Press | The Right Way",
+    "channel": "Well+Good",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=TUHL8dXFvTg",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "db-front-raise",
+   "group": "shoulders",
+   "part": "shoulder-front",
+   "equipment": "dumbbell",
+   "ar": "رفرفة أمامية بالدمبل",
+   "en": "Dumbbell Front Raise",
+   "primary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "secondary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "setup": "قف بقدمين بعرض الكتفين والدمبلات أمام الفخذين، والمرفقين مثنيين شوي.",
+   "grip": "مسكة عادية (كفوف للأسفل) أو محايدة (كفوف تواجه بعض) حسب راحة المعصم.",
+   "steps": [
+    "ارفع الدمبل للأمام بذراع شبه ممدودة لين يصل لمستوى الكتف تقريبًا.",
+    "تمهّل لحظة في الأعلى ثم نزّله ببطء.",
+    "ممكن ترفع ذراع واحدة أو الذراعين بالتناوب.",
+    "حافظ على الجذع ثابت."
+   ],
+   "mistakes": [
+    {
+     "m": "تأرجح الجسم لرفع الوزن",
+     "fix": "خفف الوزن وثبّت الجذع."
+    },
+    {
+     "m": "رفع الدمبل أعلى من مستوى الكتف",
+     "fix": "ارفع لمستوى الكتف فقط."
+    },
+    {
+     "m": "ثني المرفق كثير",
+     "fix": "حافظ على انثناء خفيف ثابت."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0033-relaxation.png",
+     "img/ek-0033-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Front Dumbbell Raise",
+    "source_id": "0033",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0033-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0033-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "zkP0MsTcIVU",
+    "title": "How To Do A Dumbbell Front Raise",
+    "channel": "PureGym",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=zkP0MsTcIVU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-front-raise",
+   "group": "shoulders",
+   "part": "shoulder-front",
+   "equipment": "cable",
+   "ar": "رفرفة أمامية بالكيبل",
+   "en": "Cable Front Raise",
+   "primary": [
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "secondary": [
+    "الصدر العلوي (Upper Chest)"
+   ],
+   "setup": "ضع البكرة في أسفل جهاز الكيبل وركّب مقبض مناسب (مقبض أو حبل أو بار قصير). قف ووجهك أو ظهرك للجهاز حسب الطريقة التي تفضلها.",
+   "grip": "مسكة عادية، والمرفقين مثنيين شوي طول الحركة.",
+   "steps": [
+    "أمسك المقبض بذراع شبه ممدودة قرب الفخذ.",
+    "ارفع المقبض للأمام لين يصل لمستوى الكتف تقريبًا.",
+    "نزّله ببطء بدون ما ترتاح الأوزان.",
+    "حافظ على الجذع ثابت."
+   ],
+   "mistakes": [
+    {
+     "m": "تأرجح الجذع للمساعدة",
+     "fix": "ثبّت الجذع وخفف الوزن."
+    },
+    {
+     "m": "رفع الأكتاف",
+     "fix": "خلّ الكتفين للأسفل."
+    },
+    {
+     "m": "رجوع سريع",
+     "fix": "ارجع ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0008-relaxation.png",
+     "img/ek-0008-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Front Cable Raises",
+    "source_id": "0008",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0008-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0008-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "RIAfO1-M_F4",
+    "title": "Cable Front Raise | Olympic Weightlifting Exercise Library",
+    "channel": "Catalyst Athletics",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=RIAfO1-M_F4",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "db-lateral-raise",
+   "group": "shoulders",
+   "part": "shoulder-lateral",
+   "equipment": "dumbbell",
+   "ar": "رفرفة جانبية بالدمبل",
+   "en": "Dumbbell Lateral Raise",
+   "primary": [
+    "الكتف الجانبي (Lateral Delt)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "setup": "قف بقدمين بعرض الكتفين والدمبلات بجانب الفخذين، والجذع مائل للأمام شوي، والمرفقين مثنيين شوي.",
+   "grip": "مسكة عادية، وارفع بحيث يقود المرفق الحركة (المرفق أعلى من المعصم شوي).",
+   "steps": [
+    "ارفع الدمبلات للجانبين بقوس لين يصل مستوى الذراعين لمستوى الكتفين تقريبًا.",
+    "تمهّل لحظة ثم نزّلها ببطء وبتحكم.",
+    "حافظ على الكتفين للأسفل بعيد عن الأذنين.",
+    "كرر بدون زخم."
+   ],
+   "mistakes": [
+    {
+     "m": "تأرجح الجسم لرفع الوزن",
+     "fix": "خفف الوزن وثبّت الجذع."
+    },
+    {
+     "m": "رفع الأكتاف للأذنين",
+     "fix": "نزّل الكتفين وارفع بالمرفق."
+    },
+    {
+     "m": "رفع الدمبلات أعلى من الكتفين",
+     "fix": "ارفع لمستوى الكتفين فقط."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0018-relaxation.png",
+     "img/ek-0018-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Lateral Dumbbell Raises",
+    "source_id": "0018",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0018-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0018-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "nnH63icHYXY",
+    "title": "Dumbbell Lateral Raise | Proper Form Tutorial for Bigger Shoulders",
+    "channel": "FIT.nl",
+    "duration": "0:23",
+    "url": "https://www.youtube.com/watch?v=nnH63icHYXY",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-lateral-raise",
+   "group": "shoulders",
+   "part": "shoulder-lateral",
+   "equipment": "cable",
+   "ar": "رفرفة جانبية بالكيبل",
+   "en": "Cable Lateral Raise",
+   "primary": [
+    "الكتف الجانبي (Lateral Delt)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "setup": "ضع البكرة في أسفل جهاز الكيبل وركّب مقبض واحد. قف بجانب الجهاز وأمسك المقبض باليد البعيدة عن الجهاز، بحيث يعبر الكيبل أمام جسمك.",
+   "grip": "مسكة عادية، والمرفق مثني شوي، ويقود المرفق الحركة.",
+   "steps": [
+    "أمسك المقبض بالذراع البعيدة عن الجهاز، والذراع بجانب الجسم.",
+    "ارفعها للجانب بقوس لين يصل مستوى الذراع لمستوى الكتف تقريبًا.",
+    "نزّلها ببطء بتحكم.",
+    "كرر ثم بدّل الجهة."
+   ],
+   "mistakes": [
+    {
+     "m": "تأرجح الجذع",
+     "fix": "ثبّت الجذع وخفف الوزن."
+    },
+    {
+     "m": "رفع الكتف للأذن",
+     "fix": "نزّل الكتف وارفع بالمرفق."
+    },
+    {
+     "m": "رجوع سريع",
+     "fix": "ارجع ببطء."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "zpbm-xRHB6k",
+    "title": "Cable Lateral Raise | Proper Form Tutorial for Bigger Shoulders",
+    "channel": "FIT.nl",
+    "duration": "0:23",
+    "url": "https://www.youtube.com/watch?v=zpbm-xRHB6k",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "lateral-raise-machine",
+   "group": "shoulders",
+   "part": "shoulder-lateral",
+   "equipment": "machine",
+   "ar": "جهاز الرفرفة الجانبية",
+   "en": "Lateral Raise Machine",
+   "primary": [
+    "الكتف الجانبي (Lateral Delt)"
+   ],
+   "secondary": [
+    "الكتف الأمامي (Front Delt)",
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "setup": "اضبط ارتفاع المقعد بحيث يكون مفصل الكتف بنفس مستوى محور الجهاز. ضع الذراعين على الوسادات أو المقابض حسب الجهاز.",
+   "grip": "الذراعين على الوسادات والمرفقين مثنيين، والكتفين للأسفل.",
+   "steps": [
+    "اجلس بظهر ملتصق وضع الذراعين على الوسادات.",
+    "ارفع الذراعين للجانبين لين تصل لمستوى الكتفين تقريبًا.",
+    "تمهّل لحظة ثم ارجع ببطء.",
+    "لا ترفع الأكتاف للأذنين."
+   ],
+   "mistakes": [
+    {
+     "m": "رفع الأكتاف",
+     "fix": "ثبّت الكتفين للأسفل."
+    },
+    {
+     "m": "زخم من الجسم",
+     "fix": "خفف الوزن وتحرك بتحكم."
+    },
+    {
+     "m": "ضبط المقعد غير مناسب",
+     "fix": "اضبطه حتى يتوازى المحور مع الكتف."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "uh1UO-ieTYQ",
+    "title": "Lateral Raise Machine (Tutorial + Tips)",
+    "channel": "Team Evolve | Vivian Ngo",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=uh1UO-ieTYQ",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "overhead-cable-ext",
+   "group": "triceps",
+   "part": "tri-long",
+   "equipment": "cable",
+   "ar": "تمديد ترايسبس فوق الرأس بالكيبل",
+   "en": "Overhead Cable Triceps Extension",
+   "primary": [
+    "الرأس الطويل للترايسبس (Long Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "ضع البكرة في الأعلى أو الأسفل وركّب حبل أو مقبض. قف وظهرك للجهاز وأمل الجذع للأمام شوي.",
+   "grip": "امسك الحبل أو المقبض بكلتا اليدين فوق الرأس، والمرفقين مشيرين للأمام، وقريبين من بعض.",
+   "steps": [
+    "ثبّت المرفقين قرب الرأس والمقبض خلف الرأس.",
+    "مدّ الذراعين للأمام وللأعلى لين تمتد بالكامل.",
+    "رجّع المقبض ببطء خلف الرأس لين تحس بتمدد في الترايسبس.",
+    "حافظ على المرفقين ثابتين."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح المرفقين للجانبين",
+     "fix": "خلّهما مشيرين للأمام وقريبين."
+    },
+    {
+     "m": "تحريك الكتف مع الذراع",
+     "fix": "ثبّت العضد وحرك الساعد فقط."
+    },
+    {
+     "m": "تقويس الظهر",
+     "fix": "شد البطن وأمل الجذع شوي."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "NTk0Igxqcsk",
+    "title": "The PERFECT High Cable Overhead Triceps Extension",
+    "channel": "Andrew Kwong (DeltaBolic)",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=NTk0Igxqcsk",
+    "status": "candidate",
+    "note": "الفيديو يستخدم بار على بكرة عالية، والحبل يؤدي نفس الحركة."
+   }
+  },
+  {
+   "id": "overhead-db-ext",
+   "group": "triceps",
+   "part": "tri-long",
+   "equipment": "dumbbell",
+   "ar": "تمديد ترايسبس فوق الرأس بالدمبل",
+   "en": "Overhead Dumbbell Triceps Extension",
+   "primary": [
+    "الرأس الطويل للترايسبس (Long Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "اجلس أو قف وأمسك دمبل بكلتا اليدين فوق رأسك بذراعين ممدودتين.",
+   "grip": "كف اليدين تحتضن الدمبل من جهة الأقراص (مسكة الكأس)، والمرفقين مشيرين للأمام.",
+   "steps": [
+    "ارفع الدمبل فوق الرأس وثبّت المرفقين قرب الأذنين.",
+    "نزّل الدمبل خلف الرأس ببطء بثني المرفقين.",
+    "ارفعه بقوة الترايسبس لين تمد الذراعين.",
+    "حافظ على العضد ثابت."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح المرفقين للجانبين",
+     "fix": "خلّهما مشيرين للأمام."
+    },
+    {
+     "m": "تقويس أسفل الظهر",
+     "fix": "شد البطن وخلّ الجذع ثابت."
+    },
+    {
+     "m": "وزن ثقيل يخسّر الشكل",
+     "fix": "اختر وزن تتحكم به."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0194-relaxation.png",
+     "img/ek-0194-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Seated Triceps Press with Dumbbell",
+    "source_id": "0194",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0194-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0194-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "bVfZIlxBMqU",
+    "title": "How to Do Overhead Tricep Extensions with Dumbbells Correctly",
+    "channel": "Chris McCarthy",
+    "duration": "0:49",
+    "url": "https://www.youtube.com/watch?v=bVfZIlxBMqU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "skull-crusher",
+   "group": "triceps",
+   "part": "tri-long",
+   "equipment": "barbell",
+   "ar": "سكل كراشر (مستلقي بالبار)",
+   "en": "Skull Crusher (EZ Bar)",
+   "primary": [
+    "الرأس الطويل للترايسبس (Long Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "استلقِ على بنش مستوي وأمسك بار EZ بمسكة ضيقة قليلًا فوق الصدر بذراعين ممدودتين. يفضّل وجود مساعد (سبوتر) للأوزان الثقيلة.",
+   "grip": "مسكة على الأجزاء المنحنية من بار EZ بعرض الكتفين تقريبًا، والمرفقين ثابتين ومشيرين لأعلى.",
+   "steps": [
+    "ثبّت العضد عمودي والمرفقين قريبين من بعض.",
+    "نزّل البار ببطء بثني المرفقين نحو الجبهة أو خلف الرأس قليلًا.",
+    "ادفع البار للأعلى بقوة الترايسبس لين تمد الذراعين.",
+    "حافظ على المرفقين بدون فتح للجانبين."
+   ],
+   "mistakes": [
+    {
+     "m": "فتح المرفقين للجانبين",
+     "fix": "قرّبهما من بعض."
+    },
+    {
+     "m": "تحريك العضد مع الحركة",
+     "fix": "ثبّت العضد وحرك الساعد فقط."
+    },
+    {
+     "m": "وزن ثقيل يعرّض الرأس للخطر",
+     "fix": "اختر وزن تتحكم به، ويفضّل وجود مساعد."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "GaK2da6B2zM",
+    "title": "EZ Bar Skull Crushers: How To",
+    "channel": "Hammer Fitness",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=GaK2da6B2zM",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-pushdown-bar",
+   "group": "triceps",
+   "part": "tri-lateral",
+   "equipment": "cable",
+   "ar": "بوش داون كيبل بالبار المستقيم",
+   "en": "Cable Pushdown (Bar)",
+   "primary": [
+    "الرأس الجانبي للترايسبس (Lateral Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "ضع البكرة في الأعلى وركّب بار مستقيم أو بار قصير. قف قريب من الجهاز، والمرفقين بجانب الجسم.",
+   "grip": "مسكة فوق (الكفوف للأسفل) بعرض الكتفين تقريبًا، والمرفقين ثابتين بجانب الجسم.",
+   "steps": [
+    "أمسك البار عند مستوى الصدر والمرفقين ملتصقين بجانب الجسم.",
+    "ادفع البار للأسفل حتى تمتد الذراعين بدون قفل عنيف.",
+    "تمهّل لحظة ثم ارجع ببطء لمستوى الصدر.",
+    "حافظ على العضد ثابت والجذع ثابت."
+   ],
+   "mistakes": [
+    {
+     "m": "تحريك المرفقين للأمام وللخلف",
+     "fix": "ثبّت المرفقين بجانب الجسم."
+    },
+    {
+     "m": "استخدام ثقل الجسم لدفع الوزن",
+     "fix": "خفف الوزن وثبّت الجذع."
+    },
+    {
+     "m": "رجوع سريع",
+     "fix": "ارجع ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0205-relaxation.png",
+     "img/ek-0205-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Triceps Pushdown: Cable",
+    "source_id": "0205",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0205-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0205-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "Qgh72G5hRBg",
+    "title": "Cable Tricep Pushdown (Straight Bar)",
+    "channel": "Resolve Performance",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=Qgh72G5hRBg",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "close-grip-bench",
+   "group": "triceps",
+   "part": "tri-lateral",
+   "equipment": "barbell",
+   "ar": "بنش بريس ضيق",
+   "en": "Close-Grip Bench Press",
+   "primary": [
+    "الرأس الجانبي للترايسبس (Lateral Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)",
+    "الصدر (Pectoralis)",
+    "الكتف الأمامي (Front Delt)"
+   ],
+   "setup": "استلقِ على بنش مستوي والبار على الحامل. المسكة أضيق من بنش الصدر العادي (بعرض الكتفين تقريبًا وليس أضيق من اللازم). يفضّل وجود مساعد (سبوتر).",
+   "grip": "مسكة بعرض الكتفين تقريبًا، والمرفقين قريبين من الجسم، والمعصمين مستقيمين.",
+   "steps": [
+    "ثبّت الكتفين والقدمين وفك البار فوق صدرك.",
+    "نزّل البار ببطء لأسفل الصدر والمرفقين قريبين من الجسم.",
+    "ادفع البار للأعلى بقوة الترايسبس لين تمد الذراعين.",
+    "رجّعه للحامل بتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "مسكة ضيقة أكثر من اللازم تضغط المعصم",
+     "fix": "اجعلها بعرض الكتفين تقريبًا."
+    },
+    {
+     "m": "فتح المرفقين",
+     "fix": "خلّهما قريبين من الجسم."
+    },
+    {
+     "m": "ارتداد البار على الصدر",
+     "fix": "نزّل بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0049-relaxation.png",
+     "img/ek-0049-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bench Press: Barbell (Close Grip)",
+    "source_id": "0049",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0049-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0049-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "UYJsFzqdgK4",
+    "title": "HOW TO: Close-Grip Bench Press (TRICEPS BUILDER) || PERFECT FORM",
+    "channel": "ScottHermanFitness",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=UYJsFzqdgK4",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "triceps-dips",
+   "group": "triceps",
+   "part": "tri-lateral",
+   "equipment": "bodyweight",
+   "ar": "ديبس ترايسبس (الجسم عمودي)",
+   "en": "Triceps Dips",
+   "primary": [
+    "الرأس الجانبي للترايسبس (Lateral Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)",
+    "الكتف الأمامي (Front Delt)",
+    "الصدر (Pectoralis)"
+   ],
+   "setup": "استخدم متوازي الديبس. ارفع نفسك على ذراعين ممدودتين، وخلّ الجذع عمودي أو شبه عمودي والمرفقين قريبين من الجسم.",
+   "grip": "الكفوف على المقابض، والمرفقين مشيرين للخلف وقريبين من الجسم، والنظر للأمام.",
+   "steps": [
+    "ابدأ بذراعين ممدودتين بدون قفل عنيف والجذع عمودي.",
+    "نزّل الجسم ببطء بثني المرفقين للخلف لين يصير العضد قريب من مستوى الأرض.",
+    "ادفع للأعلى بقوة الترايسبس لين تمد الذراعين.",
+    "حافظ على الكتفين للأسفل."
+   ],
+   "mistakes": [
+    {
+     "m": "إمالة الجذع للأمام فيتحول الشغل للصدر",
+     "fix": "خلّ الجذع عمودي للتركيز على الترايسبس."
+    },
+    {
+     "m": "نزول عميق يضغط الكتف",
+     "fix": "انزل لحد مريح."
+    },
+    {
+     "m": "فتح المرفقين للجانبين",
+     "fix": "خلّهما قريبين من الجسم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "HrPoJWxzLkg",
+    "title": "Dips - Triceps Version",
+    "channel": "Musqle",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=HrPoJWxzLkg",
+    "status": "candidate",
+    "note": "الفيديو على متوازي (بار موازي)، وقد يختلف شكله عن المعدات اللي عندك."
+   }
+  },
+  {
+   "id": "triceps-dip-machine",
+   "group": "triceps",
+   "part": "tri-lateral",
+   "equipment": "machine",
+   "ar": "جهاز ديبس ترايسبس",
+   "en": "Triceps Dip Machine",
+   "primary": [
+    "الرأس الجانبي للترايسبس (Lateral Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)",
+    "الكتف الأمامي (Front Delt)",
+    "الصدر (Pectoralis)"
+   ],
+   "setup": "اجلس واضبط المقعد حتى تكون المقابض بجانب الجسم. ثبّت الظهر على المسند.",
+   "grip": "امسك المقابض ومرفقين مثنيين بجانب الجسم، والمعصمين مستقيمين.",
+   "steps": [
+    "اجلس بظهر ملتصق وأمسك المقابض.",
+    "ادفع المقابض للأسفل حتى تمتد الذراعين بدون قفل عنيف.",
+    "ارجع ببطء لين تقرب المقابض من وضع البداية.",
+    "حافظ على الكتفين للأسفل."
+   ],
+   "mistakes": [
+    {
+     "m": "رفع الأكتاف",
+     "fix": "ثبّت الكتفين للأسفل."
+    },
+    {
+     "m": "فتح المرفقين",
+     "fix": "خلّهما قريبين من الجسم."
+    },
+    {
+     "m": "رجوع سريع",
+     "fix": "ارجع ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0171-relaxation.png",
+     "img/ek-0171-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Triceps Dips: Machine",
+    "source_id": "0171",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0171-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0171-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "Zg0tT27iYuY",
+    "title": "How To: Seated Dip Machine",
+    "channel": "Fitness Lab",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=Zg0tT27iYuY",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "reverse-grip-pushdown",
+   "group": "triceps",
+   "part": "tri-medial",
+   "equipment": "cable",
+   "ar": "بوش داون بمسكة عكسية",
+   "en": "Reverse-Grip Pushdown",
+   "primary": [
+    "الرأس الإنسي للترايسبس (Medial Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)",
+    "عضلات الساعد (Forearms)"
+   ],
+   "setup": "ضع البكرة في الأعلى وركّب بار مستقيم أو بار قصير. قف قريب من الجهاز والمرفقين بجانب الجسم.",
+   "grip": "مسكة تحت (الكفوف للأعلى)، والمرفقين ثابتين بجانب الجسم، والمعصمين مستقيمين.",
+   "steps": [
+    "أمسك البار بمسكة تحت عند مستوى الصدر والمرفقين ملتصقين بالجسم.",
+    "ادفع البار للأسفل حتى تمتد الذراعين بدون قفل عنيف.",
+    "تمهّل لحظة ثم ارجع ببطء.",
+    "حافظ على ثبات المرفقين والمعصمين."
+   ],
+   "mistakes": [
+    {
+     "m": "تحريك المرفقين",
+     "fix": "ثبّت المرفقين بجانب الجسم."
+    },
+    {
+     "m": "ثني المعصمين",
+     "fix": "حافظ على المعصمين مستقيمين."
+    },
+    {
+     "m": "وزن ثقيل يصعّب التحكم",
+     "fix": "اختر وزن أخف لأن المسكة أضعف."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0189-relaxation.png",
+     "img/ek-0189-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Reverse Grip Triceps Pushdown",
+    "source_id": "0189",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0189-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0189-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "8_5YkuU38s4",
+    "title": "Reverse Grip Tricep Pushdown",
+    "channel": "nutritioneering",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=8_5YkuU38s4",
+    "status": "candidate",
+    "note": "وصف الفيديو ما يذكر نوع المعدات، لكن عنوانه يطابق نفس الحركة."
+   }
+  },
+  {
+   "id": "rope-pushdown",
+   "group": "triceps",
+   "part": "tri-medial",
+   "equipment": "cable",
+   "ar": "بوش داون بالحبل",
+   "en": "Rope Pushdown",
+   "primary": [
+    "الرأس الإنسي للترايسبس (Medial Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "ضع البكرة في الأعلى وركّب حبل. قف قريب من الجهاز والمرفقين بجانب الجسم.",
+   "grip": "أمسك طرفي الحبل بمسكة محايدة (الكفوف تواجه بعض)، والمرفقين ثابتين.",
+   "steps": [
+    "أمسك الحبل عند مستوى الصدر والمرفقين ملتصقين بالجسم.",
+    "ادفع الحبل للأسفل وافتح اليدين للجانبين في آخر الحركة.",
+    "تمهّل لحظة ثم ارجع ببطء.",
+    "حافظ على العضد ثابت."
+   ],
+   "mistakes": [
+    {
+     "m": "تحريك المرفقين للأمام وللخلف",
+     "fix": "ثبّتهما بجانب الجسم."
+    },
+    {
+     "m": "تأرجح الجذع",
+     "fix": "خفف الوزن وثبّت الجذع."
+    },
+    {
+     "m": "رجوع سريع",
+     "fix": "ارجع ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0206-relaxation.png",
+     "img/ek-0206-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Triceps Pushdown: Cable (Rope)",
+    "source_id": "0206",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0206-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0206-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "K--j4Qh9d2s",
+    "title": "Cable Rope Triceps Pushdown - Proper Form",
+    "channel": "Germain Craddock's EVA",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=K--j4Qh9d2s",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "kickback",
+   "group": "triceps",
+   "part": "tri-medial",
+   "equipment": "dumbbell",
+   "ar": "كيك باك بالدمبل",
+   "en": "Dumbbell Triceps Kickback",
+   "primary": [
+    "الرأس الإنسي للترايسبس (Medial Head)"
+   ],
+   "secondary": [
+    "الترايسبس (Triceps)"
+   ],
+   "setup": "ضع ركبة ويد على بنش مستوي، والجذع شبه موازي للأرض، والعضد ثابت بجانب الجسم والمرفق مثني. الدمبل في اليد الأخرى.",
+   "grip": "مسكة محايدة، والعضد ملتصق بجانب الجسم ومواز للأرض.",
+   "steps": [
+    "ثبّت العضد قرب الجسم وموازي للأرض والمرفق مثني.",
+    "مدّ الذراع للخلف حتى تمتد بالكامل بدون زخم.",
+    "تمهّل لحظة ثم ارجع ببطء.",
+    "كرر ثم بدّل الذراع."
+   ],
+   "mistakes": [
+    {
+     "m": "تحريك العضد مع الحركة",
+     "fix": "ثبّت العضد وحرك الساعد فقط."
+    },
+    {
+     "m": "وزن ثقيل يضيّع الشكل",
+     "fix": "اختر وزن خفيف تتحكم به."
+    },
+    {
+     "m": "استخدام الزخم",
+     "fix": "تحرك ببطء وبتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0204-relaxation.png",
+     "img/ek-0204-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Triceps Kickback with Dumbbell",
+    "source_id": "0204",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0204-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0204-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "koxddbUMLzw",
+    "title": "Dumbbell Tricep Kickback Technique",
+    "channel": "Postema Performance",
+    "duration": null,
+    "url": "https://www.youtube.com/watch?v=koxddbUMLzw",
+    "status": "candidate",
+    "note": "الفيديو بوضع ركبة ويد على بنش، وهو نفس الوضع المشروح."
+   }
+  }
+ ]
+}</script>
+<script>
+(function () {
+  'use strict';
+  var DATA = JSON.parse(document.getElementById('gg-data').textContent);
+  var KEY_S = 'gg.v1.session', KEY_H = 'gg.v1.history';
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+
+  /* ---------- التخزين: كل كتابة تُقرأ مرة ثانية للتأكد ---------- */
+  var mem = {}; var storageOk = true; var lastSaved = null; var lastError = null;
+  function rawGet(k) {
+    try { var v = window.localStorage.getItem(k); return v; } catch (e) { return mem.hasOwnProperty(k) ? mem[k] : null; }
+  }
+  function rawSet(k, str) {
+    try {
+      window.localStorage.setItem(k, str);
+      if (window.localStorage.getItem(k) !== str) throw new Error('verify-failed');
+      storageOk = true; return true;
+    } catch (e) { mem[k] = str; storageOk = false; lastError = e; return false; }
+  }
+  function readJSON(k, fallback) {
+    var s = rawGet(k); if (s == null) return fallback;
+    try { return JSON.parse(s); } catch (e) { return fallback; }
+  }
+
+  /* ---------- الحالة ---------- */
+  var session = readJSON(KEY_S, null);
+  if (!session || !Array.isArray(session.items)) session = { startedAt: null, items: [] };
+  var history = readJSON(KEY_H, []); if (!Array.isArray(history)) history = [];
+  var sel = { day: '', group: '', part: '', equip: '', ex: '' };
+
+  function exById(id) { return DATA.exercises.filter(function (e) { return e.id === id; })[0]; }
+  function equipName(id) { var q = DATA.equipment.filter(function (x) { return x.id === id; })[0]; return q ? q.ar : ''; }
+  function newItem(exId) { var sets = []; for (var i = 0; i < 5; i++) sets.push({ reps: null, weight: null }); return { exId: exId, addedAt: Date.now(), count: null, sets: sets, approved: false }; }
+  function inSession(exId) { return session.items.some(function (i) { return i.exId === exId; }); }
+  function isComplete(it) {
+    if (!it.count) return false;
+    for (var i = 0; i < it.count; i++) { if (!it.sets[i].reps || !it.sets[i].weight) return false; }
+    return true;
+  }
+
+  function persistSession() {
+    var ok = rawSet(KEY_S, JSON.stringify(session));
+    if (ok) lastSaved = Date.now();
+    renderStatus(); return ok;
+  }
+
+  function fmtTime(t) {
+    try { return new Date(t).toLocaleTimeString('ar-KW-u-nu-latn', { hour: '2-digit', minute: '2-digit' }); } catch (e) { return new Date(t).toTimeString().slice(0, 5); }
+  }
+  function fmtDate(t) {
+    try { return new Date(t).toLocaleDateString('ar-KW-u-nu-latn-ca-gregory', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return new Date(t).toDateString(); }
+  }
+
+  function renderStatus() {
+    var el = $('saveStatus'); var w = $('storeWarn');
+    w.hidden = storageOk;
+    if (!storageOk) { el.textContent = 'تعذّر الحفظ على هذا الجهاز'; el.className = 'status err'; return; }
+    el.className = 'status';
+    el.textContent = lastSaved ? ('تم الحفظ على هذا الجهاز · ' + fmtTime(lastSaved)) : 'يُحفظ تلقائيًا على هذا الجهاز';
+  }
+
+  /* ---------- Toast ---------- */
+  var toastT = null;
+  function toast(msg) {
+    var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT);
+    toastT = setTimeout(function () { t.hidden = true; }, 2200);
+  }
+
+  /* ---------- التبويبات (hash: guide / list / history) ---------- */
+  var TABS = ['guide', 'list', 'history'];
+  function showTab(name) {
+    if (TABS.indexOf(name) < 0) name = 'guide';
+    TABS.forEach(function (t) {
+      $('v-' + t).hidden = (t !== name);
+      $('tab-' + t).setAttribute('aria-selected', t === name ? 'true' : 'false');
+    });
+    if (name === 'list') renderList();
+    if (name === 'history') renderHistory();
+    try { if (location.hash.replace('#', '') !== name) history_replace('#' + name); } catch (e) {}
+    window.scrollTo(0, 0);
+  }
+  function history_replace(h) { if (window.history && window.history.replaceState) { try { window.history.replaceState(null, '', h); } catch (e) { location.hash = h; } } else { location.hash = h; } }
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) { b.addEventListener('click', function () { showTab(b.getAttribute('data-tab')); }); });
+  window.addEventListener('hashchange', function () { showTab(location.hash.replace('#', '')); });
+
+  /* ---------- القوائم المترابطة ---------- */
+  function fill(el, placeholder, opts, value) {
+    var h = '<option value="">' + esc(placeholder) + '</option>';
+    opts.forEach(function (o) { h += '<option value="' + esc(o.value) + '"' + (o.disabled ? ' disabled' : '') + '>' + esc(o.label) + '</option>'; });
+    el.innerHTML = h; el.value = value || '';
+    el.disabled = opts.length === 0;
+  }
+  function dayObj() { return DATA.days.filter(function (d) { return d.id === sel.day; })[0]; }
+  function groupObj() { return DATA.groups.filter(function (g) { return g.id === sel.group; })[0]; }
+
+  function renderSelects() {
+    fill($('selDay'), 'اختر اليوم', DATA.days.map(function (d) {
+      return { value: d.id, label: d.ar + ' — ' + d.en + (d.available ? '' : ' (قريبًا)'), disabled: !d.available };
+    }), sel.day);
+    $('selDay').disabled = false;
+
+    var gOpts = [];
+    if (sel.day) { var d = dayObj(); gOpts = d.groups.map(function (id) { var g = DATA.groups.filter(function (x) { return x.id === id; })[0]; return { value: g.id, label: g.ar + ' — ' + g.en }; }); }
+    fill($('selGroup'), sel.day ? 'اختر المجموعة العضلية' : 'اختر اليوم أول', gOpts, sel.group);
+
+    var pOpts = [];
+    if (sel.group) { pOpts = groupObj().parts.filter(function (p) { return DATA.exercises.some(function (e) { return e.part === p; }); }).map(function (p) { return { value: p, label: DATA.parts[p].ar + ' — ' + DATA.parts[p].en }; }); }
+    fill($('selPart'), sel.group ? 'اختر الجزء المستهدف' : 'اختر المجموعة أول', pOpts, sel.part);
+
+    var qOpts = [];
+    if (sel.part) { qOpts = DATA.equipment.filter(function (q) { return DATA.exercises.some(function (e) { return e.part === sel.part && e.equipment === q.id; }); }).map(function (q) { return { value: q.id, label: q.ar + ' — ' + q.en }; }); }
+    fill($('selEquip'), sel.part ? 'اختر نوع المعدات' : 'اختر الجزء أول', qOpts, sel.equip);
+
+    var xOpts = [];
+    if (sel.equip) { xOpts = DATA.exercises.filter(function (e) { return e.part === sel.part && e.equipment === sel.equip; }).map(function (e) { return { value: e.id, label: e.ar }; }); }
+    fill($('selEx'), sel.equip ? 'اختر التمرين' : 'اختر نوع المعدات أول', xOpts, sel.ex);
+
+    var hint = $('guideHint');
+    hint.hidden = !!sel.ex;
+    var d2 = sel.day ? dayObj() : null;
+    hint.textContent = !sel.day ? 'اختر اليوم أول، وبعدها تنفتح القوائم الباقية وحدة وحدة.' : (sel.ex ? '' : 'كمّل الاختيار لين يظهر التمرين.');
+    renderDetail();
+  }
+  function onChange(level) {
+    return function () {
+      var v = this.value; sel[level] = v;
+      var order = ['day', 'group', 'part', 'equip', 'ex'];
+      for (var i = order.indexOf(level) + 1; i < order.length; i++) sel[order[i]] = '';
+      // اختيار يوم واحد فقط له مجموعات: لا نختار أي شيء تلقائيًا
+      renderSelects();
+    };
+  }
+  $('selDay').addEventListener('change', onChange('day'));
+  $('selGroup').addEventListener('change', onChange('group'));
+  $('selPart').addEventListener('change', onChange('part'));
+  $('selEquip').addEventListener('change', onChange('equip'));
+  $('selEx').addEventListener('change', onChange('ex'));
+
+  /* ---------- مشاهدة الجهاز ---------- */
+  function renderDetail() {
+    var box = $('detail');
+    if (!sel.ex) { box.hidden = true; box.innerHTML = ''; return; }
+    var e = exById(sel.ex);
+    var h = '<h2>مشاهدة الجهاز</h2>';
+    h += '<div class="names"><h3>' + esc(e.ar) + '</h3><div class="en ltr">' + esc(e.en) + '</div></div>';
+
+    // الصورة
+    h += '<div><div class="imgs">';
+    if (e.image) {
+      h += '<figure class="imgbox"><img src="' + esc(e.image.files[0]) + '" alt="' + esc(e.ar) + ' - الوضعية الأولى" loading="lazy"><figcaption>الوضعية الأولى</figcaption></figure>';
+      h += '<figure class="imgbox"><img src="' + esc(e.image.files[1]) + '" alt="' + esc(e.ar) + ' - الوضعية الثانية" loading="lazy"><figcaption>الوضعية الثانية</figcaption></figure>';
+    } else {
+      h += '<div class="noimg"><strong>صورة غير متوفرة</strong><span>ما لقيت صورة تطابق هذا التمرين في المصدر المستخدم.</span></div>';
+    }
+    h += '</div>';
+    if (e.image) {
+      var im = e.image;
+      h += '<p class="imgnote">رسم توضيحي: <a href="' + esc(im.source_url) + '" target="_blank" rel="noopener">' + esc(im.author) + '</a>، ترخيص <a href="' + esc(im.license_url) + '" target="_blank" rel="noopener"><span class="ltr">' + esc(im.license) + '</span></a>. الرسمة من <span class="ltr">everkinetic/data</span> بدون أي تعديل عليها، وتظهر على خلفية بيضاء.</p>';
+    }
+    h += '</div>';
+
+    // العضلات
+    h += '<div class="block"><p class="row-label">العضلات الأساسية</p><div class="chips">' + e.primary.map(function (m) { return '<span class="chip main">' + esc(m) + '</span>'; }).join('') + '</div>';
+    h += '<p class="row-label" style="margin-top:10px">العضلات المساعدة</p><div class="chips">' + e.secondary.map(function (m) { return '<span class="chip">' + esc(m) + '</span>'; }).join('') + '</div></div>';
+
+    h += '<div class="block"><h4>' + (e.equipment === 'machine' ? 'ضبط الجهاز / المقعد' : 'ضبط الوضعية والمعدات') + '</h4><p>' + esc(e.setup) + '</p></div>';
+    h += '<div class="block"><h4>الجلسة والمسكة</h4><p>' + esc(e.grip) + '</p></div>';
+    h += '<div class="block"><h4>خطوات التنفيذ</h4><ol class="steps">' + e.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol></div>';
+    h += '<div class="block"><h4>أخطاء شائعة وكيف تتجنبها</h4><ul class="mist">' + e.mistakes.map(function (m) { return '<li><span class="m">الغلط: ' + esc(m.m) + '</span><span class="f">التصحيح: ' + esc(m.fix) + '</span></li>'; }).join('') + '</ul></div>';
+
+    // الفيديو
+    h += '<div class="block"><h4>فيديو التمرين والتكنيك</h4>';
+    if (e.video) {
+      h += '<div class="video"><div class="t ltr" style="direction:ltr;text-align:left">' + esc(e.video.title) + '</div>';
+      h += '<div class="meta">القناة: <span class="ltr">' + esc(e.video.channel) + '</span>' + (e.video.duration ? ' · المدة: <span class="ltr">' + esc(e.video.duration) + '</span>' : '') + '</div>';
+      h += '<a class="btn ghost" href="' + esc(e.video.url) + '" target="_blank" rel="noopener noreferrer">افتح الفيديو على يوتيوب</a>';
+      h += '<p class="small">فيديو مرشّح: تحققت من عنوانه وقناته فقط، وما أقدر أتأكد من تشغيله أو محتواه من عندي. شاهده وتأكد أنه يشرح نفس التمرين.' + (e.equipment === 'machine' ? ' شكل الجهاز في الفيديو قد يختلف عن الجهاز اللي عندك، المهم أن الحركة نفسها.' : '') + (e.video.note ? ' ' + esc(e.video.note) : '') + '</p></div>';
+    } else {
+      h += '<div class="video"><div class="t">الفيديو غير متوفر</div><p class="small">ما لقيت فيديو موثوق يشرح نفس التمرين.</p></div>';
+    }
+    h += '</div>';
+
+    // الإضافة
+    if (inSession(e.id)) {
+      h += '<button class="btn ok full" type="button" id="goList">موجود في قائمتك، افتح «تماريني»</button>';
+    } else {
+      h += '<button class="btn primary full" type="button" id="addBtn">أضف إلى تمريني</button>';
+    }
+    box.innerHTML = h; box.hidden = false;
+    Array.prototype.forEach.call(box.querySelectorAll('img'), function (img) {
+      img.addEventListener('error', function () {
+        var fb = document.createElement('div'); fb.className = 'noimg'; fb.style.gridColumn = 'auto'; fb.style.aspectRatio = '4 / 3';
+        fb.innerHTML = '<strong>صورة غير متوفرة</strong>';
+        if (img.parentNode) img.parentNode.replaceChild(fb, img);
+      });
+    });
+    var add = $('addBtn');
+    if (add) add.addEventListener('click', function () { addExercise(e.id); });
+    var go = $('goList'); if (go) go.addEventListener('click', function () { showTab('list'); });
+  }
+
+  function addExercise(id) {
+    if (inSession(id)) return;
+    if (!session.startedAt) session.startedAt = Date.now();
+    session.items.push(newItem(id));
+    persistSession(); updateBadge(); renderDetail();
+    toast(storageOk ? 'تمت الإضافة إلى قائمتك' : 'تمت الإضافة، لكن الحفظ على الجهاز فشل');
+  }
+  function updateBadge() { var b = $('badge'); b.textContent = session.items.length; b.hidden = session.items.length === 0; }
+
+  /* ---------- قائمة تماريني ---------- */
+  function optRange(from, to, step, cur, unit) {
+    var h = '<option value="">اختر</option>';
+    for (var v = from; v <= to; v += step) h += '<option value="' + v + '"' + (cur === v ? ' selected' : '') + '>' + v + (unit ? ' ' + unit : '') + '</option>';
+    return h;
+  }
+  function renderList() {
+    var wrap = $('items');
+    var done = session.items.filter(function (i) { return i.approved; }).length;
+    $('sessionInfo').textContent = session.items.length
+      ? ('معتمد ' + done + ' من ' + session.items.length + (session.startedAt ? ' · بدأت الحصة ' + fmtTime(session.startedAt) : ''))
+      : '';
+    if (!session.items.length) {
+      wrap.innerHTML = '<div class="card empty"><strong>قائمتك فاضية</strong>اختر تمرين من «الدليل» واضغط «أضف إلى تمريني».</div>';
+      renderStatus(); return;
+    }
+    var h = '';
+    session.items.forEach(function (it, idx) {
+      var e = exById(it.exId);
+      h += '<article class="item' + (it.approved ? ' done' : '') + '" data-i="' + idx + '">';
+      h += '<div class="hd"><div class="tick" aria-hidden="true">' + (it.approved ? '✅' : '') + '</div><div><div class="nm">' + esc(e.ar) + '</div><div class="sub"><span class="ltr">' + esc(e.en) + '</span> · ' + esc(equipName(e.equipment)) + '</div></div></div>';
+      h += '<div class="field"><label for="cnt' + idx + '">عدد الجولات</label><select id="cnt' + idx + '" data-act="count" data-i="' + idx + '">' + optRange(1, 5, 1, it.count) + '</select></div>';
+      if (it.count) {
+        h += '<div class="sets">';
+        for (var s = 0; s < it.count; s++) {
+          h += '<div class="setrow"><div class="lab">جولة ' + (s + 1) + '</div>' +
+            '<div class="field"><label for="r' + idx + '_' + s + '">العدّات</label><select id="r' + idx + '_' + s + '" data-act="reps" data-i="' + idx + '" data-s="' + s + '">' + optRange(1, 30, 1, it.sets[s].reps) + '</select></div>' +
+            '<div class="field"><label for="w' + idx + '_' + s + '">الوزن (كجم)</label><select id="w' + idx + '_' + s + '" data-act="weight" data-i="' + idx + '" data-s="' + s + '">' + optRange(5, 200, 5, it.sets[s].weight) + '</select></div></div>';
+        }
+        h += '</div>';
+      }
+      h += '<div class="actions">';
+      if (it.approved) {
+        h += '<button class="btn ok" type="button" disabled>✅ معتمد (تقدر تعدّل)</button><button class="btn second" type="button" data-act="unapprove" data-i="' + idx + '">إلغاء الاعتماد</button>';
+      } else {
+        h += '<button class="btn primary" type="button" data-act="approve" data-i="' + idx + '">اعتماد التمرين</button>';
+      }
+      h += '</div>';
+      if (!it.approved && it.count && !isComplete(it)) h += '<div class="status">اختر العدّات والوزن لكل جولة قبل الاعتماد.</div>';
+      if (!it.approved && !it.count) h += '<div class="status">اختر عدد الجولات أول.</div>';
+      h += '</article>';
+    });
+    wrap.innerHTML = h;
+    renderStatus();
+  }
+
+  $('items').addEventListener('change', function (ev) {
+    var t = ev.target; var act = t.getAttribute('data-act'); if (!act) return;
+    var it = session.items[+t.getAttribute('data-i')]; if (!it) return;
+    var v = t.value === '' ? null : +t.value; var wasApproved = it.approved;
+    if (act === 'count') it.count = v;
+    if (act === 'reps') it.sets[+t.getAttribute('data-s')].reps = v;
+    if (act === 'weight') it.sets[+t.getAttribute('data-s')].weight = v;
+    var canceled = false;
+    if (it.approved && !isComplete(it)) { it.approved = false; canceled = true; }
+    persistSession(); renderList();
+    if (canceled) toast('انلغى الاعتماد لأن فيه بيانات ناقصة، عبّها واعتمد من جديد');
+    else if (wasApproved) toast('تم تعديل التمرين المعتمد');
+    var n = document.getElementById(t.id); if (n && n.focus) { try { n.focus(); } catch (e) {} }
+  });
+  $('items').addEventListener('click', function (ev) {
+    var t = ev.target.closest ? ev.target.closest('button[data-act]') : null; if (!t) return;
+    var act = t.getAttribute('data-act'); var it = session.items[+t.getAttribute('data-i')]; if (!it) return;
+    if (act === 'approve') {
+      if (!isComplete(it)) { toast('اختر عدد الجولات ثم العدّات والوزن لكل جولة'); return; }
+      it.approved = true; persistSession(); renderList(); toast('تم اعتماد التمرين ✅');
+    }
+    if (act === 'unapprove') { it.approved = false; persistSession(); renderList(); }
+  });
+
+  /* ---------- بدء حصة جديدة ---------- */
+  function showNewMsg(txt, cls) { var m = $('newMsg'); m.textContent = txt; m.className = 'notice ' + (cls || ''); m.hidden = !txt; }
+  $('newSession').addEventListener('click', function () {
+    showNewMsg('');
+    if (!session.items.length) { showNewMsg('قائمتك فاضية، ما فيه شي يتحفظ.'); return; }
+    $('confirmBox').hidden = false; $('newSession').hidden = true;
+  });
+  $('confirmNo').addEventListener('click', function () { $('confirmBox').hidden = true; $('newSession').hidden = false; });
+  $('confirmYes').addEventListener('click', function () {
+    var rec = {
+      id: 's' + Date.now(), startedAt: session.startedAt || Date.now(), savedAt: Date.now(),
+      items: session.items.map(function (it) {
+        var e = exById(it.exId); var sets = [];
+        for (var i = 0; i < (it.count || 0); i++) sets.push({ reps: it.sets[i].reps, weight: it.sets[i].weight });
+        return { exId: it.exId, ar: e.ar, en: e.en, equipment: equipName(e.equipment), approved: !!it.approved, count: it.count, sets: sets };
+      })
+    };
+    var next = [rec].concat(history);
+    var saved = rawSet(KEY_H, JSON.stringify(next));
+    var verified = false;
+    if (saved) { var back = readJSON(KEY_H, null); verified = !!(back && back[0] && back[0].id === rec.id && back.length === next.length); }
+    $('confirmBox').hidden = true; $('newSession').hidden = false;
+    if (!verified) {
+      showNewMsg('ما قدرت أحفظ الحصة في السجل، فما مسحت قائمتك. جرّب مرة ثانية.', 'bad');
+      renderStatus(); return;
+    }
+    history = next;
+    session = { startedAt: null, items: [] };
+    var ok = persistSession();
+    updateBadge(); renderList(); renderDetail();
+    showNewMsg(ok ? 'انحفظت الحصة في «سجل تماريني»، وقائمتك جاهزة لحصة جديدة.' : 'انحفظت الحصة في السجل، لكن تفريغ القائمة المحفوظة فشل. لو سكّرت الصفحة ممكن ترجع القائمة القديمة.', ok ? 'ok' : 'bad');
+  });
+
+  /* ---------- السجل ---------- */
+  function renderHistory() {
+    $('histCount').textContent = history.length ? (history.length + ' حصة') : '';
+    var w = $('histList');
+    if (!history.length) { w.innerHTML = '<div class="card empty"><strong>ما فيه حصص محفوظة</strong>لما تضغط «بدء حصة جديدة» تنحفظ حصتك هنا.</div>'; return; }
+    w.innerHTML = history.map(function (r, n) {
+      var b = r.items.map(function (it) {
+        var sets = (it.sets || []).map(function (s, i) { return '<li>جولة ' + (i + 1) + ': ' + esc(s.reps == null ? '؟' : s.reps) + ' عدّة × ' + esc(s.weight == null ? '؟' : s.weight) + ' كجم</li>'; }).join('');
+        return '<div class="ex"><div class="n">' + (it.approved ? '✅ ' : '') + esc(it.ar) + ' <span class="sub ltr" style="color:var(--muted);font-weight:400">' + esc(it.en) + '</span></div>' + (sets ? '<ul>' + sets + '</ul>' : '<div class="status">بدون جولات مسجّلة</div>') + '</div>';
+      }).join('');
+      return '<details class="rec"' + (n === 0 ? '' : '') + '><summary><span class="d">' + esc(fmtDate(r.startedAt)) + '</span><span class="s">' + r.items.length + ' تمارين · بدأت ' + esc(fmtTime(r.startedAt)) + ' · انحفظت ' + esc(fmtTime(r.savedAt)) + '</span></summary><div class="body">' + b + '</div></details>';
+    }).join('');
+  }
+
+  /* ---------- النسخ الاحتياطي والاستعادة ---------- */
+  var BK_FORMAT = 1, bkPending = null;
+  function bkMsg(txt, cls) { var m = $('bkMsg'); m.textContent = txt || ''; m.className = 'notice ' + (cls || ''); m.hidden = !txt; }
+  function bkPanels(which) { $('bkExportPanel').hidden = (which !== 'export'); $('bkImportPanel').hidden = (which !== 'import'); }
+  function bkFileName() { var d = new Date(); function z(n) { return (n < 10 ? '0' : '') + n; } return 'gym-guide-backup-' + d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()) + '.json'; }
+
+  $('bkExport').addEventListener('click', function () {
+    bkPending = null; $('bkConfirm').hidden = true;
+    var payload = { app: 'gym-guide', format: BK_FORMAT, exportedAt: new Date().toISOString(), session: session, history: history };
+    $('bkText').value = JSON.stringify(payload, null, 1);
+    bkPanels('export');
+    bkMsg('النسخة جاهزة: ' + history.length + ' حصة في السجل، و' + session.items.length + ' تمرين في القائمة الحالية.', 'ok');
+  });
+  function bkDownload(text, name) {
+    try {
+      var url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+      var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click();
+      setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+      bkMsg('بدأ التنزيل. إذا ما ظهر شي، استخدم «نسخ النص» واحتفظ فيه.', 'ok');
+    } catch (e) { bkMsg('تعذّر حفظ الملف من هذا المتصفح. استخدم «نسخ النص».', 'bad'); }
+  }
+  $('bkShare').addEventListener('click', function () {
+    var text = $('bkText').value, name = bkFileName();
+    try {
+      var file = new File([text], name, { type: 'application/json' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: 'GYM GUIDE - نسخة احتياطية' })
+          .then(function () { bkMsg('تم فتح قائمة المشاركة. اختر «حفظ في الملفات».', 'ok'); })
+          .catch(function (e) { if (!e || e.name !== 'AbortError') bkDownload(text, name); });
+        return;
+      }
+    } catch (e) { /* ننزل للطريقة البديلة */ }
+    bkDownload(text, name);
+  });
+  $('bkCopy').addEventListener('click', function () {
+    var ta = $('bkText'), text = ta.value;
+    function fallback() { try { ta.focus(); ta.select(); ta.setSelectionRange(0, text.length); var ok = document.execCommand && document.execCommand('copy'); bkMsg(ok ? 'تم نسخ النص.' : 'حدّد النص يدويًا وانسخه.', ok ? 'ok' : ''); } catch (e) { bkMsg('حدّد النص يدويًا وانسخه.'); } }
+    try { if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(function () { bkMsg('تم نسخ النص.', 'ok'); }, fallback); return; } } catch (e) {}
+    fallback();
+  });
+
+  $('bkImport').addEventListener('click', function () { bkPending = null; $('bkConfirm').hidden = true; bkPanels('import'); bkMsg(''); });
+  $('bkFile').addEventListener('change', function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () { $('bkPaste').value = String(r.result || ''); bkMsg('تمت قراءة الملف: ' + f.name + '. اضغط «فحص النسخة».', 'ok'); };
+    r.onerror = function () { bkMsg('تعذّرت قراءة الملف.', 'bad'); };
+    r.readAsText(f);
+  });
+
+  function numOrNull(v, lo, hi, step) { return (typeof v === 'number' && isFinite(v) && Math.floor(v) === v && v >= lo && v <= hi && v % step === 0) ? v : null; }
+  function bkParse(txt) {
+    var o; try { o = JSON.parse(txt); } catch (e) { return { err: 'النص مو بصيغة صحيحة. تأكد إنك نسخته كامل.' }; }
+    if (!o || o.app !== 'gym-guide') return { err: 'هذي مو نسخة احتياطية من GYM GUIDE.' };
+    if (o.format !== BK_FORMAT) return { err: 'صيغة هذي النسخة غير مدعومة في هذا الإصدار.' };
+    if (!Array.isArray(o.history) || !o.session || !Array.isArray(o.session.items)) return { err: 'ملف النسخة ناقص أو تالف.' };
+    var hist = [];
+    for (var i = 0; i < o.history.length; i++) {
+      var r = o.history[i];
+      if (!r || typeof r.id !== 'string' || typeof r.startedAt !== 'number' || typeof r.savedAt !== 'number' || !Array.isArray(r.items)) return { err: 'في النسخة حصة تالفة (رقم ' + (i + 1) + '). ما غيّرت شي على بياناتك.' };
+      var items = [];
+      for (var j = 0; j < r.items.length; j++) {
+        var it = r.items[j];
+        if (!it || typeof it.ar !== 'string' || typeof it.en !== 'string' || !Array.isArray(it.sets)) return { err: 'في النسخة تمرين تالف داخل الحصة رقم ' + (i + 1) + '. ما غيّرت شي على بياناتك.' };
+        items.push({ exId: String(it.exId || ''), ar: it.ar, en: it.en, equipment: String(it.equipment || ''), approved: !!it.approved,
+          count: (typeof it.count === 'number' ? it.count : null),
+          sets: it.sets.map(function (st) { return { reps: (st && typeof st.reps === 'number') ? st.reps : null, weight: (st && typeof st.weight === 'number') ? st.weight : null }; }) });
+      }
+      hist.push({ id: r.id, startedAt: r.startedAt, savedAt: r.savedAt, items: items });
+    }
+    var dropped = 0, sItems = [];
+    o.session.items.forEach(function (it) {
+      if (!it || typeof it.exId !== 'string' || !exById(it.exId)) { dropped++; return; }
+      var count = numOrNull(it.count, 1, 5, 1), sets = [];
+      for (var k = 0; k < 5; k++) { var st = (Array.isArray(it.sets) && it.sets[k]) || {}; sets.push({ reps: numOrNull(st.reps, 1, 30, 1), weight: numOrNull(st.weight, 5, 200, 5) }); }
+      var n = { exId: it.exId, addedAt: (typeof it.addedAt === 'number' ? it.addedAt : Date.now()), count: count, sets: sets, approved: false };
+      n.approved = !!it.approved && isComplete(n);
+      sItems.push(n);
+    });
+    return { session: { startedAt: (typeof o.session.startedAt === 'number' ? o.session.startedAt : null), items: sItems }, history: hist, dropped: dropped, exportedAt: o.exportedAt };
+  }
+  $('bkCheck').addEventListener('click', function () {
+    bkPending = null; $('bkConfirm').hidden = true;
+    var txt = $('bkPaste').value.trim();
+    if (!txt) { bkMsg('اختر ملف النسخة أو الصق نصها أول.', 'bad'); return; }
+    var res = bkParse(txt);
+    if (res.err) { bkMsg(res.err, 'bad'); return; }
+    bkPending = res; bkMsg('');
+    var when = ''; try { if (res.exportedAt) when = ' بتاريخ ' + fmtDate(new Date(res.exportedAt).getTime()); } catch (e) {}
+    $('bkSummary').textContent = 'النسخة سليمة' + when + ': ' + res.history.length + ' حصة في السجل، و' + res.session.items.length + ' تمرين في القائمة.' + (res.dropped ? ' (' + res.dropped + ' تمرين غير معروف بيتجاهل.)' : '');
+    $('bkConfirm').hidden = false;
+  });
+  $('bkNo').addEventListener('click', function () { bkPending = null; $('bkConfirm').hidden = true; bkMsg('تم الإلغاء. ما تغيّر شي.'); });
+  $('bkYes').addEventListener('click', function () {
+    var p = bkPending; if (!p) return;
+    var oldS = rawGet(KEY_S), oldH = rawGet(KEY_H);
+    var okH = rawSet(KEY_H, JSON.stringify(p.history));
+    var okS = okH && rawSet(KEY_S, JSON.stringify(p.session));
+    var back = okS ? { h: readJSON(KEY_H, null), s: readJSON(KEY_S, null) } : null;
+    var verified = !!(back && Array.isArray(back.h) && back.h.length === p.history.length && back.s && Array.isArray(back.s.items) && back.s.items.length === p.session.items.length);
+    if (!verified) {
+      function restore(k, v) { try { if (v == null) window.localStorage.removeItem(k); else window.localStorage.setItem(k, v); } catch (e) {} delete mem[k]; }
+      restore(KEY_H, oldH); restore(KEY_S, oldS);
+      bkPending = null; $('bkConfirm').hidden = true;
+      bkMsg('ما قدرت أحفظ النسخة على هذا الجهاز، فرجّعت بياناتك الحالية كما كانت.', 'bad'); renderStatus(); return;
+    }
+    session = p.session; history = p.history; bkPending = null; lastSaved = Date.now();
+    $('bkConfirm').hidden = true; bkPanels(''); $('bkPaste').value = ''; $('bkFile').value = '';
+    updateBadge(); renderList(); renderDetail(); renderHistory(); renderStatus();
+    bkMsg('تمت الاستعادة: ' + history.length + ' حصة في السجل، و' + session.items.length + ' تمرين في القائمة.', 'ok');
+    toast('تمت الاستعادة ✅');
+  });
+
+  /* ---------- تشغيل ---------- */
+  renderSelects(); updateBadge(); renderStatus();
+  if (!rawGet(KEY_S) && storageOk) { /* لا شيء محفوظ بعد */ }
+  showTab(location.hash.replace('#', '') || 'guide');
+  // حالة التخزين عند الفتح: اختبار كتابة صغير
+  (function probe() { var ok = rawSet('gg.v1.probe', '1'); if (!ok) renderStatus(); else { try { window.localStorage.removeItem('gg.v1.probe'); } catch (e) {} } })();
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); }); }
+</script>
+</body>
+</html>
