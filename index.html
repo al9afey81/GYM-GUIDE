@@ -303,35 +303,81 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     "chest",
     "shoulders",
     "triceps"
-   ]
+   ],
+   "parts": {
+    "shoulders": [
+     "shoulder-front",
+     "shoulder-lateral"
+    ]
+   }
   },
   {
    "id": "legs",
    "ar": "ليق",
    "en": "Legs",
-   "available": false,
-   "groups": []
+   "available": true,
+   "groups": [
+    "quads",
+    "hamstrings",
+    "glutes",
+    "calves",
+    "hips"
+   ]
   },
   {
    "id": "pull",
    "ar": "بول",
    "en": "Pull",
-   "available": false,
-   "groups": []
+   "available": true,
+   "groups": [
+    "back",
+    "shoulders",
+    "biceps"
+   ],
+   "parts": {
+    "shoulders": [
+     "shoulder-rear"
+    ]
+   }
   },
   {
    "id": "upper",
    "ar": "أبر",
    "en": "Upper",
-   "available": false,
-   "groups": []
+   "available": true,
+   "groups": [
+    "chest",
+    "back",
+    "shoulders",
+    "biceps",
+    "triceps"
+   ],
+   "parts": {
+    "back": [
+     "back-vertical",
+     "back-horizontal",
+     "back-traps"
+    ]
+   }
   },
   {
    "id": "lower",
    "ar": "لور",
    "en": "Lower",
-   "available": false,
-   "groups": []
+   "available": true,
+   "groups": [
+    "quads",
+    "hamstrings",
+    "glutes",
+    "calves",
+    "hips",
+    "back"
+   ],
+   "parts": {
+    "back": [
+     "back-lower"
+    ]
+   }
   }
  ],
  "groups": [
@@ -351,7 +397,8 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
    "en": "Shoulders",
    "parts": [
     "shoulder-front",
-    "shoulder-lateral"
+    "shoulder-lateral",
+    "shoulder-rear"
    ]
   },
   {
@@ -362,6 +409,74 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     "tri-long",
     "tri-lateral",
     "tri-medial"
+   ]
+  },
+  {
+   "id": "quads",
+   "ar": "الفخذ الأمامي",
+   "en": "Quadriceps",
+   "parts": [
+    "quad-compound",
+    "quad-unilateral",
+    "quad-isolation"
+   ]
+  },
+  {
+   "id": "hamstrings",
+   "ar": "الفخذ الخلفي",
+   "en": "Hamstrings",
+   "parts": [
+    "ham-hinge",
+    "ham-curl"
+   ]
+  },
+  {
+   "id": "glutes",
+   "ar": "الأرداف",
+   "en": "Glutes",
+   "parts": [
+    "glute-thrust",
+    "glute-kickback"
+   ]
+  },
+  {
+   "id": "calves",
+   "ar": "السمانة",
+   "en": "Calves",
+   "parts": [
+    "calf-standing",
+    "calf-seated"
+   ]
+  },
+  {
+   "id": "hips",
+   "ar": "الفخذ الداخلي والخارجي",
+   "en": "Inner & Outer Thigh",
+   "parts": [
+    "hip-adductors",
+    "hip-abductors"
+   ]
+  },
+  {
+   "id": "back",
+   "ar": "الظهر",
+   "en": "Back",
+   "parts": [
+    "back-vertical",
+    "back-horizontal",
+    "back-traps",
+    "back-lower"
+   ]
+  },
+  {
+   "id": "biceps",
+   "ar": "البايسبس",
+   "en": "Biceps",
+   "parts": [
+    "bi-both",
+    "bi-long",
+    "bi-short",
+    "bi-brachialis"
    ]
   }
  ],
@@ -397,6 +512,86 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
   "tri-medial": {
    "ar": "ترايسبس إنسي",
    "en": "Medial Head"
+  },
+  "shoulder-rear": {
+   "ar": "كتف خلفي",
+   "en": "Rear Delt"
+  },
+  "quad-compound": {
+   "ar": "سكوات وضغط الأرجل",
+   "en": "Squat & Leg Press"
+  },
+  "quad-unilateral": {
+   "ar": "تمارين الرجل الواحدة (لانجز وستب أب)",
+   "en": "Single-Leg"
+  },
+  "quad-isolation": {
+   "ar": "عزل الفخذ الأمامي",
+   "en": "Quad Isolation"
+  },
+  "ham-hinge": {
+   "ar": "انحناء الورك (رفعات رومانية)",
+   "en": "Hip Hinge"
+  },
+  "ham-curl": {
+   "ar": "ثني الركبة (ليق كيرل)",
+   "en": "Leg Curls"
+  },
+  "glute-thrust": {
+   "ar": "الجسر ودفع الورك",
+   "en": "Bridges & Hip Thrusts"
+  },
+  "glute-kickback": {
+   "ar": "الركلة الخلفية",
+   "en": "Kickbacks"
+  },
+  "calf-standing": {
+   "ar": "سمانة بالركبة ممدودة",
+   "en": "Gastrocnemius"
+  },
+  "calf-seated": {
+   "ar": "سمانة بالركبة مثنية",
+   "en": "Soleus"
+  },
+  "hip-adductors": {
+   "ar": "الفخذ الداخلي",
+   "en": "Adductors"
+  },
+  "hip-abductors": {
+   "ar": "الفخذ الخارجي (جانب الورك)",
+   "en": "Abductors"
+  },
+  "back-vertical": {
+   "ar": "سحب عمودي (اللاتس)",
+   "en": "Vertical Pull"
+  },
+  "back-horizontal": {
+   "ar": "سحب أفقي (منتصف الظهر)",
+   "en": "Horizontal Pull"
+  },
+  "back-traps": {
+   "ar": "الترابيس العلوي",
+   "en": "Upper Traps"
+  },
+  "back-lower": {
+   "ar": "أسفل الظهر",
+   "en": "Lower Back"
+  },
+  "bi-both": {
+   "ar": "البايسبس بالكامل",
+   "en": "Both Heads"
+  },
+  "bi-long": {
+   "ar": "الرأس الطويل",
+   "en": "Long Head"
+  },
+  "bi-short": {
+   "ar": "الرأس القصير",
+   "en": "Short Head"
+  },
+  "bi-brachialis": {
+   "ar": "البراكياليس والساعد",
+   "en": "Brachialis & Forearm"
   }
  },
  "equipment": [
@@ -2701,6 +2896,4570 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     "status": "candidate",
     "note": "الفيديو بوضع ركبة ويد على بنش، وهو نفس الوضع المشروح."
    }
+  },
+  {
+   "id": "barbell-back-squat",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "barbell",
+   "ar": "سكوات خلفي بالبار",
+   "en": "Barbell Back Squat",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "أسفل الظهر (Erector Spinae)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البار على الحامل (الرك) بمستوى أعلى صدرك تقريبًا، واضبط حواجز الأمان تحت أدنى نقطة بتنزل لها. خلّ الحمل خفيف لين تتقن الحركة.",
+   "grip": "البار على أعلى الظهر (عضلة الترابيس) وليس على الرقبة، والمسكة أعرض من الكتفين بشوي. القدمين بعرض الكتفين تقريبًا والأصابع مفتوحة للخارج شوي، والوزن موزع على القدم كاملة.",
+   "steps": [
+    "ادخل تحت البار، شد الجذع وفك البار من الحامل وارجع خطوتين أو ثلاث بس.",
+    "خذ نفس وشد بطنك، وانزل بثني الورك والركبة مع بعض، والركبة تمشي بنفس اتجاه الأصابع.",
+    "انزل للعمق اللي تقدر تحافظ فيه على ظهر محايد وكعب ثابت على الأرض.",
+    "ادفع الأرض بقدمك كاملة وارجع للوقوف، والصدر والورك يطلعون مع بعض."
+   ],
+   "mistakes": [
+    {
+     "m": "الركبة تدخل للداخل وقت الطلوع",
+     "fix": "خلّ الركبة بنفس اتجاه أصابع القدم، وخفف الوزن إذا تكرر."
+    },
+    {
+     "m": "الكعب يرتفع عن الأرض",
+     "fix": "خلّ الوزن على القدم كاملة، وقلل العمق أو وسّع الوقفة شوي."
+    },
+    {
+     "m": "تقويس أو تدوير أسفل الظهر تحت",
+     "fix": "انزل للعمق اللي يبقى فيه ظهرك محايد بس."
+    },
+    {
+     "m": "الورك يطلع قبل الصدر",
+     "fix": "اطلع والصدر والورك مع بعض بنفس السرعة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0122-relaxation.png",
+     "img/ek-0122-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Barbell Squat",
+    "source_id": "0122",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0122-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0122-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "aOzrA4FgnM0",
+    "title": "How to do the BARBELL BACK SQUAT! | 2 Minute Tutorial",
+    "channel": "Max Euceda",
+    "duration": "2:01",
+    "url": "https://www.youtube.com/watch?v=aOzrA4FgnM0",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم. استخدم حواجز الأمان أو مساعد (سبوتر) مع الأوزان الثقيلة."
+  },
+  {
+   "id": "front-squat",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "barbell",
+   "ar": "سكوات أمامي بالبار",
+   "en": "Barbell Front Squat",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)"
+   ],
+   "secondary": [
+    "الأرداف (Glutes)",
+    "عضلات الفخذ الداخلية (Adductors)",
+    "عضلات الجذع (Core)",
+    "أعلى الظهر (Upper Back)"
+   ],
+   "setup": "اضبط البار على الحامل بمستوى أعلى صدرك، وحواجز الأمان تحت أدنى نقطة بتوصل لها. يحتاج مرونة في الرسغ والكتف، فابدأ بوزن خفيف جدًا.",
+   "grip": "البار على مقدمة الكتفين قريب من الرقبة. المسكة يا بأطراف الأصابع والمرفقين مرفوعين للأمام، يا بتكتيف الذراعين فوق البار. القدمين بعرض الكتفين تقريبًا.",
+   "steps": [
+    "ثبّت البار على مقدمة الكتفين وارفع المرفقين، وفك البار وارجع خطوتين.",
+    "انزل بثني الركبة والورك والجذع شبه عمودي، والمرفقين مرفوعين طول الوقت.",
+    "انزل للعمق اللي تقدر تتحكم فيه بدون ما ينزل المرفقين أو يدور الظهر.",
+    "ادفع بالقدم كاملة وارجع للوقوف."
+   ],
+   "mistakes": [
+    {
+     "m": "المرفقين ينزلون والبار يطيح للأمام",
+     "fix": "ارفع المرفقين وخفف الوزن."
+    },
+    {
+     "m": "الضغط على الرسغ يسبب ألم",
+     "fix": "جرّب مسكة التكتيف أو وسّع المسكة شوي."
+    },
+    {
+     "m": "الكعب يرتفع",
+     "fix": "خلّ الوزن على القدم كاملة وقلل العمق."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0138-relaxation.png",
+     "img/ek-0138-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Front Squat with Barbell",
+    "source_id": "0138",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0138-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0138-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "wyDbagKS7Rg",
+    "title": "How To Front Squat With Proper Form",
+    "channel": "CanditoTrainingHQ",
+    "duration": "2:26",
+    "url": "https://www.youtube.com/watch?v=wyDbagKS7Rg",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "hack-squat-machine",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "machine",
+   "ar": "جهاز هاك سكوات",
+   "en": "Hack Squat Machine",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)"
+   ],
+   "secondary": [
+    "الأرداف (Glutes)",
+    "عضلات الفخذ الداخلية (Adductors)"
+   ],
+   "setup": "اضبط مسند الكتف بحيث يرتكز على كتفك وأنت واقف مستقيم. حدد مكان القدم على اللوح: وسط اللوح بعرض الكتفين نقطة بداية مناسبة، ولا تحطها قريبة جدًا من الحافة السفلية.",
+   "grip": "ظهرك كامل ملتصق بالمسند، والكتفين تحت المساند، ومسك المقابض الجانبية. القدمين ثابتة على اللوح والأصابع مفتوحة شوي للخارج.",
+   "steps": [
+    "فك قفل الأمان وأنت واقف والركبة شبه ممدودة.",
+    "انزل ببطء بثني الركبة والورك، والركبة تمشي بنفس اتجاه أصابع القدم.",
+    "انزل للمدى اللي يبقى فيه أسفل ظهرك ملتصق بالمسند والكعب على اللوح.",
+    "ادفع اللوح بالقدم كاملة وارجع، ولا تقفل الركبة بعنف فوق. رجّع قفل الأمان بعد ما تخلص."
+   ],
+   "mistakes": [
+    {
+     "m": "أسفل الظهر يبتعد عن المسند في آخر النزول",
+     "fix": "قلل العمق لين يبقى ظهرك ملتصق."
+    },
+    {
+     "m": "الكعب يرتفع عن اللوح",
+     "fix": "ارفع مكان القدم على اللوح شوي أو قلل العمق."
+    },
+    {
+     "m": "قفل الركبة بقوة فوق",
+     "fix": "وقف قبل القفل الكامل بشوي."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0123-relaxation.png",
+     "img/ek-0123-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Hack Squat: Machine",
+    "source_id": "0123",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0123-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0123-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "fE5BWPy7uRc",
+    "title": "How To PROPERLY Hack Squat With Proper Form",
+    "channel": "Colossus Fitness",
+    "duration": "2:21",
+    "url": "https://www.youtube.com/watch?v=fE5BWPy7uRc",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "leg-press",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "machine",
+   "ar": "جهاز ضغط الأرجل (ليق برس)",
+   "en": "Leg Press",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "setup": "اضبط ظهر المقعد على زاوية مريحة، وتأكد من مكان أقفال الأمان. القدمين على وسط اللوح بعرض الكتفين تقريبًا. لما ترفع القدم أعلى على اللوح يزيد الشغل على الأرداف والفخذ الخلفي، ولما تنزلها يزيد على الفخذ الأمامي.",
+   "grip": "الظهر والورك ملتصقين بالمقعد، ومسك المقابض الجانبية. القدمين ثابتة على اللوح والأصابع بنفس اتجاه الركبة.",
+   "steps": [
+    "ادفع اللوح لين تمد رجلك بدون قفل، وفك أقفال الأمان.",
+    "نزّل اللوح ببطء بثني الركبة، والركبة بنفس اتجاه الأصابع.",
+    "وقف النزول قبل ما يرتفع وركك أو أسفل ظهرك عن المقعد.",
+    "ادفع اللوح بالقدم كاملة وارجع، ورجّع الأقفال لما تخلص."
+   ],
+   "mistakes": [
+    {
+     "m": "الورك يرتفع عن المقعد في آخر النزول (تدوير أسفل الظهر)",
+     "fix": "قلل العمق لين يبقى الورك ملتصق."
+    },
+    {
+     "m": "قفل الركبة بقوة فوق",
+     "fix": "خلّ الركبة شبه ممدودة في أعلى الحركة."
+    },
+    {
+     "m": "الدفع بأطراف الأصابع",
+     "fix": "ادفع بالقدم كاملة والكعب ثابت."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0127-relaxation.png",
+     "img/ek-0127-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Leg Press",
+    "source_id": "0127",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0127-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0127-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "K5n2vg3oZa4",
+    "title": "How to PROPERLY Leg Press (FIX YOUR FORM NOW)",
+    "channel": "Colossus Fitness",
+    "duration": "3:48",
+    "url": "https://www.youtube.com/watch?v=K5n2vg3oZa4",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تقفل الركبة بعنف أبدًا تحت الحمل في هذا الجهاز. الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "smith-squat",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "machine",
+   "ar": "سكوات على جهاز سميث",
+   "en": "Smith Machine Squat",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البار بمستوى أعلى صدرك، والصدادات (المصدّات) تحت أدنى نقطة بتنزل لها. البار يمشي في مسار ثابت، فمكان قدمك يحدد شكل الحركة: القدم تحت البار أو قدامه بشوي.",
+   "grip": "البار على أعلى الظهر وليس على الرقبة، والمسكة أعرض من الكتفين. القدمين بعرض الكتفين والأصابع مفتوحة شوي.",
+   "steps": [
+    "ادخل تحت البار، لف البار عشان تفكه من الخطافات، وثبّت قدمك.",
+    "انزل بثني الركبة والورك، والركبة تمشي بنفس اتجاه الأصابع.",
+    "انزل للعمق اللي يبقى فيه ظهرك محايد وكعبك على الأرض.",
+    "ادفع وارجع للوقوف، وبعد آخر عدة لف البار عشان يرجع على الخطافات."
+   ],
+   "mistakes": [
+    {
+     "m": "مكان القدم غلط فتحس الحركة تسحبك",
+     "fix": "جرّب تقدّم قدمك شوي لين تحس بالتوازن."
+    },
+    {
+     "m": "نسيان ضبط الصدادات",
+     "fix": "اضبطها قبل البداية دائمًا."
+    },
+    {
+     "m": "الركبة تدخل للداخل",
+     "fix": "ادفع الركبة بنفس اتجاه الأصابع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0124-relaxation.png",
+     "img/ek-0124-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Squats: Smith Machine",
+    "source_id": "0124",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0124-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0124-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "AHnX-aimA4E",
+    "title": "How To: Smith Machine- Squat",
+    "channel": "ScottHermanFitness",
+    "duration": "2:16",
+    "url": "https://www.youtube.com/watch?v=AHnX-aimA4E",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "db-squat",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "dumbbell",
+   "ar": "سكوات بالدمبل (الدمبلات على الجانبين)",
+   "en": "Dumbbell Squat",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)",
+    "الساعد (Grip)"
+   ],
+   "setup": "اختر دمبلين بوزن تقدر تمسكه طول الجولة. ما يحتاج جهاز، بس تأكد إن المكان حولك فاضي.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض. القدمين بعرض الكتفين، والكتفين للخلف والصدر مرفوع.",
+   "steps": [
+    "قف مستقيم والدمبلات على جانبك والذراعين ممدودة.",
+    "انزل بثني الورك والركبة مع بعض، والدمبلات تنزل عمودية على جانبك.",
+    "انزل للعمق اللي تقدر تتحكم فيه بظهر محايد.",
+    "ادفع بالقدم كاملة وارجع للوقوف."
+   ],
+   "mistakes": [
+    {
+     "m": "الانحناء للأمام بشكل زائد",
+     "fix": "خلّ الصدر مرفوع والنظر للأمام."
+    },
+    {
+     "m": "الركبة تدخل للداخل",
+     "fix": "ادفع الركبة بنفس اتجاه الأصابع."
+    },
+    {
+     "m": "الكعب يرتفع",
+     "fix": "الوزن على القدم كاملة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0130-relaxation.png",
+     "img/ek-0130-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Squats: Dumbbells",
+    "source_id": "0130",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0130-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0130-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "v_c67Omje48",
+    "title": "How to Dumbbell Squat | Mike Hildebrandt",
+    "channel": "Bodybuilding.com",
+    "duration": "1:35",
+    "url": "https://www.youtube.com/watch?v=v_c67Omje48",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "bodyweight-squat",
+   "group": "quads",
+   "part": "quad-compound",
+   "equipment": "bodyweight",
+   "ar": "سكوات بوزن الجسم",
+   "en": "Bodyweight Squat",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "ما يحتاج معدات. مناسب للإحماء ولتعلّم الحركة قبل إضافة وزن.",
+   "grip": "القدمين بعرض الكتفين أو أعرض شوي، والأصابع مفتوحة للخارج شوي. الذراعين قدامك للتوازن أو على صدرك.",
+   "steps": [
+    "قف مستقيم وشد بطنك.",
+    "انزل بثني الورك والركبة مع بعض، كأنك بتجلس على كرسي وراك.",
+    "انزل للعمق اللي تقدر تحافظ فيه على ظهر محايد وكعب على الأرض.",
+    "ادفع بالقدم كاملة وارجع للوقوف."
+   ],
+   "mistakes": [
+    {
+     "m": "الركبة تدخل للداخل",
+     "fix": "ادفع الركبة بنفس اتجاه الأصابع."
+    },
+    {
+     "m": "النزول بسرعة بدون تحكم",
+     "fix": "انزل ببطء واطلع بتحكم."
+    },
+    {
+     "m": "تدوير الظهر في آخر النزول",
+     "fix": "قلل العمق."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "P-yaD24bUE8",
+    "title": "Bodyweight Squat Tutorial - Proper Form and Technique",
+    "channel": "Runna",
+    "duration": "0:47",
+    "url": "https://www.youtube.com/watch?v=P-yaD24bUE8",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "db-lunge",
+   "group": "quads",
+   "part": "quad-unilateral",
+   "equipment": "dumbbell",
+   "ar": "لانجز أمامي بالدمبل",
+   "en": "Dumbbell Forward Lunge",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اختر دمبلين خفاف بالبداية، لأن التمرين يحتاج توازن. خلّ مساحة كافية قدامك.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض. الجذع مستقيم والكتفين للخلف.",
+   "steps": [
+    "قف والقدمين بعرض الورك.",
+    "خذ خطوة للأمام بطول مريح، ونزّل جسمك عمودي لين تقرب الركبة الخلفية من الأرض بدون ما تلمسها بقوة.",
+    "الركبة الأمامية تمشي بنفس اتجاه الأصابع، والكعب الأمامي ثابت على الأرض.",
+    "ادفع بالقدم الأمامية وارجع لوضع البداية، وبدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "الخطوة قصيرة جدًا فيرتفع الكعب الأمامي",
+     "fix": "طوّل الخطوة لين يبقى الكعب على الأرض."
+    },
+    {
+     "m": "الركبة الأمامية تدخل للداخل",
+     "fix": "خلّها بنفس اتجاه الأصابع."
+    },
+    {
+     "m": "ضرب الركبة الخلفية بالأرض",
+     "fix": "انزل بتحكم ووقف قبل الأرض بشوي."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0115-relaxation.png",
+     "img/ek-0115-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Lunges: Dumbbell",
+    "source_id": "0115",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0115-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0115-tension.png"
+    ],
+    "modified": false,
+    "note": "الرسمة ثابتة وما توضح اتجاه الخطوة (للأمام أو للخلف أو مشي)، فاتبع الخطوات المكتوبة."
+   },
+   "video": {
+    "id": "3TM-vVWuLYE",
+    "title": "How To Do A DUMBBELL FORWARD LUNGE | Exercise Demonstration Video and Guide",
+    "channel": "Live Lean TV Daily Exercises",
+    "duration": "0:47",
+    "url": "https://www.youtube.com/watch?v=3TM-vVWuLYE",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "barbell-lunge",
+   "group": "quads",
+   "part": "quad-unilateral",
+   "equipment": "barbell",
+   "ar": "لانجز بالبار",
+   "en": "Barbell Lunge",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "يحتاج توازن أكثر من الدمبل. اضبط البار على الحامل بمستوى أعلى صدرك وابدأ بوزن خفيف أو بالبار فاضي.",
+   "grip": "البار على أعلى الظهر وليس على الرقبة، والمسكة أعرض من الكتفين. الجذع مستقيم.",
+   "steps": [
+    "فك البار من الحامل وارجع خطوتين، والقدمين بعرض الورك.",
+    "خذ خطوة للأمام ونزّل جسمك عمودي لين تقرب الركبة الخلفية من الأرض.",
+    "الركبة الأمامية بنفس اتجاه الأصابع والجذع مستقيم.",
+    "ادفع بالقدم الأمامية وارجع، وبدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "القدمين على خط واحد فيختل التوازن",
+     "fix": "خلّ بين القدمين مسافة بعرض الورك تقريبًا."
+    },
+    {
+     "m": "الانحناء للأمام",
+     "fix": "الجذع شبه عمودي والنظر للأمام."
+    },
+    {
+     "m": "الركبة الأمامية تدخل للداخل",
+     "fix": "خلّها بنفس اتجاه الأصابع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0114-relaxation.png",
+     "img/ek-0114-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Lunges: Barbell",
+    "source_id": "0114",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0114-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0114-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "NcDtORTfVNQ",
+    "title": "How to PROPERLY Barbell Lunge (AVOID THESE MISTAKES)",
+    "channel": "Colossus Fitness",
+    "duration": "4:27",
+    "url": "https://www.youtube.com/watch?v=NcDtORTfVNQ",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "db-walking-lunge",
+   "group": "quads",
+   "part": "quad-unilateral",
+   "equipment": "dumbbell",
+   "ar": "لانجز مشي بالدمبل",
+   "en": "Dumbbell Walking Lunge",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "يحتاج مساحة فاضية تمشي فيها للأمام. ابدأ بوزن خفيف.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض، والجذع مستقيم.",
+   "steps": [
+    "خذ خطوة للأمام وانزل لين تقرب الركبة الخلفية من الأرض.",
+    "ادفع بالقدم الأمامية وقدّم الرجل الخلفية لقدّام لخطوة جديدة بدل ما ترجع.",
+    "كمّل المشي بالتبديل بين الرجلين بنفس الإيقاع.",
+    "خلّ كل خطوة متحكم فيها قبل اللي بعدها."
+   ],
+   "mistakes": [
+    {
+     "m": "المشي بسرعة وفقدان التوازن",
+     "fix": "وقف لحظة بين كل خطوة لو احتجت."
+    },
+    {
+     "m": "الركبة الأمامية تدخل للداخل",
+     "fix": "خلّها بنفس اتجاه الأصابع."
+    },
+    {
+     "m": "الانحناء للأمام",
+     "fix": "الجذع شبه عمودي."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0121-relaxation.png",
+     "img/ek-0121-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Lunges: Dumbbell (Walking)",
+    "source_id": "0121",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0121-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0121-tension.png"
+    ],
+    "modified": false,
+    "note": "الرسمة ثابتة وما توضح اتجاه الخطوة (للأمام أو للخلف أو مشي)، فاتبع الخطوات المكتوبة."
+   },
+   "video": {
+    "id": "_DLIS8SySzs",
+    "title": "How to PROPERLY Walking Dumbbell Lunge (FIX THIS NOW!)",
+    "channel": "Colossus Fitness",
+    "duration": "2:55",
+    "url": "https://www.youtube.com/watch?v=_DLIS8SySzs",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "db-reverse-lunge",
+   "group": "quads",
+   "part": "quad-unilateral",
+   "equipment": "dumbbell",
+   "ar": "لانجز خلفي بالدمبل",
+   "en": "Dumbbell Reverse Lunge",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "الرجوع للخلف بدل التقدم، وكثير ناس يحسونه أسهل على الركبة الأمامية وأسهل بالتوازن. ابدأ بوزن خفيف.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض، والجذع مستقيم.",
+   "steps": [
+    "قف والقدمين بعرض الورك.",
+    "ارجع خطوة للخلف ونزّل جسمك لين تقرب الركبة الخلفية من الأرض.",
+    "الوزن الأكبر على القدم الأمامية، وركبتها بنفس اتجاه الأصابع.",
+    "ادفع بالقدم الأمامية وارجع لوضع البداية، وبدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "الدفع بالرجل الخلفية",
+     "fix": "خلّ الشغل الأكبر على القدم الأمامية."
+    },
+    {
+     "m": "الخطوة للخلف على نفس خط القدم الأمامية",
+     "fix": "خلّ بين القدمين مسافة بعرض الورك."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "انزل بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0129-relaxation.png",
+     "img/ek-0129-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Lunges: Dumbbell (Rear)",
+    "source_id": "0129",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0129-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0129-tension.png"
+    ],
+    "modified": false,
+    "note": "الرسمة ثابتة وما توضح اتجاه الخطوة (للأمام أو للخلف أو مشي)، فاتبع الخطوات المكتوبة."
+   },
+   "video": {
+    "id": "sjlsISvHyZs",
+    "title": "How To: Dumbbell Reverse Lunge",
+    "channel": "ScottHermanFitness",
+    "duration": "3:08",
+    "url": "https://www.youtube.com/watch?v=sjlsISvHyZs",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "bulgarian-split-squat",
+   "group": "quads",
+   "part": "quad-unilateral",
+   "equipment": "dumbbell",
+   "ar": "بلغاري سبليت سكوات بالدمبل",
+   "en": "Dumbbell Bulgarian Split Squat",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "تحتاج بنش أو مقعد بارتفاع الركبة تقريبًا وراك. حط ظهر القدم الخلفية عليه، والقدم الأمامية بعيدة عنه بمسافة تخليك تنزل والكعب الأمامي على الأرض. جرّب بدون وزن أول لين تلقى المسافة المناسبة.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض. الجذع مستقيم أو مائل للأمام شوي.",
+   "steps": [
+    "ثبّت القدم الخلفية على البنش والأمامية على الأرض.",
+    "انزل عمودي بثني الركبة الأمامية، والركبة بنفس اتجاه الأصابع.",
+    "انزل للمدى اللي تقدر تتحكم فيه بدون ألم والكعب الأمامي ثابت.",
+    "ادفع بالقدم الأمامية وارجع، وكمّل العدات ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "القدم الأمامية قريبة جدًا من البنش فيرتفع الكعب",
+     "fix": "بعّد القدم الأمامية شوي."
+    },
+    {
+     "m": "الدفع بالرجل الخلفية",
+     "fix": "الرجل الخلفية للتوازن بس."
+    },
+    {
+     "m": "فقدان التوازن",
+     "fix": "ابدأ بدون وزن أو امسك شي ثابت بيد."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "Fmjj7wFJWRE",
+    "title": "Bulgarian Split Squat with Dumbbells",
+    "channel": "The Active Life",
+    "duration": "0:20",
+    "url": "https://www.youtube.com/watch?v=Fmjj7wFJWRE",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم. التمرين يحتاج توازن، فابدأ بوزن الجسم."
+  },
+  {
+   "id": "db-step-up",
+   "group": "quads",
+   "part": "quad-unilateral",
+   "equipment": "dumbbell",
+   "ar": "ستب أب بالدمبل",
+   "en": "Dumbbell Step-Up",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الفخذ الداخلية (Adductors)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "استخدم صندوق أو بنش ثابت ما يتحرك. ابدأ بارتفاع يخلي ركبتك تقريبًا بمستوى الورك أو أقل، وكل ما زاد الارتفاع زادت الصعوبة.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض، والجذع مستقيم.",
+   "steps": [
+    "حط القدم كاملة على الصندوق.",
+    "اطلع بالدفع بالرجل اللي فوق، بدون ما تدفع كثير بالرجل اللي تحت.",
+    "قف مستقيم فوق الصندوق، ثم انزل ببطء بنفس الرجل.",
+    "كمّل العدات ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "الدفع بالرجل اللي على الأرض",
+     "fix": "خلّ الشغل على الرجل اللي فوق الصندوق."
+    },
+    {
+     "m": "الصندوق عالي زيادة",
+     "fix": "اختر ارتفاع تقدر تطلع عليه بتحكم."
+    },
+    {
+     "m": "الركبة تدخل للداخل وقت الطلوع",
+     "fix": "خلّها بنفس اتجاه الأصابع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0137-relaxation.png",
+     "img/ek-0137-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Step Ups: Dumbbell",
+    "source_id": "0137",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0137-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0137-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "aKj-6hgiViA",
+    "title": "How To PROPERLY Perform Dumbbell Step Ups (GLUTE FOCUSED)",
+    "channel": "Colossus Fitness",
+    "duration": "3:41",
+    "url": "https://www.youtube.com/watch?v=aKj-6hgiViA",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم. تأكد إن الصندوق ثابت وما يتزحلق."
+  },
+  {
+   "id": "leg-extension",
+   "group": "quads",
+   "part": "quad-isolation",
+   "equipment": "machine",
+   "ar": "جهاز تمديد الركبة (ليق إكستنشن)",
+   "en": "Leg Extension",
+   "primary": [
+    "الفخذ الأمامي (Quadriceps)"
+   ],
+   "secondary": [],
+   "setup": "اضبط ظهر المقعد بحيث تكون ركبتك على حافة المقعد ومحاذية لمحور دوران الجهاز (النقطة اللي يلف عليها). اضبط المسند السفلي بحيث يكون على أسفل الساق فوق الكاحل بشوي.",
+   "grip": "اجلس والظهر ملتصق بالمسند، ومسك المقابض الجانبية عشان ما يرتفع وركك.",
+   "steps": [
+    "ابدأ والركبة مثنية والمسند على أسفل الساق.",
+    "مد الركبة ببطء لين تقرب من الامتداد الكامل.",
+    "ثبّت لحظة فوق وشد الفخذ الأمامي.",
+    "نزّل ببطء وتحكم بدون ما تخلّ الوزن يطيح."
+   ],
+   "mistakes": [
+    {
+     "m": "محور الجهاز مو محاذي للركبة",
+     "fix": "عدّل ظهر المقعد لين تتطابق الركبة مع محور الدوران."
+    },
+    {
+     "m": "رمي الوزن للأعلى بسرعة",
+     "fix": "ارفع ونزّل ببطء."
+    },
+    {
+     "m": "الورك يرتفع عن المقعد",
+     "fix": "امسك المقابض وخفف الوزن."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0142-relaxation.png",
+     "img/ek-0142-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Leg Extensions",
+    "source_id": "0142",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0142-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0142-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "1DlLe1r0i74",
+    "title": "How to PROPERLY Use The Leg Extension Machine for Muscle Gain & Injury Prevention",
+    "channel": "Colossus Fitness",
+    "duration": "4:56",
+    "url": "https://www.youtube.com/watch?v=1DlLe1r0i74",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "اضبط المدى على مستوى مريح لركبتك. إذا حسيت بألم في الركبة وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "romanian-deadlift",
+   "group": "hamstrings",
+   "part": "ham-hinge",
+   "equipment": "barbell",
+   "ar": "رفعة رومانية بالبار (RDL)",
+   "en": "Barbell Romanian Deadlift",
+   "primary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "أسفل الظهر (Erector Spinae)",
+    "الساعد (Grip)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "ابدأ والبار على الحامل بمستوى منتصف الفخذ، أو ارفعه من الأرض بطريقة سليمة. الحمل خفيف لين تتقن حركة الورك.",
+   "grip": "مسكة علوية (الكفوف لك) بعرض الكتفين تقريبًا. القدمين بعرض الورك، والركبة مثنية شوي وتبقى على نفس الثنية طول الحركة.",
+   "steps": [
+    "قف مستقيم والبار قدام فخذك.",
+    "ادفع الورك للخلف والبار ينزل قريب من الفخذ والساق، والظهر محايد.",
+    "انزل لين تحس بتمدد في الفخذ الخلفي، وغالبًا هذا يكون عند الركبة أو تحتها بشوي.",
+    "ارجع للوقوف بدفع الورك للأمام، بدون ما تميل للخلف فوق."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر للنزول أكثر",
+     "fix": "وقف النزول لما توصل لآخر تمدد تقدر تحافظ فيه على ظهر محايد."
+    },
+    {
+     "m": "ثني الركبة كثير فتتحول لسكوات",
+     "fix": "خلّ الركبة على ثنية خفيفة ثابتة."
+    },
+    {
+     "m": "البار يبعد عن الرجل",
+     "fix": "خلّه قريب من الفخذ والساق طول الحركة."
+    },
+    {
+     "m": "الميل للخلف فوق",
+     "fix": "اوقف مستقيم بس."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0118-relaxation.png",
+     "img/ek-0118-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Romanian Dead Lift",
+    "source_id": "0118",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0118-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0118-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "3VXmecChYYM",
+    "title": "How to do the ROMANIAN DEADLIFT! | 2 Minute Tutorial",
+    "channel": "Max Euceda",
+    "duration": "2:00",
+    "url": "https://www.youtube.com/watch?v=3VXmecChYYM",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. المدى يحدده مرونة الفخذ الخلفي عندك، ومو لازم تنزل للأرض. إذا حسيت بألم في أسفل الظهر وقّف."
+  },
+  {
+   "id": "db-romanian-deadlift",
+   "group": "hamstrings",
+   "part": "ham-hinge",
+   "equipment": "dumbbell",
+   "ar": "رفعة رومانية بالدمبل",
+   "en": "Dumbbell Romanian Deadlift",
+   "primary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "أسفل الظهر (Erector Spinae)",
+    "الساعد (Grip)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اختر دمبلين بوزن تقدر تتحكم فيه. ما يحتاج حامل.",
+   "grip": "الدمبلات قدام الفخذ والكفوف لك (أو تواجه بعض). القدمين بعرض الورك، والركبة مثنية شوي.",
+   "steps": [
+    "قف مستقيم والدمبلات قدام الفخذ.",
+    "ادفع الورك للخلف والدمبلات تنزل قريبة من الرجل، والظهر محايد.",
+    "انزل لين تحس بتمدد في الفخذ الخلفي.",
+    "ارجع للوقوف بدفع الورك للأمام."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر",
+     "fix": "قلل المدى لين يبقى ظهرك محايد."
+    },
+    {
+     "m": "الدمبلات تبعد عن الرجل",
+     "fix": "خلّها قريبة طول الحركة."
+    },
+    {
+     "m": "ثني الركبة كثير",
+     "fix": "ثنية خفيفة ثابتة بس."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0107-relaxation.png",
+     "img/ek-0107-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Dead Lifts: Dumbbell",
+    "source_id": "0107",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0107-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0107-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Dead Lifts: Dumbbell»، وخطواتها في المصدر نفس حركة الرفعة الرومانية (انحناء من الورك مع ثني خفيف للركبة)."
+   },
+   "video": {
+    "id": "FQKfr1YDhEk",
+    "title": "How To: Dumbbell Romanian Deadlift",
+    "channel": "ScottHermanFitness",
+    "duration": "1:59",
+    "url": "https://www.youtube.com/watch?v=FQKfr1YDhEk",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. المدى يحدده مرونة الفخذ الخلفي عندك، ومو لازم تنزل للأرض. إذا حسيت بألم في أسفل الظهر وقّف."
+  },
+  {
+   "id": "lying-leg-curl",
+   "group": "hamstrings",
+   "part": "ham-curl",
+   "equipment": "machine",
+   "ar": "جهاز ثني الركبة منبطح (ليق كيرل)",
+   "en": "Lying Leg Curl",
+   "primary": [
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "secondary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "setup": "انبطح على الجهاز بحيث تكون الركبة خارج حافة المقعد بشوي ومحاذية لمحور الدوران. اضبط المسند بحيث يكون على أسفل الساق فوق الكاحل.",
+   "grip": "الورك ملتصق بالمقعد، ومسك المقابض قدامك.",
+   "steps": [
+    "ابدأ والرجل شبه ممدودة.",
+    "اثنِ الركبة واسحب المسند باتجاه الأرداف ببطء.",
+    "ثبّت لحظة وشد الفخذ الخلفي.",
+    "نزّل ببطء بدون ما تقفل الركبة بقوة تحت."
+   ],
+   "mistakes": [
+    {
+     "m": "الورك يرتفع عن المقعد",
+     "fix": "ثبّت الورك على المقعد وخفف الوزن."
+    },
+    {
+     "m": "رمي الوزن بسرعة",
+     "fix": "اسحب ونزّل بتحكم."
+    },
+    {
+     "m": "المسند على عضلة السمانة",
+     "fix": "اضبطه فوق الكاحل."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0117-relaxation.png",
+     "img/ek-0117-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Lying Leg Curl Machine",
+    "source_id": "0117",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0117-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0117-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "vl5nUdE9mWM",
+    "title": "How to Lying Leg Curl | Proper Technique, Set Up, & Mistakes",
+    "channel": "Physique Development",
+    "duration": "2:44",
+    "url": "https://www.youtube.com/watch?v=vl5nUdE9mWM",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "seated-leg-curl",
+   "group": "hamstrings",
+   "part": "ham-curl",
+   "equipment": "machine",
+   "ar": "جهاز ثني الركبة جالس",
+   "en": "Seated Leg Curl",
+   "primary": [
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "secondary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "setup": "اضبط ظهر المقعد بحيث تكون الركبة محاذية لمحور دوران الجهاز. المسند السفلي على أسفل الساق فوق الكاحل، ونزّل مسند الفخذ لين يثبّت فخذك بدون ضغط مزعج.",
+   "grip": "اجلس والظهر ملتصق بالمسند، ومسك المقابض.",
+   "steps": [
+    "ابدأ والرجل شبه ممدودة قدامك.",
+    "اسحب المسند للأسفل وللخلف بثني الركبة.",
+    "ثبّت لحظة وشد الفخذ الخلفي.",
+    "ارجع ببطء بتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "مسند الفخذ مو مثبّت فيتحرك الفخذ",
+     "fix": "نزّل مسند الفخذ لين يثبته."
+    },
+    {
+     "m": "محور الجهاز مو محاذي للركبة",
+     "fix": "عدّل ظهر المقعد."
+    },
+    {
+     "m": "الرجوع بسرعة",
+     "fix": "ارجع ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0119-relaxation.png",
+     "img/ek-0119-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Seated Leg Curl",
+    "source_id": "0119",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0119-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0119-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "t9sTSr-JYSs",
+    "title": "Beginner's Guide: Seated Leg Curl",
+    "channel": "SilverSneakers",
+    "duration": "1:58",
+    "url": "https://www.youtube.com/watch?v=t9sTSr-JYSs",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "standing-leg-curl",
+   "group": "hamstrings",
+   "part": "ham-curl",
+   "equipment": "machine",
+   "ar": "جهاز ثني الركبة واقف",
+   "en": "Standing Leg Curl",
+   "primary": [
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "secondary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "setup": "اضبط المسند بحيث يكون على أسفل الساق فوق الكاحل، والركبة محاذية لمحور الدوران. يتمرن رجل وحدة كل مرة.",
+   "grip": "قف والجذع مستقيم أو مائل شوي حسب الجهاز، ومسك المقابض. الرجل الثانية ثابتة.",
+   "steps": [
+    "ابدأ والرجل ممدودة.",
+    "اثنِ الركبة واسحب الكعب باتجاه الأرداف ببطء.",
+    "ثبّت لحظة.",
+    "ارجع بتحكم، وكمّل العدات ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "تحريك الورك أو الظهر للمساعدة",
+     "fix": "خلّ الجسم ثابت وخفف الوزن."
+    },
+    {
+     "m": "رمي الوزن",
+     "fix": "اسحب بتحكم."
+    },
+    {
+     "m": "المسند على السمانة",
+     "fix": "اضبطه فوق الكاحل."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0120-relaxation.png",
+     "img/ek-0120-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Standing Leg Curls",
+    "source_id": "0120",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0120-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0120-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "Z053-kKjesQ",
+    "title": "How To: Standing Leg Curl (BM)",
+    "channel": "ScottHermanFitness",
+    "duration": "2:15",
+    "url": "https://www.youtube.com/watch?v=Z053-kKjesQ",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "glute-bridge",
+   "group": "glutes",
+   "part": "glute-thrust",
+   "equipment": "bodyweight",
+   "ar": "جسر الأرداف (قلوت بريدج)",
+   "en": "Glute Bridge",
+   "primary": [
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "استلقِ على ظهرك على الأرض أو على مرتبة. ما يحتاج معدات.",
+   "grip": "الركبتين مثنية والقدمين على الأرض بعرض الورك، قريبة من الأرداف بشوي. الذراعين على الأرض جنبك.",
+   "steps": [
+    "شد بطنك وثبّت القدمين.",
+    "ارفع الورك عن الأرض بدفع الكعب وشد الأرداف.",
+    "اطلع لين يصير الجسم خط مستقيم من الكتف للركبة، بدون تقويس أسفل الظهر.",
+    "ثبّت لحظة ثم انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس أسفل الظهر فوق",
+     "fix": "وقف لما يصير الجسم خط مستقيم وشد الأرداف."
+    },
+    {
+     "m": "الدفع بأطراف الأصابع",
+     "fix": "ادفع بالكعب."
+    },
+    {
+     "m": "الركبتين تفتح أو تسكّر",
+     "fix": "خلّها بعرض الورك."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0109-relaxation.png",
+     "img/ek-0109-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bridging",
+    "source_id": "0109",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0109-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0109-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "PhTDzR0TpZs",
+    "title": "How to Do a Glute Bridge Exercise: A Guide from Physical Therapists",
+    "channel": "Hinge Health",
+    "duration": "0:54",
+    "url": "https://www.youtube.com/watch?v=PhTDzR0TpZs",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "barbell-hip-thrust",
+   "group": "glutes",
+   "part": "glute-thrust",
+   "equipment": "barbell",
+   "ar": "هيب ثرست بالبار",
+   "en": "Barbell Hip Thrust",
+   "primary": [
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الفخذ الداخلية (Adductors)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اسند أعلى ظهرك (تحت لوحي الكتف) على حافة بنش ثابت ما يتحرك. البار فوق الورك، ويفضّل وسادة للبار عشان يكون مريح.",
+   "grip": "امسك البار بيدينك عشان يثبت. القدمين على الأرض بعرض الورك، وبمسافة تخلي الساق شبه عمودية فوق.",
+   "steps": [
+    "ابدأ والورك تحت والبار فوق وركك.",
+    "ادفع بالكعب وارفع الورك لين يصير الجذع شبه موازي للأرض.",
+    "شد الأرداف فوق، والذقن للداخل شوي، بدون تقويس أسفل الظهر.",
+    "انزل ببطء وتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس أسفل الظهر فوق بدل شد الأرداف",
+     "fix": "وقف فوق لما يستوي الجذع وشد الأرداف."
+    },
+    {
+     "m": "القدمين قريبة أو بعيدة جدًا",
+     "fix": "عدّل لين تكون الساق شبه عمودية فوق."
+    },
+    {
+     "m": "البنش يتحرك",
+     "fix": "استخدم بنش ثابت أو اسنده على جدار."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "xDmFkJxPzeM",
+    "title": "How To Build Great Glutes with Perfect Hip Thrust Technique (Fix Mistakes!)",
+    "channel": "Jeff Nippard",
+    "duration": "7:12",
+    "url": "https://www.youtube.com/watch?v=xDmFkJxPzeM",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "ابدأ بوزن خفيف. البار يضغط على الورك، فاستخدم وسادة. إذا حسيت بألم في الظهر وقّف."
+  },
+  {
+   "id": "hip-thrust-machine",
+   "group": "glutes",
+   "part": "glute-thrust",
+   "equipment": "machine",
+   "ar": "جهاز هيب ثرست",
+   "en": "Hip Thrust Machine",
+   "primary": [
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "الأجهزة تختلف. اضبط مسند الظهر بحيث يكون تحت لوحي الكتف، والحزام أو المسند على الورك. القدمين على اللوح بمسافة تخلي الساق شبه عمودية فوق.",
+   "grip": "مسك المقابض، والقدمين بعرض الورك.",
+   "steps": [
+    "ابدأ والورك تحت.",
+    "ادفع بالكعب وارفع الورك لين يستوي الجذع.",
+    "شد الأرداف فوق بدون تقويس أسفل الظهر.",
+    "انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس أسفل الظهر",
+     "fix": "وقف فوق لما يستوي الجذع."
+    },
+    {
+     "m": "مكان القدم غلط فتحس الشغل على الفخذ الأمامي أكثر",
+     "fix": "عدّل مكان القدم."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "انزل بتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "tztHvSLdXLA",
+    "title": "How to PROPERLY Machine Hip Thrust (FIX YOUR FORM NOW)",
+    "channel": "Colossus Fitness",
+    "duration": "3:12",
+    "url": "https://www.youtube.com/watch?v=tztHvSLdXLA",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-glute-kickback",
+   "group": "glutes",
+   "part": "glute-kickback",
+   "equipment": "cable",
+   "ar": "ركلة خلفية بالكيبل",
+   "en": "Cable Glute Kickback",
+   "primary": [
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى، وركّب حزام الكاحل على رجلك.",
+   "grip": "قف مواجه للجهاز ومسكه بيدينك، والجذع مائل شوي للأمام. الرجل الثانية مثنية شوي وثابتة.",
+   "steps": [
+    "ابدأ والرجل قريبة من الثانية.",
+    "ادفع الرجل للخلف بشد الأرداف، والركبة ممدودة أو مثنية شوي.",
+    "وقف لما تحس بشد الأرداف قبل ما يتقوّس أسفل ظهرك.",
+    "ارجع ببطء، وكمّل العدات ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "رفع الرجل عالي بتقويس الظهر",
+     "fix": "قلل المدى وخلّ الحركة من الورك."
+    },
+    {
+     "m": "التأرجح والرمي",
+     "fix": "تحرك ببطء وتحكم."
+    },
+    {
+     "m": "لف الجذع",
+     "fix": "خلّ الحوض مواجه للجهاز."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0112-relaxation.png",
+     "img/ek-0112-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "One Legged Cable Kickback",
+    "source_id": "0112",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0112-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0112-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "5jJNfIlKTmg",
+    "title": "How to PROPERLY Cable Glute Kickback (GROW YOUR GLUTES)",
+    "channel": "Colossus Fitness",
+    "duration": "3:12",
+    "url": "https://www.youtube.com/watch?v=5jJNfIlKTmg",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "glute-kickback-machine",
+   "group": "glutes",
+   "part": "glute-kickback",
+   "equipment": "machine",
+   "ar": "جهاز الركلة الخلفية للأرداف",
+   "en": "Glute Kickback Machine",
+   "primary": [
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "setup": "الأجهزة تختلف (واقف أو على الركب). اضبط المسند بحيث يدفعه باطن القدم أو أسفل الساق حسب نوع الجهاز، واضبط مسند الصدر أو البطن لو موجود.",
+   "grip": "مسك المقابض، والجذع ثابت، والرجل الثانية ثابتة على القاعدة.",
+   "steps": [
+    "ابدأ والرجل مثنية تحتك.",
+    "ادفع للخلف بشد الأرداف.",
+    "وقف قبل ما يتقوّس أسفل الظهر.",
+    "ارجع بتحكم، ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس أسفل الظهر",
+     "fix": "قلل المدى."
+    },
+    {
+     "m": "رمي الوزن",
+     "fix": "ادفع بتحكم."
+    },
+    {
+     "m": "الحوض يلف",
+     "fix": "خلّه ثابت."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "WhtxQnm4254",
+    "title": "Glute Kickback Machine",
+    "channel": "SIU Rec Center",
+    "duration": "0:58",
+    "url": "https://www.youtube.com/watch?v=WhtxQnm4254",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "standing-calf-machine",
+   "group": "calves",
+   "part": "calf-standing",
+   "equipment": "machine",
+   "ar": "جهاز السمانة واقف",
+   "en": "Standing Calf Raise Machine",
+   "primary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "secondary": [
+    "العضلة النعلية (Soleus)"
+   ],
+   "setup": "اضبط مساند الكتف بحيث تكون الركبة شبه ممدودة لما تقف تحتها. حط مقدمة القدم على حافة اللوح والكعب طالع برا.",
+   "grip": "الكتفين تحت المساند، ومسك المقابض. القدمين بعرض الورك، والركبة ممدودة بدون قفل.",
+   "steps": [
+    "نزّل الكعب ببطء لين تحس بتمدد في السمانة.",
+    "ارفع الكعب لأعلى نقطة تقدر عليها.",
+    "ثبّت لحظة فوق.",
+    "انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "حركات قصيرة وسريعة",
+     "fix": "استخدم المدى الكامل ببطء."
+    },
+    {
+     "m": "ثني الركبة للمساعدة",
+     "fix": "خلّ الركبة شبه ممدودة."
+    },
+    {
+     "m": "الارتداد تحت",
+     "fix": "وقف لحظة تحت قبل الطلوع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0282-relaxation.png",
+     "img/ek-0282-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Standing Calf Raises using Machine",
+    "source_id": "0282",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0282-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0282-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "SVtg-1loH4c",
+    "title": "How to PROPERLY Standing Calf Raise | Tips & Common Mistakes",
+    "channel": "Colossus Fitness",
+    "duration": "2:02",
+    "url": "https://www.youtube.com/watch?v=SVtg-1loH4c",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "barbell-calf-raise",
+   "group": "calves",
+   "part": "calf-standing",
+   "equipment": "barbell",
+   "ar": "سمانة واقف بالبار",
+   "en": "Standing Barbell Calf Raise",
+   "primary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "secondary": [
+    "العضلة النعلية (Soleus)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البار على الحامل بمستوى أعلى صدرك. تقدر تحط مقدمة القدم على قرص (صحن وزن) ثابت لمدى أكبر، بس تأكد إنه ما يتزحلق. يحتاج توازن، فابدأ خفيف.",
+   "grip": "البار على أعلى الظهر، والمسكة أعرض من الكتفين. القدمين بعرض الورك.",
+   "steps": [
+    "فك البار من الحامل وقف مستقيم.",
+    "ارفع الكعب لأعلى نقطة.",
+    "ثبّت لحظة.",
+    "انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "فقدان التوازن",
+     "fix": "ابدأ بوزن خفيف أو استخدم جهاز السمانة بدالها."
+    },
+    {
+     "m": "حركات سريعة",
+     "fix": "ببطء وبالمدى الكامل."
+    },
+    {
+     "m": "ثني الركبة",
+     "fix": "خلّها شبه ممدودة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0281-relaxation.png",
+     "img/ek-0281-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Standing Barbell Calf Raise",
+    "source_id": "0281",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0281-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0281-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "3UWi44yN-wM",
+    "title": "How To: Standing Barbell Calf Raise",
+    "channel": "ScottHermanFitness",
+    "duration": "1:21",
+    "url": "https://www.youtube.com/watch?v=3UWi44yN-wM",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "leg-press-calf-raise",
+   "group": "calves",
+   "part": "calf-standing",
+   "equipment": "machine",
+   "ar": "سمانة على جهاز الليق برس",
+   "en": "Leg Press Calf Raise",
+   "primary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "secondary": [
+    "العضلة النعلية (Soleus)"
+   ],
+   "setup": "اجلس على جهاز الليق برس وحط مقدمة القدم على الحافة السفلية للوح والكعب طالع برا. اترك أقفال الأمان مركّبة إذا الجهاز يسمح.",
+   "grip": "الظهر ملتصق بالمقعد، والركبة ممدودة بدون قفل كامل.",
+   "steps": [
+    "ادفع اللوح بمقدمة القدم.",
+    "نزّل اللوح ببطء بثني الكاحل لين تحس بتمدد.",
+    "ادفع لأعلى نقطة بالكاحل.",
+    "ثبّت لحظة ثم كرر."
+   ],
+   "mistakes": [
+    {
+     "m": "القدم تتزحلق عن اللوح",
+     "fix": "خلّ مقدمة القدم ثابتة كويس وخفف الوزن."
+    },
+    {
+     "m": "ثني الركبة",
+     "fix": "خلّها شبه ممدودة وثابتة."
+    },
+    {
+     "m": "حركات سريعة",
+     "fix": "ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0273-relaxation.png",
+     "img/ek-0273-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Calves Press on Leg Machine",
+    "source_id": "0273",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0273-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0273-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "PYZY00hI43w",
+    "title": "How to PROPERLY Calf Raise on The Leg Press Machine (FIX THIS!)",
+    "channel": "Colossus Fitness",
+    "duration": "1:51",
+    "url": "https://www.youtube.com/watch?v=PYZY00hI43w",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "انتبه إن القدم ما تتزحلق عن حافة اللوح، لأن اللوح بينزل عليك. خلّ أقفال الأمان قريبة."
+  },
+  {
+   "id": "seated-calf-machine",
+   "group": "calves",
+   "part": "calf-seated",
+   "equipment": "machine",
+   "ar": "جهاز السمانة جالس",
+   "en": "Seated Calf Raise Machine",
+   "primary": [
+    "العضلة النعلية (Soleus)"
+   ],
+   "secondary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "setup": "اجلس واضبط المسند بحيث يثبت فوق الفخذ قريب من الركبة. حط مقدمة القدم على الحافة والكعب طالع برا.",
+   "grip": "الظهر مستقيم والركبة مثنية تقريبًا 90 درجة. فك قفل الأمان بعد ما تثبّت.",
+   "steps": [
+    "نزّل الكعب ببطء لين تحس بتمدد.",
+    "ارفع الكعب لأعلى نقطة.",
+    "ثبّت لحظة.",
+    "انزل ببطء. رجّع قفل الأمان بعد ما تخلص."
+   ],
+   "mistakes": [
+    {
+     "m": "حركات قصيرة",
+     "fix": "استخدم المدى الكامل."
+    },
+    {
+     "m": "الارتداد تحت",
+     "fix": "وقف لحظة تحت."
+    },
+    {
+     "m": "دفع الوزن بالجسم",
+     "fix": "الشغل من الكاحل بس."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0279-relaxation.png",
+     "img/ek-0279-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Seated Calf Raise using Machine",
+    "source_id": "0279",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0279-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0279-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "6O5hh1rBtx8",
+    "title": "How to PROPERLY Calf Raise (SEATED CALF RAISE TIPS)",
+    "channel": "Colossus Fitness",
+    "duration": "2:31",
+    "url": "https://www.youtube.com/watch?v=6O5hh1rBtx8",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "seated-db-calf-raise",
+   "group": "calves",
+   "part": "calf-seated",
+   "equipment": "dumbbell",
+   "ar": "سمانة جالس بالدمبل",
+   "en": "Seated Dumbbell Calf Raise",
+   "primary": [
+    "العضلة النعلية (Soleus)"
+   ],
+   "secondary": [
+    "السمانة (Gastrocnemius)"
+   ],
+   "setup": "اجلس على بنش، وحط مقدمة القدم على قرص أو مكان مرتفع شوي. حط الدمبل على فخذك قريب من الركبة (يد وحدة أو اثنتين حسب ما تتمرن رجل وحدة أو الثنتين).",
+   "grip": "امسك الدمبل بثبات فوق الفخذ، والظهر مستقيم.",
+   "steps": [
+    "نزّل الكعب ببطء لين تحس بتمدد.",
+    "ارفع الكعب لأعلى نقطة.",
+    "ثبّت لحظة.",
+    "انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "الدمبل يتحرك على الفخذ",
+     "fix": "ثبته بيدك ولو تحتاج حط منشفة."
+    },
+    {
+     "m": "حركات سريعة",
+     "fix": "ببطء."
+    },
+    {
+     "m": "المكان المرتفع يتزحلق",
+     "fix": "استخدم شي ثابت."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0276-relaxation.png",
+     "img/ek-0276-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Seated One Leg Calf Raise with Dumbbell",
+    "source_id": "0276",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0276-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0276-tension.png"
+    ],
+    "modified": false,
+    "note": "الرسمة تُظهر التمرين برجل وحدة."
+   },
+   "video": {
+    "id": "fFWpWJy8ybU",
+    "title": "How To: Dumbbell Seated Calf Raise",
+    "channel": "Live Lean TV Daily Exercises",
+    "duration": "0:46",
+    "url": "https://www.youtube.com/watch?v=fFWpWJy8ybU",
+    "status": "candidate",
+    "note": "الفيديو ممكن يكون بالرجلين مع بعض، والفكرة نفسها."
+   }
+  },
+  {
+   "id": "adductor-machine",
+   "group": "hips",
+   "part": "hip-adductors",
+   "equipment": "machine",
+   "ar": "جهاز الفخذ الداخلي (أداكتور)",
+   "en": "Hip Adductor Machine",
+   "primary": [
+    "عضلات الفخذ الداخلية (Adductors)"
+   ],
+   "secondary": [],
+   "setup": "اجلس واضبط المساند على باطن الركبة أو الفخذ. ابدأ بمدى فتح مريح، ولا تفتح الرجل لأقصى مدى من أول مرة.",
+   "grip": "الظهر ملتصق بالمسند، ومسك المقابض.",
+   "steps": [
+    "ابدأ والرجلين مفتوحة لمدى مريح.",
+    "سكّر الرجلين باتجاه بعض ببطء.",
+    "ثبّت لحظة.",
+    "افتح ببطء وتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "بداية بفتح واسع جدًا",
+     "fix": "ابدأ بمدى مريح وزد تدريجيًا."
+    },
+    {
+     "m": "رمي الوزن",
+     "fix": "سكّر وافتح ببطء."
+    },
+    {
+     "m": "الميل للأمام",
+     "fix": "خلّ الظهر على المسند."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0157-relaxation.png",
+     "img/ek-0157-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Thigh Adductor",
+    "source_id": "0157",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0157-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0157-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "MLBm7i341Rw",
+    "title": "How to PROPERLY Use The Adductor Machine (STOP THIS NOW)",
+    "channel": "Colossus Fitness",
+    "duration": "2:44",
+    "url": "https://www.youtube.com/watch?v=MLBm7i341Rw",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-hip-adduction",
+   "group": "hips",
+   "part": "hip-adductors",
+   "equipment": "cable",
+   "ar": "ضم الفخذ بالكيبل",
+   "en": "Cable Hip Adduction",
+   "primary": [
+    "عضلات الفخذ الداخلية (Adductors)"
+   ],
+   "secondary": [
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى وركّب حزام الكاحل. قف جنب الجهاز والرجل اللي بالحزام هي القريبة منه.",
+   "grip": "امسك الجهاز بيد للتوازن، والجذع مستقيم.",
+   "steps": [
+    "ابدأ والرجل مبعدة شوي باتجاه الجهاز.",
+    "اسحب الرجل باتجاه الثانية وتعديها شوي.",
+    "ثبّت لحظة.",
+    "ارجع ببطء، ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "ميل الجذع للمساعدة",
+     "fix": "خلّ الجذع مستقيم."
+    },
+    {
+     "m": "التأرجح",
+     "fix": "تحرك ببطء."
+    },
+    {
+     "m": "وزن ثقيل يقصّر المدى",
+     "fix": "خفف الوزن."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0135-relaxation.png",
+     "img/ek-0135-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Hip Adduction",
+    "source_id": "0135",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0135-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0135-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "5Mkus4JdXDE",
+    "title": "How To: Hip Adduction (LF Cable)",
+    "channel": "ScottHermanFitness",
+    "duration": "1:25",
+    "url": "https://www.youtube.com/watch?v=5Mkus4JdXDE",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "sumo-db-squat",
+   "group": "hips",
+   "part": "hip-adductors",
+   "equipment": "dumbbell",
+   "ar": "سومو سكوات بالدمبل",
+   "en": "Dumbbell Sumo Squat",
+   "primary": [
+    "عضلات الفخذ الداخلية (Adductors)",
+    "الفخذ الأمامي (Quadriceps)",
+    "الأرداف (Glutes)"
+   ],
+   "secondary": [
+    "الفخذ الخلفي (Hamstrings)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "وقفة عريضة أعرض من الكتفين، والأصابع مفتوحة للخارج. امسك دمبل واحد بيدينك.",
+   "grip": "امسك الدمبل من طرفه بيدينك والذراعين ممدودة تحت. الصدر مرفوع والظهر محايد.",
+   "steps": [
+    "قف بوقفة عريضة والدمبل معلّق بين رجلك.",
+    "انزل بثني الركبة والورك، والركبة تمشي بنفس اتجاه الأصابع المفتوحة.",
+    "انزل للعمق اللي تقدر تتحكم فيه بظهر محايد.",
+    "ادفع وارجع للوقوف."
+   ],
+   "mistakes": [
+    {
+     "m": "الركبة تدخل للداخل",
+     "fix": "ادفعها بنفس اتجاه الأصابع."
+    },
+    {
+     "m": "وقفة عريضة زيادة تضغط على الركبة أو الورك",
+     "fix": "ضيّق الوقفة لمسافة مريحة."
+    },
+    {
+     "m": "الانحناء للأمام",
+     "fix": "الصدر مرفوع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0152-relaxation.png",
+     "img/ek-0152-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Pile Squat with Dumbbell",
+    "source_id": "0152",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0152-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0152-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Pile Squat with Dumbbell» (سكوات بليه/سومو بالدمبل)."
+   },
+   "video": {
+    "id": "MwNY25e4QEA",
+    "title": "How To: Dumbbell Sumo Squat",
+    "channel": "Live Lean TV Daily Exercises",
+    "duration": "1:12",
+    "url": "https://www.youtube.com/watch?v=MwNY25e4QEA",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الركبة تمشي بنفس اتجاه أصابع القدم ولا تدخل للداخل. انزل للمدى اللي تقدر تتحكم فيه وظهرك محايد. إذا حسيت بألم حاد في الركبة أو الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "abductor-machine",
+   "group": "hips",
+   "part": "hip-abductors",
+   "equipment": "machine",
+   "ar": "جهاز الفخذ الخارجي (أبداكتور)",
+   "en": "Hip Abductor Machine",
+   "primary": [
+    "جانب الورك (Glute Medius)"
+   ],
+   "secondary": [
+    "الأرداف (Glutes)"
+   ],
+   "setup": "اجلس واضبط المساند على جانب الركبة من الخارج. ابدأ والرجلين مسكّرة.",
+   "grip": "الظهر ملتصق بالمسند، ومسك المقابض.",
+   "steps": [
+    "ابدأ والرجلين مسكّرة.",
+    "افتح الرجلين للخارج ببطء.",
+    "ثبّت لحظة.",
+    "سكّر ببطء وتحكم."
+   ],
+   "mistakes": [
+    {
+     "m": "رمي الوزن",
+     "fix": "افتح وسكّر ببطء."
+    },
+    {
+     "m": "الوزن يرجع بسرعة ويطقطق",
+     "fix": "تحكم بالرجوع."
+    },
+    {
+     "m": "تحريك الجذع للمساعدة",
+     "fix": "خلّ الجذع ثابت."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0156-relaxation.png",
+     "img/ek-0156-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Thigh Abductor",
+    "source_id": "0156",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0156-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0156-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "OjI5OpV6IWA",
+    "title": "How to PROPERLY Use The Abductor Machine (STOP DOING THIS)",
+    "channel": "Colossus Fitness",
+    "duration": "3:54",
+    "url": "https://www.youtube.com/watch?v=OjI5OpV6IWA",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-hip-abduction",
+   "group": "hips",
+   "part": "hip-abductors",
+   "equipment": "cable",
+   "ar": "فتح الفخذ بالكيبل",
+   "en": "Cable Hip Abduction",
+   "primary": [
+    "جانب الورك (Glute Medius)"
+   ],
+   "secondary": [
+    "الأرداف (Glutes)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى وركّب حزام الكاحل. قف جنب الجهاز والرجل اللي بالحزام هي البعيدة عنه.",
+   "grip": "امسك الجهاز بيد للتوازن، والجذع مستقيم.",
+   "steps": [
+    "ابدأ والرجل قريبة من الثانية.",
+    "ارفع الرجل للجانب بعيد عن الجهاز ببطء.",
+    "وقف قبل ما يميل جذعك.",
+    "ارجع ببطء، ثم بدّل الرجل."
+   ],
+   "mistakes": [
+    {
+     "m": "ميل الجذع للجانب",
+     "fix": "قلل المدى وخلّ الجذع مستقيم."
+    },
+    {
+     "m": "لف القدم للخارج",
+     "fix": "خلّ الأصابع للأمام."
+    },
+    {
+     "m": "التأرجح",
+     "fix": "تحرك ببطء."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "bGlm-qTnfTI",
+    "title": "How To Do A STANDING CABLE HIP ABDUCTION | Exercise Demonstration Video and Guide",
+    "channel": "Live Lean TV Daily Exercises",
+    "duration": "0:40",
+    "url": "https://www.youtube.com/watch?v=bGlm-qTnfTI",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "lat-pulldown-wide",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "cable",
+   "ar": "سحب أمامي بمسكة عريضة",
+   "en": "Wide-Grip Lat Pulldown",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "البايسبس (Biceps)",
+    "الكتف الخلفي (Rear Delt)"
+   ],
+   "setup": "اجلس واضبط مسند الفخذ بحيث يثبت فخذك تحته بدون ضغط مزعج. ركّب البار الطويل.",
+   "grip": "مسكة علوية (الكفوف للأمام) أعرض من الكتفين بشوي. الجذع مستقيم أو مائل للخلف شوي.",
+   "steps": [
+    "امسك البار والذراعين ممدودة فوق.",
+    "نزّل الكتفين لتحت ثم اسحب البار باتجاه أعلى الصدر، والمرفقين ينزلون لتحت وللجانب.",
+    "وقف لما يقرب البار من أعلى الصدر، بدون ما تميل للخلف بقوة.",
+    "رجّع البار ببطء لين تمد ذراعيك فوق."
+   ],
+   "mistakes": [
+    {
+     "m": "السحب خلف الرقبة",
+     "fix": "اسحب للأمام باتجاه أعلى الصدر."
+    },
+    {
+     "m": "الميل للخلف بقوة والتأرجح",
+     "fix": "ميل خفيف بس، والحركة من الظهر والذراع."
+    },
+    {
+     "m": "ترك البار يرجع بسرعة",
+     "fix": "رجّعه بتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "lueEJGjTuPQ",
+    "title": "Wide-Grip Lat Pulldown | Back Exercise Guide",
+    "channel": "Bodybuilding.com",
+    "duration": "1:05",
+    "url": "https://www.youtube.com/watch?v=lueEJGjTuPQ",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تسحب لمدى يسبب ألم في الكتف. إذا حسيت بألم حاد وقّف التمرين."
+  },
+  {
+   "id": "underhand-pulldown",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "cable",
+   "ar": "سحب أمامي بمسكة عكسية",
+   "en": "Underhand (Reverse-Grip) Lat Pulldown",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)",
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "setup": "اجلس واضبط مسند الفخذ بحيث يثبت فخذك. ركّب البار المستقيم.",
+   "grip": "مسكة سفلية (الكفوف لك) بعرض الكتفين تقريبًا. الجذع مستقيم.",
+   "steps": [
+    "امسك البار والذراعين ممدودة فوق.",
+    "اسحب البار باتجاه أعلى الصدر، والمرفقين ينزلون لتحت قريبين من الجسم.",
+    "شد الظهر لحظة تحت.",
+    "رجّع ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "السحب بالذراع بس",
+     "fix": "فكّر إنك تنزّل المرفق، مو إنك تسحب باليد."
+    },
+    {
+     "m": "الميل للخلف بقوة",
+     "fix": "خلّ الجذع شبه ثابت."
+    },
+    {
+     "m": "مسكة واسعة تضغط الرسغ",
+     "fix": "خلّ المسكة بعرض الكتفين."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0095-relaxation.png",
+     "img/ek-0095-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Pull Down: Underhand",
+    "source_id": "0095",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0095-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0095-tension.png"
+    ],
+    "modified": false,
+    "note": "المصدر فيه رسمتين بنفس العنوان «Pull Down: Underhand»، واستُخدمت 0095."
+   },
+   "video": {
+    "id": "apzFTbsm7HU",
+    "title": "How To: Reverse Lat Pulldown",
+    "channel": "ScottHermanFitness",
+    "duration": "2:01",
+    "url": "https://www.youtube.com/watch?v=apzFTbsm7HU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "vbar-pulldown",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "cable",
+   "ar": "سحب أمامي بمقبض V",
+   "en": "V-Bar Lat Pulldown",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "البايسبس (Biceps)"
+   ],
+   "setup": "اجلس واضبط مسند الفخذ. ركّب مقبض V (المثلث) على الكيبل.",
+   "grip": "مسكة محايدة (الكفوف تواجه بعض). الجذع مستقيم أو مائل للخلف شوي.",
+   "steps": [
+    "امسك المقبض والذراعين ممدودة فوق.",
+    "اسحب المقبض باتجاه أعلى الصدر والمرفقين قريبين من الجسم.",
+    "شد الظهر لحظة.",
+    "رجّع ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "الميل للخلف كثير فيتحول لتجديف",
+     "fix": "ميل خفيف بس."
+    },
+    {
+     "m": "تدوير الكتفين للأمام تحت",
+     "fix": "خلّ الصدر مرفوع والكتفين للخلف."
+    },
+    {
+     "m": "الرجوع بسرعة",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0096-relaxation.png",
+     "img/ek-0096-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Pull Down: V Bar ",
+    "source_id": "0096",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0096-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0096-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "-HA56qLRK84",
+    "title": "How to do a V-Bar Pulldown",
+    "channel": "Blackstone Labs",
+    "duration": "1:16",
+    "url": "https://www.youtube.com/watch?v=-HA56qLRK84",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "pull-up",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "bodyweight",
+   "ar": "عقلة (مسكة علوية)",
+   "en": "Pull-Up",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)",
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "الكتف الخلفي (Rear Delt)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "استخدم بار عقلة ثابت. إذا ما تقدر تسوي عدات كاملة، استخدم جهاز العقلة المساعد أو السحب الأمامي.",
+   "grip": "مسكة علوية (الكفوف للأمام) أعرض من الكتفين بشوي. الجسم معلّق والبطن مشدود.",
+   "steps": [
+    "تعلّق من البار والذراعين ممدودة.",
+    "نزّل الكتفين لتحت، ثم اسحب جسمك لين يقرب الذقن من البار.",
+    "خلّ الجسم ثابت بدون تأرجح.",
+    "انزل ببطء لين تمد ذراعيك."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح والركل بالرجل",
+     "fix": "خلّ الجسم ثابت والبطن مشدود."
+    },
+    {
+     "m": "نص حركة",
+     "fix": "انزل لين تمد ذراعيك تقريبًا."
+    },
+    {
+     "m": "رفع الكتفين للأذن",
+     "fix": "نزّل الكتفين قبل السحب."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0087-relaxation.png",
+     "img/ek-0087-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Pull Ups",
+    "source_id": "0087",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0087-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0087-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "eGo4IYlbE5g",
+    "title": "The Perfect Pull Up  - Do it right!",
+    "channel": "Calisthenicmovement",
+    "duration": "4:32",
+    "url": "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تسحب لمدى يسبب ألم في الكتف. إذا حسيت بألم حاد وقّف التمرين."
+  },
+  {
+   "id": "chin-up",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "bodyweight",
+   "ar": "عقلة بمسكة عكسية (تشن أب)",
+   "en": "Chin-Up",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)",
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "استخدم بار عقلة ثابت. إذا ما تقدر تسوي عدات كاملة، استخدم الجهاز المساعد.",
+   "grip": "مسكة سفلية (الكفوف لك) بعرض الكتفين تقريبًا.",
+   "steps": [
+    "تعلّق من البار والذراعين ممدودة.",
+    "اسحب جسمك لين يقرب الذقن من البار والمرفقين ينزلون قدامك.",
+    "ثبّت لحظة.",
+    "انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح",
+     "fix": "خلّ الجسم ثابت."
+    },
+    {
+     "m": "نص حركة",
+     "fix": "انزل لين تمد ذراعيك تقريبًا."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "انزل بتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "e1YSApl-QcM",
+    "title": "PERFECT CHIN-UPS | The Only Chin-up Tutorial You'll Ever Need (Full Guide)",
+    "channel": "Simonster Strength",
+    "duration": "4:11",
+    "url": "https://www.youtube.com/watch?v=e1YSApl-QcM",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تسحب لمدى يسبب ألم في الكتف. إذا حسيت بألم حاد وقّف التمرين."
+  },
+  {
+   "id": "assisted-pullup-machine",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "machine",
+   "ar": "جهاز العقلة المساعد",
+   "en": "Assisted Pull-Up Machine",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)",
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "setup": "الوزن اللي تختاره في هذا الجهاز يساعدك ويخفف عنك: كل ما زاد الوزن صار التمرين أسهل. اطلع على المنصة أو المسند واضبطه بحيث تبدأ والذراعين ممدودة.",
+   "grip": "اختر المقابض: علوية عريضة، أو محايدة (الكفوف تواجه بعض). الركبتين على المسند أو القدمين على المنصة حسب الجهاز.",
+   "steps": [
+    "امسك المقابض وانزل على المسند بحذر.",
+    "اسحب جسمك لين يقرب الذقن من المقابض.",
+    "ثبّت لحظة.",
+    "انزل ببطء لين تمد ذراعيك."
+   ],
+   "mistakes": [
+    {
+     "m": "النزول عن المسند بسرعة",
+     "fix": "انزل منه بحذر وأنت ماسك المقابض."
+    },
+    {
+     "m": "نص حركة",
+     "fix": "استخدم المدى الكامل."
+    },
+    {
+     "m": "تأرجح الجسم",
+     "fix": "خلّ الجسم ثابت."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "gx0RWT7WbmA",
+    "title": "How To PROPERLY Use The Assisted Pull Up Machine (DO MORE PULL UPS)",
+    "channel": "Colossus Fitness",
+    "duration": "2:54",
+    "url": "https://www.youtube.com/watch?v=gx0RWT7WbmA",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "straight-arm-pulldown",
+   "group": "back",
+   "part": "back-vertical",
+   "equipment": "cable",
+   "ar": "سحب بذراع ممدودة بالكيبل",
+   "en": "Straight-Arm Cable Pulldown",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "الترايسبس الطويل (Long Head)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "اضبط البكرة على أعلى مستوى، وركّب بار مستقيم أو حبل. ارجع خطوة أو خطوتين من الجهاز.",
+   "grip": "مسكة علوية بعرض الكتفين، والذراعين شبه ممدودة والمرفق مثني شوي. الجذع مائل شوي للأمام والظهر محايد.",
+   "steps": [
+    "ابدأ والذراعين ممدودة قدامك بمستوى الرأس تقريبًا.",
+    "نزّل البار بقوس لين يقرب من الفخذ، والمرفق على نفس الثنية.",
+    "شد اللاتس لحظة تحت.",
+    "ارجع ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "ثني المرفق فيتحول لبوش داون",
+     "fix": "خلّ المرفق على ثنية خفيفة ثابتة."
+    },
+    {
+     "m": "تحريك الجذع للمساعدة",
+     "fix": "خلّ الجذع ثابت."
+    },
+    {
+     "m": "الرجوع بسرعة",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0092-relaxation.png",
+     "img/ek-0092-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Straight Arm Push Down",
+    "source_id": "0092",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0092-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0092-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "98W63pVdW38",
+    "title": "How To: Straight Arm Pull Down (Cable Machine)",
+    "channel": "Fitness Lab",
+    "duration": "0:43",
+    "url": "https://www.youtube.com/watch?v=98W63pVdW38",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "seated-cable-row",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "cable",
+   "ar": "تجديف كيبل جالس",
+   "en": "Seated Cable Row",
+   "primary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)",
+    "الكتف الخلفي (Rear Delt)",
+    "أسفل الظهر (Erector Spinae)"
+   ],
+   "setup": "اجلس وحط القدمين على المساند، والركبة مثنية شوي. ركّب مقبض V أو بار حسب ما تبي.",
+   "grip": "مسكة محايدة مع مقبض V. الجذع مستقيم والصدر مرفوع.",
+   "steps": [
+    "ابدأ والذراعين ممدودة والجذع مستقيم.",
+    "اسحب المقبض باتجاه أسفل الصدر أو أعلى البطن، وسكّر لوحي الكتف للخلف.",
+    "ثبّت لحظة.",
+    "ارجع ببطء لين تمد ذراعيك، بدون ما يدور ظهرك."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح بالجذع للأمام والخلف",
+     "fix": "خلّ الجذع شبه ثابت."
+    },
+    {
+     "m": "تدوير الظهر وقت الرجوع",
+     "fix": "خلّ الظهر محايد."
+    },
+    {
+     "m": "رفع الكتفين للأذن",
+     "fix": "نزّل الكتفين."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0025-relaxation.png",
+     "img/ek-0025-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Seated Cable Rows",
+    "source_id": "0025",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0025-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0025-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "vwHG9Jfu4sw",
+    "title": "How to do the SEATED CABLE ROW! | 2 Minute Tutorial",
+    "channel": "Max Euceda",
+    "duration": "2:00",
+    "url": "https://www.youtube.com/watch?v=vwHG9Jfu4sw",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "barbell-bent-over-row",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "barbell",
+   "ar": "تجديف بالبار منحني",
+   "en": "Barbell Bent-Over Row",
+   "primary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "الكتف الخلفي (Rear Delt)",
+    "البايسبس (Biceps)",
+    "أسفل الظهر (Erector Spinae)",
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "setup": "يحتاج تتقن وضعية الانحناء من الورك قبل ما تزيد الوزن. ابدأ خفيف.",
+   "grip": "مسكة علوية (الكفوف لك) أعرض من الكتفين بشوي. القدمين بعرض الورك، والركبة مثنية شوي. انحنِ من الورك لين يصير الجذع مائل للأمام والظهر محايد.",
+   "steps": [
+    "ارفع البار وانحنِ من الورك والظهر محايد.",
+    "اسحب البار باتجاه أسفل الصدر أو أعلى البطن، والمرفقين للخلف.",
+    "ثبّت لحظة وسكّر لوحي الكتف.",
+    "نزّل البار ببطء لين تمد ذراعيك."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر",
+     "fix": "خلّ الظهر محايد وقلل الوزن."
+    },
+    {
+     "m": "رفع الجذع مع كل عدة",
+     "fix": "خلّ زاوية الجذع ثابتة."
+    },
+    {
+     "m": "الرمي بالجسم",
+     "fix": "اسحب بتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "FWJR5Ve8bnQ",
+    "title": "How to do the BENT-OVER BARBELL ROW! | 2 Minute Tutorial",
+    "channel": "Max Euceda",
+    "duration": "2:00",
+    "url": "https://www.youtube.com/watch?v=FWJR5Ve8bnQ",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. ابدأ بوزن خفيف لين تتقن الحركة. إذا حسيت بألم في أسفل الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "reverse-grip-barbell-row",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "barbell",
+   "ar": "تجديف بالبار بمسكة عكسية",
+   "en": "Reverse-Grip Barbell Row",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)",
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)",
+    "الكتف الخلفي (Rear Delt)",
+    "أسفل الظهر (Erector Spinae)"
+   ],
+   "setup": "نفس وضعية التجديف المنحني، بس المسكة عكسية. ابدأ خفيف.",
+   "grip": "مسكة سفلية (الكفوف للأمام) بعرض الكتفين تقريبًا. انحنِ من الورك والظهر محايد، والركبة مثنية شوي.",
+   "steps": [
+    "ارفع البار وانحنِ من الورك.",
+    "اسحب البار باتجاه أسفل البطن، والمرفقين قريبين من الجسم.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر",
+     "fix": "خلّ الظهر محايد."
+    },
+    {
+     "m": "تحويل الحركة لكيرل بايسبس",
+     "fix": "فكّر إنك تسحب المرفق للخلف."
+    },
+    {
+     "m": "رفع الجذع مع كل عدة",
+     "fix": "زاوية الجذع ثابتة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0026-relaxation.png",
+     "img/ek-0026-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Reverse Grips Bent Over Barbell Rows",
+    "source_id": "0026",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0026-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0026-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "3gdGSSgDby8",
+    "title": "Reverse Grip Bent Over Rows | How To Perform Them Correctly",
+    "channel": "KAGED ",
+    "duration": "2:06",
+    "url": "https://www.youtube.com/watch?v=3gdGSSgDby8",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. ابدأ بوزن خفيف لين تتقن الحركة. إذا حسيت بألم في أسفل الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "t-bar-row",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "machine",
+   "ar": "تجديف تي بار",
+   "en": "T-Bar Row",
+   "primary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "الكتف الخلفي (Rear Delt)",
+    "البايسبس (Biceps)",
+    "أسفل الظهر (Erector Spinae)",
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "setup": "قف على منصة الجهاز والقدمين على جانبي البار. حمّل الوزن تدريجيًا.",
+   "grip": "مسكة على المقابض (ضيقة أو محايدة). الركبة مثنية شوي، وانحنِ من الورك والظهر محايد.",
+   "steps": [
+    "ارفع البار من مكانه وثبّت وضعية الانحناء.",
+    "اسحب المقابض باتجاه الصدر، والمرفقين للخلف.",
+    "ثبّت لحظة.",
+    "نزّل ببطء لين تمد ذراعيك."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر",
+     "fix": "الظهر محايد وقلل الوزن."
+    },
+    {
+     "m": "الوقوف أكثر مع كل عدة",
+     "fix": "زاوية الجذع ثابتة."
+    },
+    {
+     "m": "الرمي بالجسم",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0029-relaxation.png",
+     "img/ek-0029-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "T-Bar Rows",
+    "source_id": "0029",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0029-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0029-tension.png"
+    ],
+    "modified": false,
+    "note": "الرسمة لجهاز تي بار واقف بدون مسند صدر."
+   },
+   "video": {
+    "id": "TyLoy3n_a10",
+    "title": "How to PROPERLY Machine T-Bar Row (FIX YOUR FORM)",
+    "channel": "Colossus Fitness",
+    "duration": "2:24",
+    "url": "https://www.youtube.com/watch?v=TyLoy3n_a10",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. ابدأ بوزن خفيف لين تتقن الحركة. إذا حسيت بألم في أسفل الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "one-arm-db-row",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "dumbbell",
+   "ar": "تجديف دمبل بيد وحدة",
+   "en": "One-Arm Dumbbell Row",
+   "primary": [
+    "اللاتس (Latissimus Dorsi)",
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "secondary": [
+    "الكتف الخلفي (Rear Delt)",
+    "البايسبس (Biceps)"
+   ],
+   "setup": "حط ركبة ويد على بنش مستوي، والرجل الثانية على الأرض. أو قف ويدك على البنش والرجلين على الأرض.",
+   "grip": "امسك الدمبل باليد الحرة والكف يواجه الجسم. الظهر محايد وشبه موازي للأرض.",
+   "steps": [
+    "ابدأ والذراع ممدودة تحت.",
+    "اسحب الدمبل باتجاه الورك، والمرفق قريب من الجسم.",
+    "ثبّت لحظة.",
+    "نزّل ببطء، وكمّل العدات ثم بدّل اليد."
+   ],
+   "mistakes": [
+    {
+     "m": "لف الجذع لرفع الدمبل",
+     "fix": "خلّ الكتفين والورك مستقيمين."
+    },
+    {
+     "m": "السحب للصدر بدل الورك",
+     "fix": "اسحب المرفق باتجاه الورك."
+    },
+    {
+     "m": "تدوير الظهر",
+     "fix": "محايد."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "dFzUjzfih7k",
+    "title": "How to do the SINGLE ARM DUMBBELL ROW! | 2 Minute Tutorial",
+    "channel": "Max Euceda",
+    "duration": "2:00",
+    "url": "https://www.youtube.com/watch?v=dFzUjzfih7k",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "seated-row-machine",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "machine",
+   "ar": "جهاز التجديف جالس",
+   "en": "Seated Row Machine",
+   "primary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "الكتف الخلفي (Rear Delt)",
+    "البايسبس (Biceps)"
+   ],
+   "setup": "اضبط المقعد بحيث تكون المقابض بمستوى أسفل الصدر، ومسند الصدر بحيث تمد ذراعك وتلحق المقابض.",
+   "grip": "الصدر ملتصق بالمسند. اختر المقبض: محايد أو علوي.",
+   "steps": [
+    "امسك المقابض والذراعين ممدودة.",
+    "اسحب المقابض للخلف وسكّر لوحي الكتف.",
+    "ثبّت لحظة.",
+    "ارجع ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "الصدر يبعد عن المسند",
+     "fix": "خلّه ملتصق."
+    },
+    {
+     "m": "رفع الكتفين",
+     "fix": "نزّل الكتفين."
+    },
+    {
+     "m": "ترك الوزن يرجع بسرعة",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "TeFo51Q_Nsc",
+    "title": "How To Use The Seated Row Machine",
+    "channel": "PureGym",
+    "duration": "1:01",
+    "url": "https://www.youtube.com/watch?v=TeFo51Q_Nsc",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "inverted-row",
+   "group": "back",
+   "part": "back-horizontal",
+   "equipment": "bodyweight",
+   "ar": "تجديف معكوس بوزن الجسم",
+   "en": "Inverted Row",
+   "primary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "اللاتس (Latissimus Dorsi)"
+   ],
+   "secondary": [
+    "الكتف الخلفي (Rear Delt)",
+    "البايسبس (Biceps)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "استخدم بار ثابت على حامل أو جهاز سميث بمستوى الخصر تقريبًا. كل ما نزّلت البار أو بعّدت قدمك صار أصعب.",
+   "grip": "مسكة علوية بعرض الكتفين، والجسم مستقيم من الكتف للكعب والبطن مشدود.",
+   "steps": [
+    "تعلّق تحت البار والذراعين ممدودة والجسم مستقيم.",
+    "اسحب صدرك باتجاه البار.",
+    "ثبّت لحظة وسكّر لوحي الكتف.",
+    "انزل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "الورك ينزل",
+     "fix": "شد البطن والأرداف."
+    },
+    {
+     "m": "نص حركة",
+     "fix": "اسحب لين يقرب الصدر من البار."
+    },
+    {
+     "m": "البار مو ثابت",
+     "fix": "تأكد إنه مثبت قبل ما تبدأ."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0086-relaxation.png",
+     "img/ek-0086-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Body Row",
+    "source_id": "0086",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0086-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0086-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Body Row»."
+   },
+   "video": {
+    "id": "GdyhjXlxE-U",
+    "title": "How To PROPERLY Inverted Row For Muscle Gain",
+    "channel": "Colossus Fitness",
+    "duration": "2:46",
+    "url": "https://www.youtube.com/watch?v=GdyhjXlxE-U",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "barbell-shrug",
+   "group": "back",
+   "part": "back-traps",
+   "equipment": "barbell",
+   "ar": "رفع الأكتاف بالبار (شرق)",
+   "en": "Barbell Shrug",
+   "primary": [
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "secondary": [
+    "الساعد (Forearms)"
+   ],
+   "setup": "خذ البار من الحامل بمستوى الفخذ.",
+   "grip": "مسكة علوية بعرض الكتفين، والذراعين ممدودة قدامك. وقفة مستقيمة.",
+   "steps": [
+    "ابدأ والكتفين نازلة.",
+    "ارفع الكتفين للأعلى باتجاه الأذن.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "لف الكتفين بدوائر",
+     "fix": "الحركة فوق وتحت بس."
+    },
+    {
+     "m": "ثني المرفق",
+     "fix": "خلّ الذراعين ممدودة."
+    },
+    {
+     "m": "دفع الرأس للأمام",
+     "fix": "الرأس محايد."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0030-relaxation.png",
+     "img/ek-0030-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Barbell Shrugs",
+    "source_id": "0030",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0030-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0030-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "9xGqgGFAtiM",
+    "title": "Barbell Shrug - Shoulder Exercise - Bodybuilding.com",
+    "channel": "Bodybuilding.com",
+    "duration": "0:39",
+    "url": "https://www.youtube.com/watch?v=9xGqgGFAtiM",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "db-shrug",
+   "group": "back",
+   "part": "back-traps",
+   "equipment": "dumbbell",
+   "ar": "رفع الأكتاف بالدمبل",
+   "en": "Dumbbell Shrug",
+   "primary": [
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "secondary": [
+    "الساعد (Forearms)"
+   ],
+   "setup": "اختر دمبلين ثقيلين نسبيًا تقدر تمسكهم بثبات.",
+   "grip": "الدمبلات على جانبي الجسم والكفوف تواجه بعض. وقفة مستقيمة.",
+   "steps": [
+    "ابدأ والكتفين نازلة.",
+    "ارفع الكتفين للأعلى.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "لف الكتفين",
+     "fix": "فوق وتحت بس."
+    },
+    {
+     "m": "ثني المرفق",
+     "fix": "الذراعين ممدودة."
+    },
+    {
+     "m": "حركة قصيرة",
+     "fix": "نزّل الكتفين كامل تحت."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0005-relaxation.png",
+     "img/ek-0005-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Shoulder Shrugs: Dumbbell",
+    "source_id": "0005",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0005-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0005-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "cJRVVxmytaM",
+    "title": "How To: Dumbbell Shrugs",
+    "channel": "ScottHermanFitness",
+    "duration": "1:42",
+    "url": "https://www.youtube.com/watch?v=cJRVVxmytaM",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-shrug",
+   "group": "back",
+   "part": "back-traps",
+   "equipment": "cable",
+   "ar": "رفع الأكتاف بالكيبل",
+   "en": "Cable Shrug",
+   "primary": [
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "secondary": [
+    "الساعد (Forearms)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى وركّب بار مستقيم.",
+   "grip": "مسكة علوية بعرض الكتفين، والذراعين ممدودة قدامك. قف قريب من الجهاز.",
+   "steps": [
+    "ابدأ والكتفين نازلة.",
+    "ارفع الكتفين للأعلى.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "لف الكتفين",
+     "fix": "فوق وتحت بس."
+    },
+    {
+     "m": "ثني المرفق",
+     "fix": "الذراعين ممدودة."
+    },
+    {
+     "m": "الميل للخلف",
+     "fix": "وقفة مستقيمة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0009-relaxation.png",
+     "img/ek-0009-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Shoulder Shrugs: Cable",
+    "source_id": "0009",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0009-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0009-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "Wab3-dsZohU",
+    "title": "Cable Shrug - The Proper Lift - BPI Sports",
+    "channel": "BPI Sports",
+    "duration": "1:29",
+    "url": "https://www.youtube.com/watch?v=Wab3-dsZohU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "smith-shrug",
+   "group": "back",
+   "part": "back-traps",
+   "equipment": "machine",
+   "ar": "رفع الأكتاف على جهاز سميث",
+   "en": "Smith Machine Shrug",
+   "primary": [
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "secondary": [
+    "الساعد (Forearms)"
+   ],
+   "setup": "اضبط البار بمستوى منتصف الفخذ.",
+   "grip": "مسكة علوية بعرض الكتفين، والبار قدامك.",
+   "steps": [
+    "لف البار عشان تفكه من الخطافات.",
+    "ارفع الكتفين للأعلى.",
+    "ثبّت لحظة ثم نزّل ببطء.",
+    "بعد آخر عدة لف البار عشان يرجع على الخطافات."
+   ],
+   "mistakes": [
+    {
+     "m": "لف الكتفين",
+     "fix": "فوق وتحت بس."
+    },
+    {
+     "m": "ثني المرفق",
+     "fix": "الذراعين ممدودة."
+    },
+    {
+     "m": "حركة قصيرة",
+     "fix": "المدى الكامل."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0041-relaxation.png",
+     "img/ek-0041-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Shoulder Shrugs: Smith Machine",
+    "source_id": "0041",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0041-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0041-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Shoulder Shrugs: Smith Machine»."
+   },
+   "video": {
+    "id": "LI3b05LUdpA",
+    "title": "How To PROPERLY Smith Machine Shrug | 3 Shoulder Shrug Variations for Muscle Gain",
+    "channel": "Colossus Fitness",
+    "duration": "2:44",
+    "url": "https://www.youtube.com/watch?v=LI3b05LUdpA",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "conventional-deadlift",
+   "group": "back",
+   "part": "back-lower",
+   "equipment": "barbell",
+   "ar": "ديدلفت بالبار",
+   "en": "Barbell Deadlift",
+   "primary": [
+    "أسفل الظهر (Erector Spinae)",
+    "الأرداف (Glutes)",
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "secondary": [
+    "الفخذ الأمامي (Quadriceps)",
+    "اللاتس (Latissimus Dorsi)",
+    "الترابيس العلوي (Upper Traps)",
+    "الساعد (Forearms)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "تمرين يحتاج تكنيك. ابدأ بوزن خفيف لين تتقن الحركة، ويفضّل إن أحد خبير يشوف حركتك. البار على الأرض فوق منتصف القدم.",
+   "grip": "القدمين بعرض الورك، والمسكة علوية (الكفوف لك) خارج الرجلين مباشرة. الظهر محايد، والكتفين فوق البار أو قدامه بشوي.",
+   "steps": [
+    "قف والبار فوق منتصف القدم، وانزل بثني الورك والركبة لين تمسك البار.",
+    "شد الظهر والبطن وخذ نفس، وارفع الصدر بدون ما تقوّس الظهر.",
+    "ادفع الأرض بالقدم والبار يطلع قريب من الساق والفخذ، لين توقف مستقيم.",
+    "نزّل البار بنفس المسار: الورك للخلف أول، ثم الركبة لما يعدي البار الركبة."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر وقت الرفع",
+     "fix": "خفف الوزن وثبّت الظهر محايد قبل كل عدة."
+    },
+    {
+     "m": "البار يبعد عن الجسم",
+     "fix": "خلّه قريب من الساق والفخذ."
+    },
+    {
+     "m": "الورك يطلع قبل الكتف",
+     "fix": "الورك والكتف يطلعون مع بعض."
+    },
+    {
+     "m": "الميل للخلف فوق",
+     "fix": "اوقف مستقيم بس."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0099-relaxation.png",
+     "img/ek-0099-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Dead Lifts: Barbell",
+    "source_id": "0099",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0099-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0099-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "VL5Ab0T07e4",
+    "title": "Build A Bigger Deadlift With Perfect Technique (Conventional Form)",
+    "channel": "Jeff Nippard",
+    "duration": "8:56",
+    "url": "https://www.youtube.com/watch?v=VL5Ab0T07e4",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. ابدأ بوزن خفيف لين تتقن الحركة. إذا حسيت بألم في أسفل الظهر وقّف التمرين، ولا تكمّل على الألم. لا تسحب البار بالظهر من وضع مدوّر."
+  },
+  {
+   "id": "hyperextension",
+   "group": "back",
+   "part": "back-lower",
+   "equipment": "bodyweight",
+   "ar": "تمديد الظهر على بنش الهايبر",
+   "en": "Hyperextension (Back Extension)",
+   "primary": [
+    "أسفل الظهر (Erector Spinae)"
+   ],
+   "secondary": [
+    "الأرداف (Glutes)",
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "setup": "اضبط البنش بحيث تكون الحافة العلوية للمسند تحت عظم الورك، عشان تقدر تنحني من الورك بحرية. القدمين مثبتة تحت المساند.",
+   "grip": "الذراعين على الصدر أو جنب الرأس. الظهر محايد.",
+   "steps": [
+    "ابدأ والجسم مستقيم.",
+    "انحنِ ببطء من الورك للأسفل، والظهر محايد.",
+    "ارجع لين يصير الجسم خط مستقيم.",
+    "لا تطلع أعلى من الخط المستقيم."
+   ],
+   "mistakes": [
+    {
+     "m": "تقويس الظهر للخلف فوق",
+     "fix": "وقف لما يصير الجسم مستقيم."
+    },
+    {
+     "m": "المسند على البطن فيقصّر الحركة",
+     "fix": "نزّل المسند لتحت عظم الورك."
+    },
+    {
+     "m": "الحركة بسرعة",
+     "fix": "ببطء."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0103-relaxation.png",
+     "img/ek-0103-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Hyperextensions",
+    "source_id": "0103",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0103-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0103-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "H8Swl1N-uis",
+    "title": "STOP Doing Back Extensions Like This!",
+    "channel": "Squat University",
+    "duration": "3:40",
+    "url": "https://www.youtube.com/watch?v=H8Swl1N-uis",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. ابدأ بوزن خفيف لين تتقن الحركة. إذا حسيت بألم في أسفل الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "good-morning",
+   "group": "back",
+   "part": "back-lower",
+   "equipment": "barbell",
+   "ar": "قود مورننق بالبار",
+   "en": "Barbell Good Morning",
+   "primary": [
+    "أسفل الظهر (Erector Spinae)",
+    "الفخذ الخلفي (Hamstrings)"
+   ],
+   "secondary": [
+    "الأرداف (Glutes)",
+    "عضلات الجذع (Core)"
+   ],
+   "setup": "تمرين يضغط على أسفل الظهر، فابدأ بالبار فاضي أو وزن خفيف جدًا. اضبط البار على الحامل بمستوى أعلى صدرك.",
+   "grip": "البار على أعلى الظهر، والمسكة أعرض من الكتفين. القدمين بعرض الورك، والركبة مثنية شوي.",
+   "steps": [
+    "فك البار وقف مستقيم.",
+    "ادفع الورك للخلف وانحنِ للأمام والظهر محايد.",
+    "انزل لين تحس بتمدد في الفخذ الخلفي، بدون ما يدور ظهرك.",
+    "ارجع للوقوف بدفع الورك للأمام."
+   ],
+   "mistakes": [
+    {
+     "m": "تدوير الظهر",
+     "fix": "قلل المدى والوزن."
+    },
+    {
+     "m": "ثني الركبة كثير",
+     "fix": "ثنية خفيفة بس."
+    },
+    {
+     "m": "وزن ثقيل",
+     "fix": "هذا التمرين يتم بأوزان خفيفة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0101-relaxation.png",
+     "img/ek-0101-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Good Mornings: Barbell",
+    "source_id": "0101",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0101-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0101-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "5Xj6XUa77qc",
+    "title": "How To: Good Mornings",
+    "channel": "ScottHermanFitness",
+    "duration": "1:50",
+    "url": "https://www.youtube.com/watch?v=5Xj6XUa77qc",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "الظهر يبقى محايد (مستقيم) طول الحركة، والنزول من الورك وليس من تقويس الظهر. ابدأ بوزن خفيف لين تتقن الحركة. إذا حسيت بألم في أسفل الظهر وقّف التمرين، ولا تكمّل على الألم."
+  },
+  {
+   "id": "reverse-pec-deck",
+   "group": "shoulders",
+   "part": "shoulder-rear",
+   "equipment": "machine",
+   "ar": "جهاز الفراشة العكسي (كتف خلفي)",
+   "en": "Reverse Pec Deck",
+   "primary": [
+    "الكتف الخلفي (Rear Delt)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "setup": "اجلس مواجه لمسند الصدر في جهاز الفراشة. اضبط المقعد بحيث تكون المقابض بمستوى الكتف، واضبط المقابض للخلف عشان تبدأ والذراعين ممدودة قدامك.",
+   "grip": "الصدر ملتصق بالمسند. مسكة محايدة أو علوية حسب الجهاز، والمرفق مثني شوي.",
+   "steps": [
+    "ابدأ والذراعين قدامك.",
+    "افتح الذراعين للخلف بقوس، والمرفق على نفس الثنية.",
+    "وقف لما يصير الذراع على خط الجسم تقريبًا.",
+    "ارجع ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "سكّر لوحي الكتف بقوة فيصير الشغل على منتصف الظهر",
+     "fix": "فكّر إنك تبعد يدك للجانب."
+    },
+    {
+     "m": "رمي الوزن",
+     "fix": "بتحكم."
+    },
+    {
+     "m": "رفع الكتفين",
+     "fix": "نزّل الكتفين."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "JL8nHvZcAK8",
+    "title": "How-To Use the \"Rear Delt / Pec Fly\" Machine",
+    "channel": "Tri Cities Gold's Gym",
+    "duration": "2:24",
+    "url": "https://www.youtube.com/watch?v=JL8nHvZcAK8",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تسحب لمدى يسبب ألم في الكتف. إذا حسيت بألم حاد وقّف التمرين."
+  },
+  {
+   "id": "face-pull",
+   "group": "shoulders",
+   "part": "shoulder-rear",
+   "equipment": "cable",
+   "ar": "فيس بول بالحبل",
+   "en": "Cable Face Pull",
+   "primary": [
+    "الكتف الخلفي (Rear Delt)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)",
+    "الترابيس العلوي (Upper Traps)"
+   ],
+   "setup": "اضبط البكرة بمستوى الوجه أو أعلى شوي، وركّب الحبل.",
+   "grip": "امسك طرفي الحبل والإبهام للخلف أو للأعلى. ارجع خطوة والذراعين ممدودة قدامك.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "اسحب الحبل باتجاه الوجه، وفرّق طرفي الحبل والمرفقين للجانب وفوق.",
+    "ثبّت لحظة.",
+    "ارجع ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "الميل للخلف",
+     "fix": "الجذع ثابت."
+    },
+    {
+     "m": "المرفقين ينزلون فيتحول لتجديف",
+     "fix": "خلّ المرفقين عالية."
+    },
+    {
+     "m": "وزن ثقيل",
+     "fix": "هذا التمرين يتم بوزن خفيف ومتوسط."
+    }
+   ],
+   "image": null,
+   "video": {
+    "id": "eTCBSFlCJ_s",
+    "title": "How to do a Face Pull | Proper Form & Technique | NASM",
+    "channel": "National Academy of Sports Medicine (NASM)",
+    "duration": "0:26",
+    "url": "https://www.youtube.com/watch?v=eTCBSFlCJ_s",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تسحب لمدى يسبب ألم في الكتف. إذا حسيت بألم حاد وقّف التمرين."
+  },
+  {
+   "id": "cable-rear-delt-raise",
+   "group": "shoulders",
+   "part": "shoulder-rear",
+   "equipment": "cable",
+   "ar": "رفرفة خلفية بالكيبل منحني (يد وحدة)",
+   "en": "Bent-Over One-Arm Cable Rear Delt Raise",
+   "primary": [
+    "الكتف الخلفي (Rear Delt)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى بدون مقبض أو مع مقبض صغير.",
+   "grip": "امسك الكيبل باليد البعيدة عن الجهاز. انحنِ من الورك لين يصير الجذع شبه موازي للأرض، واليد الثانية على الفخذ. المرفق مثني شوي.",
+   "steps": [
+    "ابدأ والذراع قدام جسمك.",
+    "ارفع الذراع للجانب وللخلف بقوس لين يقرب من مستوى الكتف.",
+    "ثبّت لحظة.",
+    "ارجع ببطء، ثم بدّل اليد."
+   ],
+   "mistakes": [
+    {
+     "m": "لف الجذع لرفع الذراع",
+     "fix": "الجذع ثابت."
+    },
+    {
+     "m": "ثني المرفق كثير",
+     "fix": "ثنية خفيفة ثابتة."
+    },
+    {
+     "m": "رمي الوزن",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0017-relaxation.png",
+     "img/ek-0017-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bent-over Lateral Cable Raises",
+    "source_id": "0017",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0017-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0017-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Bent-over Lateral Cable Raises»."
+   },
+   "video": {
+    "id": "PL_Da1wA2mo",
+    "title": "How To - Bent-Over Cable Rear Delt Lateral Raise  - Hunter Labrada",
+    "channel": "Labrada Nutrition",
+    "duration": "2:01",
+    "url": "https://www.youtube.com/watch?v=PL_Da1wA2mo",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "db-rear-delt-raise",
+   "group": "shoulders",
+   "part": "shoulder-rear",
+   "equipment": "dumbbell",
+   "ar": "رفرفة خلفية بالدمبل على بنش مائل",
+   "en": "Chest-Supported Dumbbell Rear Delt Raise",
+   "primary": [
+    "الكتف الخلفي (Rear Delt)"
+   ],
+   "secondary": [
+    "منتصف الظهر (Rhomboids / Mid Traps)"
+   ],
+   "setup": "اضبط البنش على ميل خفيف أو متوسط، وانبطح على صدرك والرأس فوق الحافة.",
+   "grip": "الدمبلات تحتك والكفوف تواجه بعض أو للخلف. المرفق مثني شوي.",
+   "steps": [
+    "ابدأ والذراعين معلّقة تحت.",
+    "ارفع الدمبلات للجانب بقوس لين تقرب من مستوى الكتف.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "رفع الصدر عن البنش",
+     "fix": "خلّه ملتصق."
+    },
+    {
+     "m": "وزن ثقيل يخليك ترمي",
+     "fix": "خفف الوزن."
+    },
+    {
+     "m": "ثني المرفق كثير",
+     "fix": "ثنية خفيفة ثابتة."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0032-relaxation.png",
+     "img/ek-0032-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Bent Over Rear Deltoid Raise With Head On Bench",
+    "source_id": "0032",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0032-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0032-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Bent Over Rear Deltoid Raise With Head On Bench»."
+   },
+   "video": {
+    "id": "V0FueWLtMTg",
+    "title": "How To: Incline Dumbbell Rear Delt Raise",
+    "channel": "Live Lean TV Daily Exercises",
+    "duration": "1:05",
+    "url": "https://www.youtube.com/watch?v=V0FueWLtMTg",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "barbell-curl",
+   "group": "biceps",
+   "part": "bi-both",
+   "equipment": "barbell",
+   "ar": "كيرل بايسبس بالبار",
+   "en": "Barbell Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)",
+    "الساعد (Forearms)"
+   ],
+   "setup": "ما يحتاج ضبط. اختر وزن تقدر ترفعه بدون تأرجح.",
+   "grip": "مسكة سفلية (الكفوف للأمام) بعرض الكتفين. المرفقين جنب الجسم، والوقفة مستقيمة.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع البار بثني المرفق، والمرفقين ثابتين جنبك.",
+    "ثبّت لحظة فوق.",
+    "نزّل ببطء لين تمد ذراعيك."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح بالظهر",
+     "fix": "خفف الوزن والجسم ثابت."
+    },
+    {
+     "m": "المرفقين يتقدمون للأمام",
+     "fix": "خلّهم جنب الجسم."
+    },
+    {
+     "m": "نص حركة تحت",
+     "fix": "نزّل لين تمد الذراع."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0211-relaxation.png",
+     "img/ek-0211-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Biceps Curl: Barbell",
+    "source_id": "0211",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0211-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0211-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "QZEqB6wUPxQ",
+    "title": "How To: Barbell Bicep Curl | 3 GOLDEN RULES",
+    "channel": "ScottHermanFitness",
+    "duration": "6:10",
+    "url": "https://www.youtube.com/watch?v=QZEqB6wUPxQ",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "ez-bar-curl",
+   "group": "biceps",
+   "part": "bi-both",
+   "equipment": "barbell",
+   "ar": "كيرل بار زد (EZ)",
+   "en": "EZ-Bar Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)",
+    "الساعد (Forearms)"
+   ],
+   "setup": "بار EZ المتعرج يخفف الضغط على الرسغ عند بعض الناس.",
+   "grip": "امسك البار على الانحناءات بعرض الكتفين. المرفقين جنب الجسم.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع البار بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "المرفقين يتقدمون",
+     "fix": "جنب الجسم."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0226-relaxation.png",
+     "img/ek-0226-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "EZ Bar Curl with Barbell",
+    "source_id": "0226",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0226-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0226-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «EZ Bar Curl with Barbell»."
+   },
+   "video": {
+    "id": "5NsFLGUf0Fo",
+    "title": "How To EZ Bar Curl With Perfect Form (Grow Your Biceps)",
+    "channel": "Colossus Fitness",
+    "duration": "3:44",
+    "url": "https://www.youtube.com/watch?v=5NsFLGUf0Fo",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "db-curl",
+   "group": "biceps",
+   "part": "bi-both",
+   "equipment": "dumbbell",
+   "ar": "كيرل بايسبس بالدمبل",
+   "en": "Dumbbell Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)",
+    "الساعد (Forearms)"
+   ],
+   "setup": "اختر دمبلين بوزن تقدر ترفعه بدون تأرجح. تقدر ترفع اليدين مع بعض أو بالتبديل.",
+   "grip": "الدمبلات على جانبي الجسم. لف الكف للأمام وأنت ترفع. المرفقين جنب الجسم.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع الدمبل بثني المرفق ولف الكف للأعلى.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "رفع الكتف مع الحركة",
+     "fix": "الكتف ثابت."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0224-relaxation.png",
+     "img/ek-0224-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Biceps Curl: Dumbbell",
+    "source_id": "0224",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0224-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0224-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "XE_pHwbst04",
+    "title": "Bicep Curls — (DUMBBELL FORM & TECHNIQUE)",
+    "channel": "Fit Father Project - Fitness For Busy Fathers",
+    "duration": "2:39",
+    "url": "https://www.youtube.com/watch?v=XE_pHwbst04",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "cable-curl",
+   "group": "biceps",
+   "part": "bi-both",
+   "equipment": "cable",
+   "ar": "كيرل بايسبس بالكيبل",
+   "en": "Cable Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)",
+    "الساعد (Forearms)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى وركّب بار مستقيم أو EZ.",
+   "grip": "مسكة سفلية بعرض الكتفين. قف قريب من الجهاز والمرفقين جنب الجسم.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع البار بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "المرفقين يتقدمون",
+     "fix": "جنب الجسم."
+    },
+    {
+     "m": "الوقوف بعيد عن الجهاز",
+     "fix": "قف قريب."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0212-relaxation.png",
+     "img/ek-0212-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Standing Biceps Curl with Cable",
+    "source_id": "0212",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0212-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0212-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "2MUEL4nL6hA",
+    "title": "How to PROPERLY Cable Bicep Curl For Bigger Biceps (EASY FIX)",
+    "channel": "Colossus Fitness",
+    "duration": "1:13",
+    "url": "https://www.youtube.com/watch?v=2MUEL4nL6hA",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "biceps-curl-machine",
+   "group": "biceps",
+   "part": "bi-both",
+   "equipment": "machine",
+   "ar": "جهاز البايسبس",
+   "en": "Biceps Curl Machine",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "اضبط المقعد بحيث يكون المرفق على المسند ومحاذي لمحور دوران الجهاز، والإبط قريب من حافة المسند.",
+   "grip": "امسك المقابض بمسكة سفلية. الظهر مستقيم.",
+   "steps": [
+    "ابدأ والذراعين شبه ممدودة.",
+    "ارفع المقابض بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "محور الجهاز مو محاذي للمرفق",
+     "fix": "عدّل المقعد."
+    },
+    {
+     "m": "رفع المرفق عن المسند",
+     "fix": "خلّه ثابت."
+    },
+    {
+     "m": "نص حركة",
+     "fix": "المدى الكامل."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0253-relaxation.png",
+     "img/ek-0253-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Biceps Curl: Machine",
+    "source_id": "0253",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0253-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0253-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "MAAd2MYz5i8",
+    "title": "Bicep Curl Machine Tutorial | Beginner’s Guide to Gym Machines (Build Muscle & Strength)",
+    "channel": "Tim Bullici",
+    "duration": "2:17",
+    "url": "https://www.youtube.com/watch?v=MAAd2MYz5i8",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "incline-db-curl",
+   "group": "biceps",
+   "part": "bi-long",
+   "equipment": "dumbbell",
+   "ar": "كيرل دمبل على بنش مائل",
+   "en": "Incline Dumbbell Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "اضبط البنش على ميل متوسط واجلس والظهر ملتصق. الذراعين معلّقة تحت الكتف أو وراه شوي، وهذا يخلي تمدد البايسبس أكبر.",
+   "grip": "الدمبلات معلّقة والكفوف للأمام. الكتف ثابت.",
+   "steps": [
+    "ابدأ والذراعين ممدودة تحت.",
+    "ارفع الدمبل بثني المرفق، والمرفق ثابت ما يتقدم.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "المرفق يتقدم للأمام",
+     "fix": "خلّه ثابت."
+    },
+    {
+     "m": "ميل البنش منخفض جدًا يضغط الكتف",
+     "fix": "اختر ميل مريح لكتفك."
+    },
+    {
+     "m": "رفع الرأس والكتف عن البنش",
+     "fix": "خلّهم ملتصقين."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0214-relaxation.png",
+     "img/ek-0214-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Alternating Incline Curl with Dumbbell",
+    "source_id": "0214",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0214-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0214-tension.png"
+    ],
+    "modified": false,
+    "note": "الرسمة من المصدر بعنوان «Alternating Incline Curl with Dumbbell» وتُظهر التبديل بين اليدين."
+   },
+   "video": {
+    "id": "HhHHBj3qTJ4",
+    "title": "How to do the INCLINE DUMBBELL CURL! | 2 Minute Tutorial",
+    "channel": "Max Euceda",
+    "duration": "2:00",
+    "url": "https://www.youtube.com/watch?v=HhHHBj3qTJ4",
+    "status": "candidate",
+    "note": ""
+   },
+   "safety": "لا تسحب لمدى يسبب ألم في الكتف. إذا حسيت بألم حاد وقّف التمرين."
+  },
+  {
+   "id": "drag-curl",
+   "group": "biceps",
+   "part": "bi-long",
+   "equipment": "barbell",
+   "ar": "دراق كيرل بالبار",
+   "en": "Barbell Drag Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "ما يحتاج ضبط. استخدم وزن أخف من الكيرل العادي.",
+   "grip": "مسكة سفلية بعرض الكتفين.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "اسحب البار للأعلى قريب من الجسم، والمرفقين يرجعون للخلف.",
+    "وقف لما يوصل البار تقريبًا لأسفل الصدر.",
+    "نزّل ببطء بنفس المسار."
+   ],
+   "mistakes": [
+    {
+     "m": "البار يبعد عن الجسم",
+     "fix": "خلّه يزحف على الجسم."
+    },
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "رفع الكتف",
+     "fix": "الكتف ثابت."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0222-relaxation.png",
+     "img/ek-0222-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Drag Curl with Barbell",
+    "source_id": "0222",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0222-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0222-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "LMdNTHH6G8I",
+    "title": "How To: Barbell Drag Curl (Increase Bicep Peaks!)",
+    "channel": "ScottHermanFitness",
+    "duration": "2:06",
+    "url": "https://www.youtube.com/watch?v=LMdNTHH6G8I",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "preacher-curl-barbell",
+   "group": "biceps",
+   "part": "bi-short",
+   "equipment": "barbell",
+   "ar": "بريتشر كيرل بالبار",
+   "en": "Barbell Preacher Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "اضبط مقعد البريتشر بحيث يكون الإبط على حافة المسند والذراع كاملة عليه.",
+   "grip": "مسكة سفلية بعرض الكتفين.",
+   "steps": [
+    "ابدأ والذراعين ممدودة على المسند تقريبًا.",
+    "ارفع البار بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء وتحكم، خصوصًا في آخر النزول."
+   ],
+   "mistakes": [
+    {
+     "m": "النزول بسرعة لآخر المدى",
+     "fix": "انزل ببطء، لأن آخر المدى هنا ممتد وحساس."
+    },
+    {
+     "m": "رفع المرفق عن المسند",
+     "fix": "خلّه ثابت."
+    },
+    {
+     "m": "الوزن ثقيل",
+     "fix": "خفف الوزن."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0239-relaxation.png",
+     "img/ek-0239-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Preacher Curl: Barbell",
+    "source_id": "0239",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0239-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0239-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "Gydpcouclx8",
+    "title": "Conquer the EZ-Bar Preacher Curl, Max Out Your Biceps",
+    "channel": "Men's Health",
+    "duration": "1:26",
+    "url": "https://www.youtube.com/watch?v=Gydpcouclx8",
+    "status": "candidate",
+    "note": "الفيديو يستخدم بار EZ، والحركة نفسها."
+   },
+   "safety": "لا تخلّ البار يطيح في آخر النزول، وانزل لمدى مريح لمرفقك."
+  },
+  {
+   "id": "preacher-curl-machine",
+   "group": "biceps",
+   "part": "bi-short",
+   "equipment": "machine",
+   "ar": "جهاز بريتشر كيرل",
+   "en": "Preacher Curl Machine",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "اضبط المقعد بحيث يكون الإبط على حافة المسند والمرفق محاذي لمحور الجهاز.",
+   "grip": "امسك المقابض بمسكة سفلية.",
+   "steps": [
+    "ابدأ والذراعين شبه ممدودة.",
+    "ارفع بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "المقعد عالي أو واطي",
+     "fix": "عدّل لين يكون الإبط على الحافة."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "بتحكم."
+    },
+    {
+     "m": "رفع المرفق",
+     "fix": "ثابت على المسند."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0236-relaxation.png",
+     "img/ek-0236-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Preacher Curl: Machine",
+    "source_id": "0236",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0236-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0236-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "AR-oARBkYxI",
+    "title": "How to PROPERLY DO Machine Bicep Curls (Machine Preacher Curls)",
+    "channel": "Colossus Fitness",
+    "duration": "2:05",
+    "url": "https://www.youtube.com/watch?v=AR-oARBkYxI",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "concentration-curl",
+   "group": "biceps",
+   "part": "bi-short",
+   "equipment": "dumbbell",
+   "ar": "كيرل التركيز بالدمبل",
+   "en": "Concentration Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "اجلس على طرف بنش والقدمين مفتوحة.",
+   "grip": "امسك الدمبل بيد وحدة، والمرفق مسنود على باطن الفخذ.",
+   "steps": [
+    "ابدأ والذراع ممدودة تحت.",
+    "ارفع الدمبل بثني المرفق باتجاه الكتف.",
+    "ثبّت لحظة.",
+    "نزّل ببطء، ثم بدّل اليد."
+   ],
+   "mistakes": [
+    {
+     "m": "تحريك الكتف أو الجذع",
+     "fix": "الحركة من المرفق بس."
+    },
+    {
+     "m": "المرفق يتحرك عن الفخذ",
+     "fix": "خلّه ثابت."
+    },
+    {
+     "m": "النزول بسرعة",
+     "fix": "بتحكم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0220-relaxation.png",
+     "img/ek-0220-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Concentration Curls with Dumbbell",
+    "source_id": "0220",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0220-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0220-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "Jvj2wV0vOYU",
+    "title": "How To: Dumbbell Concentration Curl",
+    "channel": "ScottHermanFitness",
+    "duration": "1:41",
+    "url": "https://www.youtube.com/watch?v=Jvj2wV0vOYU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "spider-curl",
+   "group": "biceps",
+   "part": "bi-short",
+   "equipment": "barbell",
+   "ar": "سبايدر كيرل بالبار",
+   "en": "Barbell Spider Curl",
+   "primary": [
+    "البايسبس (Biceps)"
+   ],
+   "secondary": [
+    "البراكياليس (Brachialis)"
+   ],
+   "setup": "استخدم الجهة العمودية من مقعد البريتشر أو بنش مائل، وانبطح عليه والذراعين معلّقة تحت بشكل عمودي.",
+   "grip": "مسكة سفلية بعرض الكتفين.",
+   "steps": [
+    "ابدأ والذراعين معلّقة تحت.",
+    "ارفع البار بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "تأرجح الذراع للأمام",
+     "fix": "الذراع العلوي عمودي وثابت."
+    },
+    {
+     "m": "الوزن ثقيل",
+     "fix": "خفف الوزن."
+    },
+    {
+     "m": "نص حركة",
+     "fix": "المدى الكامل."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0245-relaxation.png",
+     "img/ek-0245-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Spider Curl with Barbell",
+    "source_id": "0245",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0245-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0245-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "IHXbgmXjOas",
+    "title": "How to Perform Barbell Spider Curls | Bicep Exercise Tutorial",
+    "channel": "Buff Dudes Workouts",
+    "duration": "1:18",
+    "url": "https://www.youtube.com/watch?v=IHXbgmXjOas",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "hammer-curl",
+   "group": "biceps",
+   "part": "bi-brachialis",
+   "equipment": "dumbbell",
+   "ar": "هامر كيرل بالدمبل",
+   "en": "Dumbbell Hammer Curl",
+   "primary": [
+    "البراكياليس (Brachialis)",
+    "عضلة الساعد (Brachioradialis)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)"
+   ],
+   "setup": "ما يحتاج ضبط.",
+   "grip": "مسكة محايدة (الكفوف تواجه بعض) طول الحركة. المرفقين جنب الجسم.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع الدمبل بثني المرفق، والكف على نفس الوضع.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "لف الكف",
+     "fix": "خلّه محايد طول الحركة."
+    },
+    {
+     "m": "المرفقين يتقدمون",
+     "fix": "جنب الجسم."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0227-relaxation.png",
+     "img/ek-0227-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Biceps Curl: Dumbbell (Hammer)",
+    "source_id": "0227",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0227-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0227-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Biceps Curl: Dumbbell (Hammer)»."
+   },
+   "video": {
+    "id": "Hy5L3-QJETc",
+    "title": "How to PROPERLY Dumbbell Hammer Curl (FIX THIS NOW!)",
+    "channel": "Colossus Fitness",
+    "duration": "2:02",
+    "url": "https://www.youtube.com/watch?v=Hy5L3-QJETc",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "rope-hammer-curl",
+   "group": "biceps",
+   "part": "bi-brachialis",
+   "equipment": "cable",
+   "ar": "هامر كيرل بالحبل والكيبل",
+   "en": "Cable Rope Hammer Curl",
+   "primary": [
+    "البراكياليس (Brachialis)",
+    "عضلة الساعد (Brachioradialis)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)"
+   ],
+   "setup": "اضبط البكرة على أدنى مستوى وركّب الحبل.",
+   "grip": "امسك طرفي الحبل بمسكة محايدة. المرفقين جنب الجسم.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع الحبل بثني المرفق.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "المرفقين يتقدمون",
+     "fix": "جنب الجسم."
+    },
+    {
+     "m": "الوقوف بعيد عن الجهاز",
+     "fix": "قف قريب."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0216-relaxation.png",
+     "img/ek-0216-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Hammer Curls with Rope and Cable",
+    "source_id": "0216",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0216-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0216-tension.png"
+    ],
+    "modified": false,
+    "note": ""
+   },
+   "video": {
+    "id": "V8AR3SGzboU",
+    "title": "ROPE HAMMER CURL",
+    "channel": "James Harrison",
+    "duration": "0:55",
+    "url": "https://www.youtube.com/watch?v=V8AR3SGzboU",
+    "status": "candidate",
+    "note": ""
+   }
+  },
+  {
+   "id": "reverse-curl",
+   "group": "biceps",
+   "part": "bi-brachialis",
+   "equipment": "dumbbell",
+   "ar": "كيرل عكسي بالدمبل",
+   "en": "Dumbbell Reverse Curl",
+   "primary": [
+    "عضلة الساعد (Brachioradialis)",
+    "البراكياليس (Brachialis)"
+   ],
+   "secondary": [
+    "البايسبس (Biceps)",
+    "الساعد (Forearms)"
+   ],
+   "setup": "استخدم وزن أخف من الكيرل العادي.",
+   "grip": "مسكة علوية (ظهر الكف للأمام) طول الحركة. المرفقين جنب الجسم.",
+   "steps": [
+    "ابدأ والذراعين ممدودة.",
+    "ارفع الدمبل بثني المرفق وظهر الكف للأعلى.",
+    "ثبّت لحظة.",
+    "نزّل ببطء."
+   ],
+   "mistakes": [
+    {
+     "m": "ثني الرسغ",
+     "fix": "الرسغ مستقيم."
+    },
+    {
+     "m": "التأرجح",
+     "fix": "الجسم ثابت."
+    },
+    {
+     "m": "الوزن ثقيل",
+     "fix": "خفف الوزن."
+    }
+   ],
+   "image": {
+    "files": [
+     "img/ek-0257-relaxation.png",
+     "img/ek-0257-tension.png"
+    ],
+    "source": "everkinetic",
+    "source_title": "Biceps Curl: Dumbbell (Reverse)",
+    "source_id": "0257",
+    "author": "Everkinetic (Greg Priday)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://github.com/everkinetic/data",
+    "original_urls": [
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0257-relaxation.png",
+     "https://raw.githubusercontent.com/everkinetic/data/master/dist/png/0257-tension.png"
+    ],
+    "modified": false,
+    "note": "عنوان الرسمة في المصدر «Biceps Curl: Dumbbell (Reverse)»."
+   },
+   "video": {
+    "id": "rV2asdIdXF0",
+    "title": "How to Do Reverse Curls With Dumbbells - Great Exercise for Building Bigger Forearms",
+    "channel": "Fit Father Project - Fitness For Busy Fathers",
+    "duration": "4:55",
+    "url": "https://www.youtube.com/watch?v=rV2asdIdXF0",
+    "status": "candidate",
+    "note": ""
+   }
   }
  ]
 }</script>
@@ -2811,7 +7570,8 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     fill($('selGroup'), sel.day ? 'اختر المجموعة العضلية' : 'اختر اليوم أول', gOpts, sel.group);
 
     var pOpts = [];
-    if (sel.group) { pOpts = groupObj().parts.filter(function (p) { return DATA.exercises.some(function (e) { return e.part === p; }); }).map(function (p) { return { value: p, label: DATA.parts[p].ar + ' — ' + DATA.parts[p].en }; }); }
+    // اليوم يقدر يحدد أجزاء معيّنة من المجموعة (مثلًا: الكتف الخلفي في Pull بس). إذا ما حدد، تظهر كل أجزاء المجموعة.
+    if (sel.group) { var dp = dayObj().parts; pOpts = ((dp && dp[sel.group]) || groupObj().parts).filter(function (p) { return DATA.exercises.some(function (e) { return e.part === p; }); }).map(function (p) { return { value: p, label: DATA.parts[p].ar + ' — ' + DATA.parts[p].en }; }); }
     fill($('selPart'), sel.group ? 'اختر الجزء المستهدف' : 'اختر المجموعة أول', pOpts, sel.part);
 
     var qOpts = [];
@@ -2862,7 +7622,7 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     h += '</div>';
     if (e.image) {
       var im = e.image;
-      h += '<p class="imgnote">رسم توضيحي: <a href="' + esc(im.source_url) + '" target="_blank" rel="noopener">' + esc(im.author) + '</a>، ترخيص <a href="' + esc(im.license_url) + '" target="_blank" rel="noopener"><span class="ltr">' + esc(im.license) + '</span></a>. الرسمة من <span class="ltr">everkinetic/data</span> بدون أي تعديل عليها، وتظهر على خلفية بيضاء.</p>';
+      h += '<p class="imgnote">رسم توضيحي: <a href="' + esc(im.source_url) + '" target="_blank" rel="noopener">' + esc(im.author) + '</a>، ترخيص <a href="' + esc(im.license_url) + '" target="_blank" rel="noopener"><span class="ltr">' + esc(im.license) + '</span></a>. الرسمة من <span class="ltr">everkinetic/data</span> بدون أي تعديل عليها، وتظهر على خلفية بيضاء.' + (im.note ? ' ' + esc(im.note) : '') + '</p>';
     }
     h += '</div>';
 
@@ -2874,6 +7634,7 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     h += '<div class="block"><h4>الجلسة والمسكة</h4><p>' + esc(e.grip) + '</p></div>';
     h += '<div class="block"><h4>خطوات التنفيذ</h4><ol class="steps">' + e.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol></div>';
     h += '<div class="block"><h4>أخطاء شائعة وكيف تتجنبها</h4><ul class="mist">' + e.mistakes.map(function (m) { return '<li><span class="m">الغلط: ' + esc(m.m) + '</span><span class="f">التصحيح: ' + esc(m.fix) + '</span></li>'; }).join('') + '</ul></div>';
+    if (e.safety) h += '<div class="block"><h4>ملاحظات السلامة</h4><p>' + esc(e.safety) + '</p></div>';
 
     // الفيديو
     h += '<div class="block"><h4>فيديو التمرين والتكنيك</h4>';
