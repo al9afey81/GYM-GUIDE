@@ -233,18 +233,22 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       <div class="listhead">
         <div class="top"><h2>قائمة تماريني</h2><span class="status" id="saveStatus"></span></div>
         <div class="status" id="sessionInfo"></div>
+        <div class="chips" id="sessionSummary" hidden></div>
       </div>
       <div id="items" style="display:flex;flex-direction:column;gap:16px;margin-top:16px"></div>
       <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+        <!-- إضافة جهاز ثاني: ترجع للدليل وتبقى الحصة مثل ما هي -->
+        <button class="btn second full" id="addMore" type="button">أضف جهاز آخر من «الدليل»</button>
         <div id="confirmBox" class="confirm" hidden>
-          <p><strong>متأكد تبي تبدأ حصة جديدة؟</strong><br>الحصة الحالية بتنحفظ في «سجل تماريني»، وبعدها تنفرغ القائمة.</p>
+          <p id="confirmText"></p>
           <div class="actions">
-            <button class="btn primary" id="confirmYes" type="button">نعم، ابدأ حصة جديدة</button>
+            <button class="btn primary" id="confirmYes" type="button">نعم، أنهِ الحصة واحفظها</button>
             <button class="btn second" id="confirmNo" type="button">إلغاء</button>
           </div>
         </div>
         <div id="newMsg" class="notice" hidden></div>
-        <button class="btn ghost full" id="newSession" type="button">بدء حصة جديدة</button>
+        <!-- إنهاء الحصة: إجراء مستقل عن اعتماد أي تمرين -->
+        <button class="btn ghost full" id="newSession" type="button">إنهاء الحصة وحفظها في السجل</button>
       </div>
     </section>
 
@@ -7648,9 +7652,12 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     }
     h += '</div>';
 
-    // الإضافة
+    // الإضافة: نفس الجهاز ما ينضاف مرتين بالغلط، لكن تقدر تضيفه مرة ثانية إذا قصدت بعد تأكيد
     if (inSession(e.id)) {
-      h += '<button class="btn ok full" type="button" id="goList">موجود في قائمتك، افتح «تماريني»</button>';
+      h += '<button class="btn ok full" type="button" id="goList">موجود في حصتك، افتح «تماريني»</button>';
+      h += '<div id="dupBox" class="confirm" hidden><p>هذا الجهاز موجود في حصتك الحالية. تبي تضيفه مرة ثانية كتمرين مستقل بجولاته الخاصة؟</p>' +
+        '<div class="actions"><button class="btn primary" type="button" id="dupYes">نعم، أضفه مرة ثانية</button><button class="btn second" type="button" id="dupNo">إلغاء</button></div></div>';
+      h += '<button class="btn second full" type="button" id="dupAdd">إضافة نفس الجهاز مرة ثانية</button>';
     } else {
       h += '<button class="btn primary full" type="button" id="addBtn">أضف إلى تمريني</button>';
     }
@@ -7665,14 +7672,30 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     var add = $('addBtn');
     if (add) add.addEventListener('click', function () { addExercise(e.id); });
     var go = $('goList'); if (go) go.addEventListener('click', function () { showTab('list'); });
+    var dup = $('dupAdd');
+    if (dup) {
+      dup.addEventListener('click', function () { $('dupBox').hidden = false; dup.hidden = true; });
+      $('dupNo').addEventListener('click', function () { $('dupBox').hidden = true; dup.hidden = false; });
+      $('dupYes').addEventListener('click', function () { addExercise(e.id, true); });
+    }
   }
 
-  function addExercise(id) {
-    if (inSession(id)) return;
+  // again = true: إضافة مقصودة لنفس الجهاز مرة ثانية (بعد التأكيد فقط)
+  function addExercise(id, again) {
+    if (inSession(id) && !again) return;
     if (!session.startedAt) session.startedAt = Date.now();
     session.items.push(newItem(id));
+    showNewMsg(''); // رسالة «انحفظت الحصة» تخص الحصة السابقة
     persistSession(); updateBadge(); renderDetail();
-    toast(storageOk ? 'تمت الإضافة إلى قائمتك' : 'تمت الإضافة، لكن الحفظ على الجهاز فشل');
+    toast(storageOk ? ('تمت الإضافة · حصتك فيها ' + devicesAr(session.items.length)) : 'تمت الإضافة، لكن الحفظ على الجهاز فشل');
+  }
+  // العدّ بالعربي: جهاز واحد، جهازين، 3 أجهزة، 11 جهاز
+  function devicesAr(n) { return n === 1 ? 'جهاز واحد' : n === 2 ? 'جهازين' : (n >= 3 && n <= 10) ? n + ' أجهزة' : n + ' جهاز'; }
+  // ملخص الحصة: الجولات المكتملة تُحسب من الأجهزة المعتمدة فقط، لأن الاعتماد يتطلب بيانات كاملة لكل جولة
+  function sessionSummary() {
+    var s = { total: session.items.length, done: 0, rounds: 0 };
+    session.items.forEach(function (it) { if (it.approved) { s.done++; s.rounds += it.count || 0; } });
+    s.left = s.total - s.done; return s;
   }
   function updateBadge() { var b = $('badge'); b.textContent = session.items.length; b.hidden = session.items.length === 0; }
 
@@ -7683,20 +7706,25 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     return h;
   }
   function renderList() {
-    var wrap = $('items');
-    var done = session.items.filter(function (i) { return i.approved; }).length;
-    $('sessionInfo').textContent = session.items.length
-      ? ('معتمد ' + done + ' من ' + session.items.length + (session.startedAt ? ' · بدأت الحصة ' + fmtTime(session.startedAt) : ''))
-      : '';
-    if (!session.items.length) {
-      wrap.innerHTML = '<div class="card empty"><strong>قائمتك فاضية</strong>اختر تمرين من «الدليل» واضغط «أضف إلى تمريني».</div>';
+    var wrap = $('items'); var sm = sessionSummary();
+    $('sessionInfo').textContent = (sm.total && session.startedAt) ? ('الحصة الحالية · بدأت ' + fmtTime(session.startedAt)) : '';
+    var sb = $('sessionSummary'); sb.hidden = !sm.total;
+    sb.innerHTML = sm.total ? ('<span class="chip">المختارة: ' + sm.total + '</span><span class="chip main">المكتملة ✅: ' + sm.done + '</span>' +
+      '<span class="chip">المتبقية: ' + sm.left + '</span><span class="chip">الجولات المكتملة: ' + sm.rounds + '</span>') : '';
+    $('newSession').hidden = !sm.total || !$('confirmBox').hidden;
+    $('addMore').textContent = sm.total ? 'أضف جهاز آخر من «الدليل»' : 'اختر أجهزة حصتك من «الدليل»';
+    if (!sm.total) {
+      $('confirmBox').hidden = true;
+      wrap.innerHTML = '<div class="card empty"><strong>ما فيه حصة حالية</strong>اختر الأجهزة اللي تبيها من «الدليل» واضغط «أضف إلى تمريني» لكل جهاز. كلها بتظهر هنا في حصة وحدة.</div>';
       renderStatus(); return;
     }
-    var h = '';
+    var h = '', seen = {};
     session.items.forEach(function (it, idx) {
       var e = exById(it.exId);
+      seen[it.exId] = (seen[it.exId] || 0) + 1;
+      var again = seen[it.exId] > 1 ? ' (مرة ' + seen[it.exId] + ')' : '';
       h += '<article class="item' + (it.approved ? ' done' : '') + '" data-i="' + idx + '">';
-      h += '<div class="hd"><div class="tick" aria-hidden="true">' + (it.approved ? '✅' : '') + '</div><div><div class="nm">' + esc(e.ar) + '</div><div class="sub"><span class="ltr">' + esc(e.en) + '</span> · ' + esc(equipName(e.equipment)) + '</div></div></div>';
+      h += '<div class="hd"><div class="tick" aria-hidden="true">' + (it.approved ? '✅' : '') + '</div><div><div class="nm">' + esc(e.ar) + esc(again) + '</div><div class="sub">' + (idx + 1) + ' من ' + sm.total + ' · <span class="ltr">' + esc(e.en) + '</span> · ' + esc(equipName(e.equipment)) + '</div></div></div>';
       h += '<div class="field"><label for="cnt' + idx + '">عدد الجولات</label><select id="cnt' + idx + '" data-act="count" data-i="' + idx + '">' + optRange(1, 5, 1, it.count) + '</select></div>';
       if (it.count) {
         h += '<div class="sets">';
@@ -7709,7 +7737,7 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       }
       h += '<div class="actions">';
       if (it.approved) {
-        h += '<button class="btn ok" type="button" disabled>✅ معتمد (تقدر تعدّل)</button><button class="btn second" type="button" data-act="unapprove" data-i="' + idx + '">إلغاء الاعتماد</button>';
+        h += '<button class="btn ok" type="button" disabled>✅ مكتمل (تقدر تعدّل)</button><button class="btn second" type="button" data-act="unapprove" data-i="' + idx + '">إعادة فتح التمرين</button>';
       } else {
         h += '<button class="btn primary" type="button" data-act="approve" data-i="' + idx + '">اعتماد التمرين</button>';
       }
@@ -7741,16 +7769,25 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     var act = t.getAttribute('data-act'); var it = session.items[+t.getAttribute('data-i')]; if (!it) return;
     if (act === 'approve') {
       if (!isComplete(it)) { toast('اختر عدد الجولات ثم العدّات والوزن لكل جولة'); return; }
-      it.approved = true; persistSession(); renderList(); toast('تم اعتماد التمرين ✅');
+      // الاعتماد يكمّل هذا الجهاز بس، والجهاز يبقى في الحصة. الحصة ما تنتهي إلا من زر «إنهاء الحصة».
+      it.approved = true; persistSession(); renderList();
+      var sm = sessionSummary();
+      toast(sm.left ? ('تم اعتماد التمرين ✅ · باقي ' + devicesAr(sm.left)) : 'تم اعتماد التمرين ✅ · كل أجهزة الحصة مكتملة');
     }
-    if (act === 'unapprove') { it.approved = false; persistSession(); renderList(); }
+    if (act === 'unapprove') { it.approved = false; persistSession(); renderList(); toast('انفتح التمرين للتعديل'); }
   });
 
-  /* ---------- بدء حصة جديدة ---------- */
+  /* ---------- إضافة جهاز آخر / إنهاء الحصة ---------- */
+  $('addMore').addEventListener('click', function () { showTab('guide'); });
   function showNewMsg(txt, cls) { var m = $('newMsg'); m.textContent = txt; m.className = 'notice ' + (cls || ''); m.hidden = !txt; }
   $('newSession').addEventListener('click', function () {
     showNewMsg('');
-    if (!session.items.length) { showNewMsg('قائمتك فاضية، ما فيه شي يتحفظ.'); return; }
+    var sm = sessionSummary();
+    if (!sm.total) { showNewMsg('ما فيه أجهزة في حصتك، ما فيه شي يتحفظ.'); return; }
+    var t = '<strong>تبي تنهي الحصة وتحفظها في «سجل تماريني»؟</strong><br>بتنحفظ ' + devicesAr(sm.total) + ': ' + sm.done + ' مكتملة ✅ و' + sm.left + ' غير مكتملة.';
+    if (sm.left) t += '<br>الأجهزة غير المكتملة بتنحفظ مثل ما هي بدون ✅. إذا باقي لك أجهزة، اضغط «إلغاء» وكمّلها أول.';
+    t += '<br>بعد الحفظ تنفرغ القائمة لحصة جديدة.';
+    $('confirmText').innerHTML = t;
     $('confirmBox').hidden = false; $('newSession').hidden = true;
   });
   $('confirmNo').addEventListener('click', function () { $('confirmBox').hidden = true; $('newSession').hidden = false; });
@@ -7767,7 +7804,7 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     var saved = rawSet(KEY_H, JSON.stringify(next));
     var verified = false;
     if (saved) { var back = readJSON(KEY_H, null); verified = !!(back && back[0] && back[0].id === rec.id && back.length === next.length); }
-    $('confirmBox').hidden = true; $('newSession').hidden = false;
+    $('confirmBox').hidden = true; $('newSession').hidden = !session.items.length;
     if (!verified) {
       showNewMsg('ما قدرت أحفظ الحصة في السجل، فما مسحت قائمتك. جرّب مرة ثانية.', 'bad');
       renderStatus(); return;
@@ -7783,13 +7820,14 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
   function renderHistory() {
     $('histCount').textContent = history.length ? (history.length + ' حصة') : '';
     var w = $('histList');
-    if (!history.length) { w.innerHTML = '<div class="card empty"><strong>ما فيه حصص محفوظة</strong>لما تضغط «بدء حصة جديدة» تنحفظ حصتك هنا.</div>'; return; }
+    if (!history.length) { w.innerHTML = '<div class="card empty"><strong>ما فيه حصص محفوظة</strong>لما تضغط «إنهاء الحصة وحفظها في السجل» من «تماريني» تنحفظ حصتك هنا.</div>'; return; }
     w.innerHTML = history.map(function (r, n) {
       var b = r.items.map(function (it) {
         var sets = (it.sets || []).map(function (s, i) { return '<li>جولة ' + (i + 1) + ': ' + esc(s.reps == null ? '؟' : s.reps) + ' عدّة × ' + esc(s.weight == null ? '؟' : s.weight) + ' كجم</li>'; }).join('');
         return '<div class="ex"><div class="n">' + (it.approved ? '✅ ' : '') + esc(it.ar) + ' <span class="sub ltr" style="color:var(--muted);font-weight:400">' + esc(it.en) + '</span></div>' + (sets ? '<ul>' + sets + '</ul>' : '<div class="status">بدون جولات مسجّلة</div>') + '</div>';
       }).join('');
-      return '<details class="rec"' + (n === 0 ? '' : '') + '><summary><span class="d">' + esc(fmtDate(r.startedAt)) + '</span><span class="s">' + r.items.length + ' تمارين · بدأت ' + esc(fmtTime(r.startedAt)) + ' · انحفظت ' + esc(fmtTime(r.savedAt)) + '</span></summary><div class="body">' + b + '</div></details>';
+      return '<details class="rec"' + (n === 0 ? '' : '') + '><summary><span class="d">' + esc(fmtDate(r.startedAt)) + '</span><span class="s">' + esc(devicesAr(r.items.length)) + ' · مكتملة ' + r.items.filter(function (x) { return x.approved; }).length +
+        ' · ' + r.items.reduce(function (a, x) { return a + (x.approved && x.sets ? x.sets.length : 0); }, 0) + ' جولة مكتملة · بدأت ' + esc(fmtTime(r.startedAt)) + ' · انحفظت ' + esc(fmtTime(r.savedAt)) + '</span></summary><div class="body">' + b + '</div></details>';
     }).join('');
   }
 
@@ -7899,7 +7937,7 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       bkPending = null; $('bkConfirm').hidden = true;
       bkMsg('ما قدرت أحفظ النسخة على هذا الجهاز، فرجّعت بياناتك الحالية كما كانت.', 'bad'); renderStatus(); return;
     }
-    session = p.session; history = p.history; bkPending = null; lastSaved = Date.now();
+    session = p.session; history = p.history; bkPending = null; lastSaved = Date.now(); showNewMsg('');
     $('bkConfirm').hidden = true; bkPanels(''); $('bkPaste').value = ''; $('bkFile').value = '';
     updateBadge(); renderList(); renderDetail(); renderHistory(); renderStatus();
     bkMsg('تمت الاستعادة: ' + history.length + ' حصة في السجل، و' + session.items.length + ' تمرين في القائمة.', 'ok');
