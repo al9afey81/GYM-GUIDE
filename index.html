@@ -129,6 +129,13 @@ select:disabled { opacity: .55; background-color: var(--surface-2); }
 .item.done .tick { border-color: var(--ok); background: var(--ok-soft); }
 .item .nm { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 1.4; }
 .item .sub { font-size: 13px; color: var(--muted); }
+/* الحصة المعتمدة: بطاقة مصغّرة، الضغط عليها يفتحها */
+.item.mini { padding: 10px 14px; }
+.item button.open { all: unset; box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.item button.open:focus-visible { outline: 2px solid var(--ok); outline-offset: 4px; border-radius: 8px; }
+.item button.open .grow { flex: 1; min-width: 0; }
+.item button.open .tick { margin-top: 0; }
+.item .chev { color: var(--muted); font-size: 22px; line-height: 1; }
 .sets { display: flex; flex-direction: column; gap: 10px; }
 .setrow { display: grid; grid-template-columns: 70px 1fr 1fr; gap: 8px; align-items: end; }
 .setrow .lab { font-weight: 600; padding-bottom: 12px; font-size: 14px; }
@@ -197,6 +204,37 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
 .bk-lab { font-size: 13px; color: var(--muted); }
 .bk-text { width: 100%; box-sizing: border-box; border-radius: 12px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.20); color: #fff; padding: 10px; font: 12px/1.5 ui-monospace, Menlo, monospace; resize: vertical; text-align: left; }
 .backup input[type=file] { color: var(--muted); font-size: 14px; max-width: 100%; }
+
+/* تقارير PDF: المعاينة ورقة بيضاء، والطباعة تطبع التقرير بس */
+.rp-date { width: 100%; box-sizing: border-box; min-height: 48px; border-radius: 12px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.20); color: #fff; padding: 8px 12px; font: inherit; color-scheme: dark; }
+body.reporting #app { display: none; }
+#reportView { padding: calc(env(safe-area-inset-top, 0px) + 12px) max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 24px) max(16px, env(safe-area-inset-left, 0px)); }
+.rp-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.rp-bar .btn { flex: 1 1 140px; }
+.rp-file { flex-basis: 100%; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+#reportSheet { background: #fff; color: #111; border-radius: 10px; padding: 18px 16px; max-width: 210mm; margin: 0 auto; font-size: 13px; line-height: 1.6; }
+#reportSheet h1 { font-size: 20px; margin: 2px 0 4px; color: #111; }
+#reportSheet h2 { font-size: 16px; margin: 18px 0 4px; color: #0d4f4a; border-bottom: 1px solid #cfd8dc; padding-bottom: 3px; break-after: avoid; page-break-after: avoid; }
+#reportSheet h3 { font-size: 14px; margin: 10px 0 2px; color: #111; break-after: avoid; }
+.rp-brand { font-weight: 800; letter-spacing: .5px; color: #0d4f4a; font-size: 12px; }
+.rp-head { border-bottom: 2px solid #0d4f4a; padding-bottom: 8px; }
+.rp-meta { margin: 2px 0; color: #455a64; font-size: 12px; }
+.rp-en { display: block; font-weight: 400; color: #455a64; font-size: 11.5px; }
+.rp-t { width: 100%; border-collapse: collapse; margin: 8px 0; break-inside: avoid; page-break-inside: avoid; table-layout: fixed; }
+.rp-t th, .rp-t td { border: 1px solid #b0bec5; padding: 4px 6px; text-align: right; vertical-align: top; overflow-wrap: anywhere; word-break: normal; }
+.rp-t thead th { background: #eef3f4; }
+.rp-t tfoot td { color: #455a64; font-size: 11.5px; }
+.rp-sum .rp-t th { width: 34%; background: #eef3f4; }
+.rp-c { break-inside: avoid; page-break-inside: avoid; margin: 8px 0; }
+.rp-c ul { margin: 2px 0; padding-right: 18px; }
+.rp-res { margin: 2px 0; font-weight: 600; }
+@media print {
+  @page { size: A4; margin: 14mm 12mm; }
+  html, body { background: #fff !important; }
+  body::before, .bg, #app, .rp-bar, .toast { display: none !important; }
+  #reportView { padding: 0; }
+  #reportSheet { border-radius: 0; padding: 0; max-width: none; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 </head>
 <body>
@@ -287,6 +325,22 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       <div class="listhead"><div class="top"><h2>سجل تماريني</h2><span class="status" id="histCount"></span></div></div>
       <div id="histList" style="display:flex;flex-direction:column;gap:12px;margin-top:16px"></div>
 
+      <!-- تقارير PDF من السجل -->
+      <div class="card backup" id="reportsCard" style="margin-top:16px">
+        <h3>تقارير PDF</h3>
+        <p class="bk-note" id="rpEmpty">لما تحفظ تمرين يوم في السجل، تقدر تطلع له تقرير هنا.</p>
+        <div id="rpForm" style="display:flex;flex-direction:column;gap:12px" hidden>
+          <div class="field"><label for="rpOne">تقرير تمرين واحد</label><select id="rpOne"></select></div>
+          <button class="btn ghost full" id="rpOneBtn" type="button">اعرض تقرير هذا التمرين</button>
+          <div class="bk-panel">
+            <div class="field"><label for="rpFrom">تقرير فترة: من تاريخ</label><input type="date" id="rpFrom" class="rp-date"></div>
+            <div class="field"><label for="rpTo">إلى تاريخ</label><input type="date" id="rpTo" class="rp-date"></div>
+            <button class="btn ghost full" id="rpRangeBtn" type="button">اعرض تقرير الفترة</button>
+          </div>
+          <p class="bk-note">بعد ما يظهر التقرير اضغط «طباعة / حفظ PDF»، ومن نافذة الطباعة اختر المشاركة أو الحفظ في الملفات.</p>
+        </div>
+      </div>
+
       <div class="card backup" id="backupCard">
         <h3>نسخة احتياطية</h3>
         <p class="bk-note">تمارينك محفوظة على هذا الجهاز فقط. احفظ نسخة تقدر تستعيدها لو انمسحت بيانات Safari أو غيّرت الجهاز.</p>
@@ -324,6 +378,15 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     </section>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</div>
+<!-- معاينة التقرير (صفحة A4 للطباعة / حفظ PDF) -->
+<div id="reportView" dir="rtl" lang="ar" hidden>
+  <div class="rp-bar">
+    <button class="btn primary" id="rpPrint" type="button">طباعة / حفظ PDF</button>
+    <button class="btn second" id="rpClose" type="button">رجوع للسجل</button>
+    <div class="rp-file" id="reportFile"></div>
+  </div>
+  <article id="reportSheet"></article>
 </div>
 
 <script type="application/json" id="gg-data">{
@@ -7618,7 +7681,9 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
   function fill(el, placeholder, opts, value) {
     var h = '<option value="">' + esc(placeholder) + '</option>';
     opts.forEach(function (o) { h += '<option value="' + esc(o.value) + '"' + (o.disabled ? ' disabled' : '') + '>' + esc(o.label) + '</option>'; });
-    el.innerHTML = h; el.value = value || '';
+    // نفس الخيارات؟ لا نعيد بناء القائمة (يمنع فتحها مرة ثانية في Safari على الآيفون)
+    if (el._opts !== h) { el.innerHTML = h; el._opts = h; }
+    if (el.value !== (value || '')) el.value = value || '';
     el.disabled = opts.length === 0;
   }
   function dayObj() { return DATA.days.filter(function (d) { return d.id === sel.day; })[0]; }
@@ -7722,9 +7787,12 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       h += '<div id="dupBox" class="confirm" hidden><p>هذا التمرين موجود في ' + esc(dayPhrase(session.day)) + '. تبي تضيفه مرة ثانية كحصة مستقلة بجولاتها الخاصة؟</p>' +
         '<div class="actions"><button class="btn primary" type="button" id="dupYes">نعم، أضفه كحصة جديدة</button><button class="btn second" type="button" id="dupNo">إلغاء</button></div></div>';
       h += '<button class="btn second full" type="button" id="dupAdd">إضافة نفس التمرين كحصة ثانية</button>';
+    } else if (active && !fitsActiveDay(e)) {
+      // ما نخلط الأيام: تمرين من يوم ثاني ما ينضاف لتمرين اليوم الشغّال
+      h += '<div class="notice">هذا التمرين مو من أقسام ' + esc(dayPhrase(session.day)) + ' الشغّال، فما ينضاف له. تقدر تتصفحه هنا كمرجع، وإذا تبي تتمرن يوم ثاني أنهِ ' + esc(dayPhrase(session.day)) + ' أول من «تماريني».</div>';
     } else if (active) {
       h += '<button class="btn primary full" type="button" id="addBtn">أضف ك' + esc(sessionLabel(session.items.length + 1)) + ' في ' + esc(dayPhrase(session.day)) + '</button>';
-      if (validDay(session.day) && !dayHasEx(session.day, e)) h += '<div class="status">هذا التمرين من خارج أقسام ' + esc(dayPhrase(session.day)) + '، وبينضاف لنفس تمرين اليوم.</div>';
+      if (validDay(session.day) && sel.day && sel.day !== session.day) h += '<div class="status">تمرين اليوم الشغّال هو ' + esc(dayShort(session.day)) + '، والحصة بتنضاف له (تصفّح يوم ثاني ما يغيّره).</div>';
     } else {
       h += '<button class="btn primary full" type="button" id="addBtn">ابدأ ' + esc(dayPhrase(sel.day)) + ' وأضف هذي الحصة</button>';
     }
@@ -7754,8 +7822,11 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     showNewMsg(''); persistSession(); updateBadge();
   }
   // again = true: إضافة مقصودة لنفس التمرين كحصة ثانية (بعد التأكيد فقط)
+  // التمرين يناسب تمرين اليوم الشغّال؟ (تمرين قديم ما عرفنا يومه: ما نقيّد)
+  function fitsActiveDay(e) { return !validDay(session.day) || dayHasEx(session.day, e); }
   function addExercise(id, again) {
     if (inSession(id) && !again) return;
+    if (workoutActive() && !fitsActiveDay(exById(id))) { toast('هذا التمرين مو من ' + dayPhrase(session.day)); return; }
     if (!workoutActive()) {
       // أول حصة تبدأ تمرين اليوم بنوع اليوم المختار في الدليل
       startWorkout(validDay(sel.day) ? sel.day : inferDay([id]));
@@ -7791,51 +7862,78 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
   var editIdx = -1, editDraft = null, editRef = null, delIdx = -1, delRef = null;
   function cloneItem(it) { return { exId: it.exId, count: it.count, sets: it.sets.map(function (x) { return { reps: x.reps, weight: x.weight }; }) }; }
   function exOptions(cur) {
-    // أقسام تمرين اليوم أول، ثم بقية الأقسام؛ كل التمارين من المكتبة الموجودة
-    var dayGroups = validDay(session.day) ? (dayById(session.day).groups || []) : [];
-    var order = DATA.groups.filter(function (g) { return dayGroups.indexOf(g.id) >= 0; }).concat(DATA.groups.filter(function (g) { return dayGroups.indexOf(g.id) < 0; }));
+    // تمارين تمرين اليوم الشغّال بس (ما نخلط الأيام)؛ تمرين قديم ما عرفنا يومه: كل المكتبة
+    var dayGroups = validDay(session.day) ? (dayById(session.day).groups || []) : DATA.groups.map(function (g) { return g.id; });
+    var order = DATA.groups.filter(function (g) { return dayGroups.indexOf(g.id) >= 0; });
     var h = '';
     order.forEach(function (g) {
-      var list = DATA.exercises.filter(function (x) { return x.group === g.id; });
+      var list = DATA.exercises.filter(function (x) { return x.group === g.id && (fitsActiveDay(x) || x.id === cur); });
       if (!list.length) return;
-      h += '<optgroup label="' + esc(g.ar) + (dayGroups.indexOf(g.id) >= 0 ? '' : ' (خارج أقسام اليوم)') + '">';
+      h += '<optgroup label="' + esc(g.ar) + '">';
       list.forEach(function (x) { h += '<option value="' + esc(x.id) + '"' + (x.id === cur ? ' selected' : '') + '>' + esc(x.ar) + ' — ' + esc(equipName(x.equipment)) + '</option>'; });
       h += '</optgroup>';
     });
     return h;
   }
   function draftComplete(d) { return isComplete({ count: d.count, sets: d.sets }); }
-  function editPanelHtml(idx, it) {
-    var d = editDraft, ne = exById(d.exId);
-    var h = '<div class="field"><label for="eex' + idx + '">الجهاز / التمرين</label><select id="eex' + idx + '" data-edit="ex">' + exOptions(d.exId) + '</select></div>';
+  function groupName(id) { var g = DATA.groups.filter(function (x) { return x.id === id; })[0]; return g ? g.ar : ''; }
+  // صفوف الجولات. mode 'live' = البطاقة قبل الاعتماد (تنحفظ فورًا)، 'edit' = لوحة التعديل (نسخة مؤقتة)
+  function setRowsHtml(idx, count, sets, mode) {
+    if (!count) return '';
+    var p = mode === 'edit' ? 'e' : '', h = '<div class="sets">';
+    for (var s = 0; s < count; s++) {
+      var a = mode === 'edit' ? ' data-edit="reps" data-s="' + s + '"' : ' data-act="reps" data-i="' + idx + '" data-s="' + s + '"';
+      var b = mode === 'edit' ? ' data-edit="weight" data-s="' + s + '"' : ' data-act="weight" data-i="' + idx + '" data-s="' + s + '"';
+      h += '<div class="setrow"><div class="lab">جولة ' + (s + 1) + '</div>' +
+        '<div class="field"><label for="' + p + 'r' + idx + '_' + s + '">العدّات</label><select id="' + p + 'r' + idx + '_' + s + '"' + a + '>' + optRange(1, 30, 1, sets[s].reps) + '</select></div>' +
+        '<div class="field"><label for="' + p + 'w' + idx + '_' + s + '">الوزن (كجم)</label><select id="' + p + 'w' + idx + '_' + s + '"' + b + '>' + optRange(5, 200, 5, sets[s].weight) + '</select></div></div>';
+    }
+    return h + '</div>';
+  }
+  function hintHtml(it) {
+    if (it.approved) return '';
+    if (!it.count) return '<div class="status">اختر عدد الجولات أول.</div>';
+    if (!isComplete(it)) return '<div class="status">اختر العدّات والوزن لكل جولة قبل الاعتماد.</div>';
+    return '';
+  }
+  function editNoteHtml(idx, it) {
+    var d = editDraft, ne = exById(d.exId), h = '';
     if (d.exId !== it.exId) {
       h += '<div class="status">بيتغيّر جهاز ' + esc(sessionLabel(idx + 1)) + ' إلى: ' + esc(ne.ar) + ' <span class="ltr">' + esc(ne.en) + '</span>.';
-      var other = session.items.some(function (x, j) { return j !== idx && x.exId === d.exId; });
-      if (other) h += ' هذا الجهاز موجود في حصة ثانية، وبيصير تكرار مستقل.';
-      if (it.approved) h += ' تغيير الجهاز يلغي اعتماد الحصة، واعتمدها من جديد بعد الحفظ.';
+      if (session.items.some(function (x, j) { return j !== idx && x.exId === d.exId; })) h += ' هذا الجهاز موجود في حصة ثانية، وبيصير تكرار مستقل.';
       h += '</div>';
     }
-    h += '<div class="field"><label for="ecnt' + idx + '">عدد الجولات</label><select id="ecnt' + idx + '" data-edit="count">' + optRange(1, 5, 1, d.count) + '</select></div>';
-    if (d.count) {
-      h += '<div class="sets">';
-      for (var s = 0; s < d.count; s++) {
-        h += '<div class="setrow"><div class="lab">جولة ' + (s + 1) + '</div>' +
-          '<div class="field"><label for="er' + idx + '_' + s + '">العدّات</label><select id="er' + idx + '_' + s + '" data-edit="reps" data-s="' + s + '">' + optRange(1, 30, 1, d.sets[s].reps) + '</select></div>' +
-          '<div class="field"><label for="ew' + idx + '_' + s + '">الوزن (كجم)</label><select id="ew' + idx + '_' + s + '" data-edit="weight" data-s="' + s + '">' + optRange(5, 200, 5, d.sets[s].weight) + '</select></div></div>';
-      }
-      h += '</div>';
-    }
-    if (it.approved && d.exId === it.exId && !draftComplete(d)) h += '<div class="status">فيه بيانات ناقصة، فبينلغى اعتماد الحصة بعد الحفظ.</div>';
-    h += '<div class="actions"><button class="btn primary" type="button" data-act="esave" data-i="' + idx + '">حفظ التعديلات</button><button class="btn second" type="button" data-act="ecancel" data-i="' + idx + '">إلغاء التعديل</button></div>';
+    if (it.approved && !draftComplete(d)) h += '<div class="status">كمّل العدّات والوزن لكل جولة عشان تحفظ والحصة تبقى معتمدة ✅.</div>';
     return h;
+  }
+  function editPanelHtml(idx, it) {
+    var d = editDraft;
+    var h = '<div class="field"><label for="eex' + idx + '">الجهاز / التمرين</label><select id="eex' + idx + '" data-edit="ex">' + exOptions(d.exId) + '</select></div>';
+    h += '<div id="enote' + idx + '">' + editNoteHtml(idx, it) + '</div>';
+    h += '<div class="field"><label for="ecnt' + idx + '">عدد الجولات</label><select id="ecnt' + idx + '" data-edit="count">' + optRange(1, 5, 1, d.count) + '</select></div>';
+    h += '<div id="esets' + idx + '">' + setRowsHtml(idx, d.count, d.sets, 'edit') + '</div>';
+    if (it.approved) {
+      h += '<div class="actions"><button class="btn primary" type="button" data-act="esave" data-i="' + idx + '">حفظ وإغلاق</button><button class="btn second" type="button" data-act="ecancel" data-i="' + idx + '">إغلاق بدون تغيير</button></div>';
+      h += '<div class="actions"><button class="btn second" type="button" data-act="unapprove" data-i="' + idx + '">إلغاء الاعتماد</button><button class="btn second" type="button" data-act="del" data-i="' + idx + '">حذف الحصة</button></div>';
+    } else {
+      h += '<div class="actions"><button class="btn primary" type="button" data-act="esave" data-i="' + idx + '">حفظ التعديلات</button><button class="btn second" type="button" data-act="ecancel" data-i="' + idx + '">إلغاء التعديل</button></div>';
+    }
+    return h;
+  }
+  function delConfirmHtml(idx, e, again) {
+    return '<div class="confirm"><p><strong>تبي تحذف ' + esc(sessionLabel(idx + 1)) + ': ' + esc(e.ar) + esc(again) + '؟</strong><br>بتنحذف هذي الحصة بس من ' + esc(dayPhrase(session.day)) + '، وبقية الحصص ما تتأثر، وما ينضاف شي للسجل.</p>' +
+      '<div class="actions"><button class="btn danger" type="button" data-act="delyes" data-i="' + idx + '">نعم، احذف الحصة</button><button class="btn second" type="button" data-act="delno" data-i="' + idx + '">إلغاء</button></div></div>';
+  }
+  function summaryHtml(sm) {
+    return '<span class="chip">عدد الحصص: ' + sm.total + '</span><span class="chip main">الحصص المعتمدة ✅: ' + sm.done + '</span>' +
+      '<span class="chip">الحصص المتبقية: ' + sm.left + '</span><span class="chip">مجموع الجولات: ' + sm.rounds + '</span>';
   }
   function renderList() {
     var wrap = $('items'); var sm = sessionSummary(); var active = workoutActive();
     $('dayTitle').textContent = (active && validDay(session.day)) ? ('تمرين اليوم: ' + dayShort(session.day)) : 'تمرين اليوم';
     $('sessionInfo').textContent = (active && session.startedAt) ? ('بدأ ' + fmtTime(session.startedAt) + ' · يُحفظ تلقائيًا أثناء التمرين') : '';
     var sb = $('sessionSummary'); sb.hidden = !active;
-    sb.innerHTML = active ? ('<span class="chip">عدد الحصص: ' + sm.total + '</span><span class="chip main">الحصص المعتمدة ✅: ' + sm.done + '</span>' +
-      '<span class="chip">الحصص المتبقية: ' + sm.left + '</span><span class="chip">مجموع الجولات: ' + sm.rounds + '</span>') : '';
+    sb.innerHTML = active ? summaryHtml(sm) : '';
     $('startCard').hidden = active;
     if (!active) $('pickCard').hidden = true;
     $('addMore').hidden = !active || pickerOpen();
@@ -7862,104 +7960,103 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       seen[it.exId] = (seen[it.exId] || 0) + 1;
       // نفس الجهاز أكثر من مرة: كل نسخة حصة مستقلة، ونوضح رقم التكرار
       var again = totalOf[it.exId] > 1 ? ' (تكرار ' + seen[it.exId] + ' من ' + totalOf[it.exId] + ')' : '';
-      h += '<article class="item' + (it.approved ? ' done' : '') + '" data-i="' + idx + '">';
-      if (idx === editIdx && editDraft) {
-        h += '<div class="hd"><div class="tick" aria-hidden="true">✏️</div><div><div class="sub">' + esc(sessionLabel(idx + 1)) + ' · تعديل</div><div class="nm">' + esc(e.ar) + esc(again) + '</div></div></div>';
-        h += editPanelHtml(idx, it);
+      var subLine = '<div class="sub">' + esc(groupName(e.group)) + ' · <span class="ltr">' + esc(e.en) + '</span> · ' + esc(equipName(e.equipment)) + '</div>';
+      var editing = idx === editIdx && editDraft;
+      if (it.approved && !editing) {
+        // معتمدة: بطاقة مصغّرة (رقم الحصة + الجهاز + ✅) بدون الجولات. الضغط عليها يفتحها للتعديل.
+        h += '<article class="item done mini" data-i="' + idx + '">';
+        h += '<button class="open" type="button" data-act="edit" data-i="' + idx + '" aria-label="افتح ' + esc(sessionLabel(idx + 1)) + ' للتعديل">' +
+          '<div class="tick" aria-hidden="true">✅</div><div class="grow"><div class="sub">' + esc(sessionLabel(idx + 1)) + ' · معتمدة</div><div class="nm">' + esc(e.ar) + esc(again) + '</div></div><span class="chev" aria-hidden="true">‹</span></button>';
+        if (idx === delIdx) h += delConfirmHtml(idx, e, again);
         h += '</article>'; return;
       }
-      h += '<div class="hd"><div class="tick" aria-hidden="true">' + (it.approved ? '✅' : '') + '</div><div><div class="sub">' + esc(sessionLabel(idx + 1)) + (it.approved ? ' · معتمدة' : ' · لم تُعتمد بعد') + '</div><div class="nm">' + esc(e.ar) + esc(again) + '</div><div class="sub"><span class="ltr">' + esc(e.en) + '</span> · ' + esc(equipName(e.equipment)) + '</div></div></div>';
+      h += '<article class="item' + (it.approved ? ' done' : '') + '" data-i="' + idx + '">';
+      if (editing) {
+        h += '<div class="hd"><div class="tick" aria-hidden="true">' + (it.approved ? '✅' : '✏️') + '</div><div><div class="sub">' + esc(sessionLabel(idx + 1)) + (it.approved ? ' · معتمدة · مفتوحة للتعديل' : ' · تعديل') + '</div><div class="nm">' + esc(e.ar) + esc(again) + '</div>' + subLine + '</div></div>';
+        h += editPanelHtml(idx, it);
+        if (idx === delIdx) h += delConfirmHtml(idx, e, again);
+        h += '</article>'; return;
+      }
+      // قبل الاعتماد: بطاقة كبيرة قابلة للتحرير
+      h += '<div class="hd"><div class="tick" aria-hidden="true"></div><div><div class="sub">' + esc(sessionLabel(idx + 1)) + ' · لم تُعتمد بعد</div><div class="nm">' + esc(e.ar) + esc(again) + '</div>' + subLine + '</div></div>';
       h += '<div class="field"><label for="cnt' + idx + '">عدد الجولات</label><select id="cnt' + idx + '" data-act="count" data-i="' + idx + '">' + optRange(1, 5, 1, it.count) + '</select></div>';
-      if (it.count) {
-        h += '<div class="sets">';
-        for (var s = 0; s < it.count; s++) {
-          h += '<div class="setrow"><div class="lab">جولة ' + (s + 1) + '</div>' +
-            '<div class="field"><label for="r' + idx + '_' + s + '">العدّات</label><select id="r' + idx + '_' + s + '" data-act="reps" data-i="' + idx + '" data-s="' + s + '">' + optRange(1, 30, 1, it.sets[s].reps) + '</select></div>' +
-            '<div class="field"><label for="w' + idx + '_' + s + '">الوزن (كجم)</label><select id="w' + idx + '_' + s + '" data-act="weight" data-i="' + idx + '" data-s="' + s + '">' + optRange(5, 200, 5, it.sets[s].weight) + '</select></div></div>';
-        }
-        h += '</div>';
-      }
-      h += '<div class="actions">';
-      if (it.approved) {
-        h += '<button class="btn ok" type="button" disabled>✅ معتمدة (تقدر تعدّل)</button><button class="btn second" type="button" data-act="unapprove" data-i="' + idx + '">إلغاء الاعتماد</button>';
-      } else {
-        h += '<button class="btn primary" type="button" data-act="approve" data-i="' + idx + '">اعتماد الحصة</button>';
-      }
-      h += '</div>';
-      if (idx === delIdx) {
-        h += '<div class="confirm"><p><strong>تبي تحذف ' + esc(sessionLabel(idx + 1)) + ': ' + esc(e.ar) + esc(again) + '؟</strong><br>بتنحذف هذي الحصة بس من ' + esc(dayPhrase(session.day)) + '، وبقية الحصص ما تتأثر، وما ينضاف شي للسجل.</p>' +
-          '<div class="actions"><button class="btn danger" type="button" data-act="delyes" data-i="' + idx + '">نعم، احذف الحصة</button><button class="btn second" type="button" data-act="delno" data-i="' + idx + '">إلغاء</button></div></div>';
-      } else {
-        h += '<div class="actions"><button class="btn second" type="button" data-act="edit" data-i="' + idx + '">تعديل الحصة</button><button class="btn second" type="button" data-act="del" data-i="' + idx + '">حذف الحصة</button></div>';
-      }
-      if (!it.approved && it.count && !isComplete(it)) h += '<div class="status">اختر العدّات والوزن لكل جولة قبل الاعتماد.</div>';
-      if (!it.approved && !it.count) h += '<div class="status">اختر عدد الجولات أول.</div>';
+      h += '<div id="sets' + idx + '">' + setRowsHtml(idx, it.count, it.sets, 'live') + '</div>';
+      h += '<div class="actions"><button class="btn primary" type="button" data-act="approve" data-i="' + idx + '">اعتماد الحصة</button></div>';
+      if (idx === delIdx) h += delConfirmHtml(idx, e, again);
+      else h += '<div class="actions"><button class="btn second" type="button" data-act="edit" data-i="' + idx + '">تعديل الحصة</button><button class="btn second" type="button" data-act="del" data-i="' + idx + '">حذف الحصة</button></div>';
+      h += '<div id="hint' + idx + '">' + hintHtml(it) + '</div>';
       h += '</article>';
     });
     wrap.innerHTML = h;
     renderStatus();
   }
+  // تحديث العدادات فوق بدون إعادة بناء البطاقات
+  function refreshSummary() { var sb = $('sessionSummary'); if (!sb.hidden) sb.innerHTML = summaryHtml(sessionSummary()); }
 
+  // القوائم المنسدلة: ما نعيد بناء القائمة اللي اخترت منها، وما نعطيها focus برمجيًا.
+  // (في Safari على الآيفون، إعادة البناء + focus() كانت تفتح القائمة مرة ثانية بعد الاختيار.)
   $('items').addEventListener('change', function (ev) {
     var t = ev.target;
     var ed = t.getAttribute('data-edit');
     if (ed && editDraft) {
-      var ev2 = t.value === '' ? null : t.value;
-      if (ed === 'ex' && ev2 && exById(ev2)) editDraft.exId = ev2;
-      if (ed === 'count') editDraft.count = ev2 === null ? null : +ev2;
-      if (ed === 'reps') editDraft.sets[+t.getAttribute('data-s')].reps = ev2 === null ? null : +ev2;
-      if (ed === 'weight') editDraft.sets[+t.getAttribute('data-s')].weight = ev2 === null ? null : +ev2;
-      renderList();
-      var en = document.getElementById(t.id); if (en && en.focus) { try { en.focus(); } catch (e) {} }
+      var v2 = t.value === '' ? null : t.value, ei = editIdx, eit = session.items[ei];
+      if (ed === 'ex' && v2 && exById(v2)) editDraft.exId = v2;
+      if (ed === 'count') { editDraft.count = v2 === null ? null : +v2; var es = $('esets' + ei); if (es) es.innerHTML = setRowsHtml(ei, editDraft.count, editDraft.sets, 'edit'); }
+      if (ed === 'reps') editDraft.sets[+t.getAttribute('data-s')].reps = v2 === null ? null : +v2;
+      if (ed === 'weight') editDraft.sets[+t.getAttribute('data-s')].weight = v2 === null ? null : +v2;
+      var en = $('enote' + ei); if (en && eit) en.innerHTML = editNoteHtml(ei, eit);
       return;
     }
     var act = t.getAttribute('data-act'); if (!act) return;
-    var it = session.items[+t.getAttribute('data-i')]; if (!it) return;
-    var v = t.value === '' ? null : +t.value; var wasApproved = it.approved;
-    if (act === 'count') it.count = v;
+    var i = +t.getAttribute('data-i'); var it = session.items[i]; if (!it) return;
+    var v = t.value === '' ? null : +t.value;
+    if (act === 'count') { it.count = v; var sc = $('sets' + i); if (sc) sc.innerHTML = setRowsHtml(i, it.count, it.sets, 'live'); }
     if (act === 'reps') it.sets[+t.getAttribute('data-s')].reps = v;
     if (act === 'weight') it.sets[+t.getAttribute('data-s')].weight = v;
-    var canceled = false;
-    if (it.approved && !isComplete(it)) { it.approved = false; canceled = true; }
-    persistSession(); renderList();
-    if (canceled) toast('انلغى اعتماد الحصة لأن فيه بيانات ناقصة، عبّها واعتمد من جديد');
-    else if (wasApproved) toast('تم تعديل الحصة المعتمدة');
-    var n = document.getElementById(t.id); if (n && n.focus) { try { n.focus(); } catch (e) {} }
+    if (it.approved && !isComplete(it)) { it.approved = false; persistSession(); renderList(); toast('انلغى اعتماد الحصة لأن فيه بيانات ناقصة، عبّها واعتمد من جديد'); return; }
+    persistSession();
+    var hn = $('hint' + i); if (hn) hn.innerHTML = hintHtml(it);
+    refreshSummary();
   });
   $('items').addEventListener('click', function (ev) {
     var t = ev.target.closest ? ev.target.closest('button[data-act]') : null; if (!t) return;
     var i = +t.getAttribute('data-i'); var act = t.getAttribute('data-act'); var it = session.items[i]; if (!it) return;
     if (act === 'approve') {
       if (!isComplete(it)) { toast('اختر عدد الجولات ثم العدّات والوزن لكل جولة'); return; }
-      // اعتماد حصة وحدة فقط: تبقى ظاهرة في تمرين اليوم، والسجل ما يتغيّر.
-      it.approved = true; persistSession(); renderList();
+      // اعتماد حصة وحدة فقط: تبقى في تمرين اليوم (مصغّرة ✅)، والسجل ما يتغيّر.
+      it.approved = true; delIdx = -1; persistSession(); renderList(); focusCard(i);
       var sm = sessionSummary();
       toast('اعتُمدت ' + sessionLabel(i + 1) + ' ✅' + (sm.left ? (' · باقي ' + sessionsAr(sm.left)) : ' · كل الحصص معتمدة'));
     }
-    if (act === 'unapprove') { it.approved = false; persistSession(); renderList(); toast('انلغى اعتماد ' + sessionLabel(i + 1) + '، تقدر تعدّلها'); }
-    if (act === 'edit') { delIdx = -1; editIdx = i; editRef = it; editDraft = cloneItem(it); renderList(); focusCard(i); }
-    if (act === 'ecancel') { editIdx = -1; editDraft = null; renderList(); focusCard(i); toast('ما تغيّر شي في ' + sessionLabel(i + 1)); }
-    if (act === 'esave' && editDraft && editIdx === i && editRef === it) {
-      var d = editDraft, exChanged = d.exId !== it.exId, wasAp = it.approved;
-      it.exId = d.exId; it.count = d.count;
-      for (var k = 0; k < it.sets.length; k++) { it.sets[k].reps = d.sets[k].reps; it.sets[k].weight = d.sets[k].weight; }
-      // الاعتماد بعد التعديل: تغيير الجهاز يلغيه، وبيانات ناقصة تلغيه، غير كذا يبقى
-      if (it.approved && (exChanged || !isComplete(it))) it.approved = false;
-      editIdx = -1; editDraft = null;
-      var ok = persistSession(); renderList(); updateBadge(); focusCard(i);
-      if (!ok) toast('انحفظ التعديل مؤقتًا، لكن الحفظ على الجهاز فشل');
-      else if (wasAp && !it.approved) toast('انحفظ تعديل ' + sessionLabel(i + 1) + ' وانلغى اعتمادها، اعتمدها من جديد');
-      else toast('انحفظ تعديل ' + sessionLabel(i + 1) + (it.approved ? ' ✅ وباقية معتمدة' : ''));
+    if (act === 'unapprove') {
+      // من البطاقة المفتوحة: نحفظ اللي غيّرته في اللوحة، وتصير الحصة غير معتمدة وقابلة للتحرير
+      if (editDraft && editIdx === i && editRef === it) applyDraft(it, editDraft);
+      editIdx = -1; editDraft = null; editRef = null; delIdx = -1;
+      it.approved = false; persistSession(); renderList(); focusCard(i); toast('انلغى اعتماد ' + sessionLabel(i + 1) + '، تقدر تعدّلها');
     }
-    if (act === 'del') { editIdx = -1; editDraft = null; delIdx = i; delRef = it; renderList(); focusCard(i); }
+    if (act === 'edit') { delIdx = -1; editIdx = i; editRef = it; editDraft = cloneItem(it); renderList(); focusCard(i); }
+    if (act === 'ecancel') { editIdx = -1; editDraft = null; delIdx = -1; renderList(); focusCard(i); toast('ما تغيّر شي في ' + sessionLabel(i + 1)); }
+    if (act === 'esave' && editDraft && editIdx === i && editRef === it) {
+      // الحصة المعتمدة تبقى معتمدة بعد الحفظ، بشرط تكون كل الجولات كاملة
+      if (it.approved && !draftComplete(editDraft)) { toast('كمّل العدّات والوزن لكل جولة قبل الحفظ'); return; }
+      applyDraft(it, editDraft);
+      editIdx = -1; editDraft = null; delIdx = -1;
+      var ok = persistSession(); renderList(); updateBadge(); focusCard(i);
+      toast(!ok ? 'انحفظ التعديل مؤقتًا، لكن الحفظ على الجهاز فشل' : ('انحفظ تعديل ' + sessionLabel(i + 1) + (it.approved ? ' ✅ وباقية معتمدة' : '')));
+    }
+    if (act === 'del') { delIdx = i; delRef = it; renderList(); focusCard(i); }
     if (act === 'delno') { delIdx = -1; renderList(); focusCard(i); }
     if (act === 'delyes' && delIdx === i && delRef === it) {
       var name = exById(it.exId).ar, label = sessionLabel(i + 1);
-      session.items.splice(i, 1); delIdx = -1;
+      session.items.splice(i, 1); delIdx = -1; editIdx = -1; editDraft = null; editRef = null;
       var ok2 = persistSession(); updateBadge(); renderList();
       toast(ok2 ? ('انحذفت ' + label + ' (' + name + ')، وانعادت أرقام الحصص') : 'انحذفت الحصة، لكن الحفظ على الجهاز فشل');
     }
   });
+  function applyDraft(it, d) {
+    it.exId = d.exId; it.count = d.count;
+    for (var k = 0; k < it.sets.length; k++) { it.sets[k].reps = d.sets[k].reps; it.sets[k].weight = d.sets[k].weight; }
+  }
   function focusCard(i) { var c = document.querySelector('#items article[data-i="' + i + '"]'); if (c && c.scrollIntoView) { try { c.scrollIntoView({ block: 'nearest' }); } catch (e) {} } }
 
   /* ---------- بدء تمرين يوم / إضافة حصة / إنهاء تمرين اليوم / حذف ---------- */
@@ -8083,6 +8180,7 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
   /* ---------- السجل: كل مدخل = تمرين يوم كامل ---------- */
   function recDay(r) { return validDay(r.day) ? r.day : inferDay((r.items || []).map(function (i) { return i.exId; })); }
   function renderHistory() {
+    renderReportsCard();
     $('histCount').textContent = history.length ? ('عدد التمارين المحفوظة: ' + history.length) : '';
     var w = $('histList');
     if (!history.length) { w.innerHTML = '<div class="card empty"><strong>ما فيه تمارين محفوظة</strong>لما تنهي تمرين اليوم من «تماريني» بزر «إنهاء … وحفظه في السجل»، ينحفظ هنا كمدخل واحد فيه كل حصصه.</div>'; return; }
@@ -8099,6 +8197,132 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
         ' · عدد الحصص: ' + r.items.length + ' · المعتمدة: ' + done + ' · الجولات: ' + rounds + ' · بدأ ' + esc(fmtTime(r.startedAt)) + ' · انحفظ ' + esc(fmtTime(r.savedAt)) + '</span></summary><div class="body">' + b + '</div></details>';
     }).join('');
   }
+
+  /* ---------- تقارير PDF (من السجل الفعلي فقط) ---------- */
+  // التقرير يُبنى كصفحة A4، والطباعة من Safari تحفظه PDF أو تشاركه (بدون خادم أو مكتبات).
+  function z2(n) { return (n < 10 ? '0' : '') + n; }
+  function dayKey(t) { var d = new Date(t); return d.getFullYear() + '-' + z2(d.getMonth() + 1) + '-' + z2(d.getDate()); }
+  function fmtKey(k) { var p = k.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2], 12); try { return d.toLocaleDateString('ar-KW-u-nu-latn-ca-gregory', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return k; } }
+  function recTime(r) { return typeof r.startedAt === 'number' ? r.startedAt : r.savedAt; }
+  function recSets(it) { return (it.sets || []).filter(function (s) { return s && s.reps != null && s.weight != null; }); }
+  function recDayEn(r) { var d = recDay(r); var o = d ? dayById(d) : null; return o ? o.en : 'Workout'; }
+  function recTitle(r) { var d = recDay(r); return d ? dayTitle(d) : 'تمرين يوم'; }
+  function recTotals(list) {
+    var t = { days: list.length, sessions: 0, rounds: 0, approved: 0 };
+    list.forEach(function (r) { r.items.forEach(function (it) { t.sessions++; if (it.approved) t.approved++; t.rounds += recSets(it).length; }); });
+    return t;
+  }
+  function rpSessionHtml(it, i) {
+    var sets = recSets(it), h = '<table class="rp-t"><thead><tr><th colspan="3">' + esc(sessionLabel(i + 1)) + ': ' + esc(it.ar || '') + (it.approved ? ' ✅' : '') +
+      '<span class="rp-en"><bdi dir="ltr">' + esc(it.en || '') + '</bdi>' + (it.equipment ? ' · ' + esc(it.equipment) : '') + '</span></th></tr>';
+    if (!sets.length) return h + '</thead><tbody><tr><td colspan="3">بدون جولات مسجّلة</td></tr></tbody></table>';
+    h += '<tr><th>الجولة</th><th>العدّات</th><th>الوزن (كجم)</th></tr></thead><tbody>';
+    sets.forEach(function (s, k) { h += '<tr><td>' + (k + 1) + '</td><td>' + esc(s.reps) + '</td><td>' + esc(s.weight) + '</td></tr>'; });
+    return h + '</tbody><tfoot><tr><td colspan="3">عدد الجولات: ' + sets.length + '</td></tr></tfoot></table>';
+  }
+  function rpWorkoutHtml(r) {
+    var t = recTotals([r]);
+    var h = '<section class="rp-day"><h2>' + esc(recTitle(r)) + '</h2><p class="rp-meta">' + esc(fmtDate(recTime(r))) +
+      (typeof r.startedAt === 'number' ? ' · بدأ ' + esc(fmtTime(r.startedAt)) : '') + (typeof r.savedAt === 'number' ? ' · انحفظ ' + esc(fmtTime(r.savedAt)) : '') + '</p>';
+    h += '<p class="rp-meta">عدد الحصص: ' + t.sessions + ' · المعتمدة: ' + t.approved + ' · مجموع الجولات: ' + t.rounds + '</p>';
+    r.items.forEach(function (it, i) { h += rpSessionHtml(it, i); });
+    return h + '</section>';
+  }
+  function setsText(sets) { return sets.map(function (s) { return s.weight + ' كجم × ' + s.reps; }).join('، '); }
+  // مقارنة نفس التمرين (نفس exId) عبر التواريخ؛ ما نعتبر الفرق تحسّن أو تراجع إذا اختلفت العدّات أو الجولات
+  function compareHtml(list) {
+    var by = {}, order = [];
+    list.forEach(function (r) {
+      var seenHere = {};
+      r.items.forEach(function (it) {
+        var sets = recSets(it); if (!it.exId || !sets.length) return;
+        if (seenHere[it.exId]) { seenHere[it.exId].dup = true; return; }
+        var o = { t: recTime(r), sets: sets, name: it.ar || it.exId, dup: false };
+        seenHere[it.exId] = o;
+        if (!by[it.exId]) { by[it.exId] = []; order.push(it.exId); }
+        by[it.exId].push(o);
+      });
+    });
+    var multi = order.filter(function (id) { return by[id].length > 1; });
+    var single = order.filter(function (id) { return by[id].length === 1; });
+    var h = '<section class="rp-cmp"><h2>مقارنة تطور الأداء</h2><p class="rp-meta">المقارنة بين التمرين نفسه فقط، بأثقل جولة في كل تاريخ. إذا اختلفت العدّات أو عدد الجولات نوضّح الفرق بدون ما نحكم إنه تحسّن أو تراجع.</p>';
+    if (!multi.length) h += '<p>ما فيه تمرين تكرر في أكثر من تاريخ خلال هذي الفترة، فما فيه بيانات كافية للمقارنة.</p>';
+    multi.forEach(function (id) {
+      var occ = by[id], a = occ[0], b = occ[occ.length - 1];
+      h += '<div class="rp-c"><h3>' + esc(b.name) + '</h3><ul>';
+      occ.forEach(function (o) { h += '<li>' + esc(fmtDate(o.t)) + ': ' + esc(setsText(o.sets)) + (o.dup ? ' (تكرر في نفس اليوم، اعتمدنا أول مرة)' : '') + '</li>'; });
+      h += '</ul><p class="rp-res">' + esc(compareText(a, b)) + '</p></div>';
+    });
+    if (single.length) h += '<p class="rp-meta">تمارين ما فيها بيانات كافية للمقارنة (مسجّلة مرة وحدة بالفترة): ' + esc(single.map(function (id) { return by[id][0].name; }).join('، ')) + '.</p>';
+    return h + '</section>';
+  }
+  function topSet(sets) { var m = sets[0]; sets.forEach(function (s) { if (s.weight > m.weight) m = s; }); return m; }
+  function compareText(a, b) {
+    var ta = topSet(a.sets), tb = topSet(b.sets), da = fmtDate(a.t), db = fmtDate(b.t);
+    var pre = 'من ' + da + ' (' + ta.weight + ' كجم × ' + ta.reps + ') إلى ' + db + ' (' + tb.weight + ' كجم × ' + tb.reps + '): ';
+    var setsNote = a.sets.length !== b.sets.length ? (' عدد الجولات اختلف (' + a.sets.length + ' ثم ' + b.sets.length + ').') : '';
+    if (ta.reps === tb.reps && ta.weight !== tb.weight && !setsNote) {
+      var pct = Math.round(Math.abs(tb.weight - ta.weight) / ta.weight * 100);
+      return pre + (tb.weight > ta.weight ? 'زيادة الوزن' : 'نقص الوزن') + ' بنسبة ' + pct + '% مع ثبات العدّات (' + ta.reps + ').';
+    }
+    if (ta.weight === tb.weight && ta.reps !== tb.reps && !setsNote) {
+      return pre + 'نفس الوزن، و' + (tb.reps > ta.reps ? 'زادت' : 'قلّت') + ' العدّات من ' + ta.reps + ' إلى ' + tb.reps + '.';
+    }
+    if (ta.weight === tb.weight && ta.reps === tb.reps) return pre + 'نفس الوزن ونفس العدّات.' + setsNote;
+    return pre + 'تغيّر الوزن' + (ta.weight === tb.weight ? ' (بقى نفسه)' : ' من ' + ta.weight + ' إلى ' + tb.weight + ' كجم') + ' والعدّات' +
+      (ta.reps === tb.reps ? ' (بقت نفسها)' : ' من ' + ta.reps + ' إلى ' + tb.reps) + '.' + setsNote + ' ما نقدر نحكم تلقائيًا إذا هذا تحسّن أو تراجع.';
+  }
+  var rpPrevTitle = null;
+  function openReport(title, fileName, bodyHtml) {
+    $('reportSheet').innerHTML = '<header class="rp-head"><div class="rp-brand">GYM GUIDE</div><h1>' + esc(title) + '</h1><p class="rp-meta">أُنشئ ' + esc(fmtDate(Date.now())) + ' ' + esc(fmtTime(Date.now())) + ' · من سجل تماريني على هذا الجهاز</p></header>' + bodyHtml;
+    $('reportFile').innerHTML = 'اسم الملف: <bdi dir="ltr">' + esc(fileName) + '.pdf</bdi>';
+    if (rpPrevTitle === null) rpPrevTitle = document.title;
+    document.title = fileName; // Safari يستخدم عنوان الصفحة كاسم لملف PDF
+    document.body.classList.add('reporting'); $('reportView').hidden = false; window.scrollTo(0, 0);
+  }
+  function closeReport() {
+    $('reportView').hidden = true; document.body.classList.remove('reporting'); $('reportSheet').innerHTML = '';
+    if (rpPrevTitle !== null) { document.title = rpPrevTitle; rpPrevTitle = null; }
+    showTab('history');
+  }
+  function renderReportsCard() {
+    var c = $('reportsCard'); if (!c) return;
+    var has = history.length > 0;
+    $('rpEmpty').hidden = has; $('rpForm').hidden = !has;
+    if (!has) return;
+    var sorted = history.slice().sort(function (a, b) { return recTime(b) - recTime(a); });
+    var cur = $('rpOne').value;
+    $('rpOne').innerHTML = '<option value="">اختر تمرين محفوظ</option>' + sorted.map(function (r) {
+      return '<option value="' + esc(r.id) + '">' + esc(fmtDate(recTime(r))) + ' · ' + esc(recTitle(r)) + ' (' + sessionsAr(r.items.length) + ')</option>';
+    }).join('');
+    if (cur) $('rpOne').value = cur;
+    if (!$('rpFrom').value) $('rpFrom').value = dayKey(recTime(sorted[sorted.length - 1]));
+    if (!$('rpTo').value) $('rpTo').value = dayKey(recTime(sorted[0]));
+  }
+  $('rpOneBtn').addEventListener('click', function () {
+    var r = history.filter(function (x) { return x.id === $('rpOne').value; })[0];
+    if (!r) { toast('اختر تمرين من السجل أول'); return; }
+    openReport('تقرير تمرين: ' + recTitle(r), 'GYM-GUIDE-تقرير-تمرين-' + recDayEn(r) + '-' + dayKey(recTime(r)), rpWorkoutHtml(r));
+  });
+  $('rpRangeBtn').addEventListener('click', function () {
+    var f = $('rpFrom').value, t = $('rpTo').value;
+    if (!f || !t) { toast('اختر تاريخ البداية والنهاية'); return; }
+    if (f > t) { toast('تاريخ البداية لازم يكون قبل تاريخ النهاية'); return; }
+    var list = history.filter(function (r) { var k = dayKey(recTime(r)); return k >= f && k <= t; }).sort(function (a, b) { return recTime(a) - recTime(b); });
+    if (!list.length) { toast('ما فيه تمارين محفوظة بين هذي التواريخ'); return; }
+    var tt = recTotals(list), types = {};
+    list.forEach(function (r) { var k = recTitle(r); types[k] = (types[k] || 0) + 1; });
+    var body = '<section class="rp-sum"><h2>ملخص الفترة</h2><table class="rp-t"><tbody>' +
+      '<tr><th>الفترة</th><td>من ' + esc(fmtKey(f)) + ' إلى ' + esc(fmtKey(t)) + '</td></tr>' +
+      '<tr><th>أيام التدريب</th><td>' + tt.days + '</td></tr><tr><th>مجموع الحصص</th><td>' + tt.sessions + ' (المعتمدة ' + tt.approved + ')</td></tr>' +
+      '<tr><th>مجموع الجولات</th><td>' + tt.rounds + '</td></tr>' +
+      '<tr><th>أنواع الأيام</th><td>' + Object.keys(types).map(function (k) { return '<bdi>' + esc(k) + '</bdi> (' + types[k] + ')'; }).join('<br>') + '</td></tr></tbody></table></section>';
+    list.forEach(function (r) { body += rpWorkoutHtml(r); });
+    body += compareHtml(list);
+    openReport('تقرير فترة: من ' + fmtKey(f) + ' إلى ' + fmtKey(t), 'GYM-GUIDE-تقرير-فترة-' + f + '-إلى-' + t, body);
+  });
+  $('rpPrint').addEventListener('click', function () { try { window.print(); } catch (e) { toast('الطباعة مو متاحة هنا. افتح الموقع في Safari وجرّب.'); } });
+  $('rpClose').addEventListener('click', closeReport);
 
   /* ---------- النسخ الاحتياطي والاستعادة ---------- */
   var BK_FORMAT = 1, bkPending = null;
