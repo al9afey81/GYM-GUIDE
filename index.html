@@ -243,7 +243,22 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
       </div>
       <div id="items" style="display:flex;flex-direction:column;gap:16px;margin-top:16px"></div>
       <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
-        <!-- إضافة حصة: ترجع للدليل بنفس اليوم، وتمرين اليوم يبقى مثل ما هو -->
+        <!-- إضافة حصة من داخل «تماريني»: اليوم ثابت (تمرين اليوم الشغّال)، وتختار الجهاز من مكتبته بس -->
+        <div class="card" id="pickCard" hidden>
+          <h3 id="pickTitle" style="margin:0 0 4px"></h3>
+          <div class="status" id="pickInfo" style="margin-bottom:12px"></div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="field"><label for="pkGroup"><span class="n">1</span>المجموعة العضلية</label><select id="pkGroup"></select></div>
+            <div class="field"><label for="pkPart"><span class="n">2</span>الجزء المستهدف</label><select id="pkPart"></select></div>
+            <div class="field"><label for="pkEquip"><span class="n">3</span>نوع المعدات</label><select id="pkEquip"></select></div>
+            <div class="field"><label for="pkEx"><span class="n">4</span>الجهاز / التمرين</label><select id="pkEx"></select></div>
+          </div>
+          <div class="status" id="pkNote" style="margin-top:10px" hidden></div>
+          <div class="actions" style="margin-top:12px">
+            <button class="btn primary" id="pkAdd" type="button" disabled>أضف الحصة</button>
+            <button class="btn second" id="pkCancel" type="button">إلغاء</button>
+          </div>
+        </div>
         <button class="btn second full" id="addMore" type="button">+ إضافة حصة جديدة</button>
         <div id="confirmBox" class="confirm" hidden>
           <p id="confirmText"></p>
@@ -7607,30 +7622,31 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     el.disabled = opts.length === 0;
   }
   function dayObj() { return DATA.days.filter(function (d) { return d.id === sel.day; })[0]; }
-  function groupObj() { return DATA.groups.filter(function (g) { return g.id === sel.group; })[0]; }
 
+  // خيارات القوائم المتسلسلة لأي يوم (نفس المنطق للدليل ولإضافة حصة من «تماريني»)
+  function cascadeOpts(dayId, st) {
+    var day = DATA.days.filter(function (d) { return d.id === dayId; })[0];
+    var o = { group: [], part: [], equip: [], ex: [] };
+    if (!day) return o;
+    o.group = day.groups.map(function (id) { var g = DATA.groups.filter(function (x) { return x.id === id; })[0]; return { value: g.id, label: g.ar + ' — ' + g.en }; });
+    var g = st.group ? DATA.groups.filter(function (x) { return x.id === st.group; })[0] : null;
+    // اليوم يقدر يحدد أجزاء معيّنة من المجموعة (مثلًا: الكتف الخلفي في Pull بس). إذا ما حدد، تظهر كل أجزاء المجموعة.
+    if (g) { var dp = day.parts; o.part = ((dp && dp[st.group]) || g.parts).filter(function (p) { return DATA.exercises.some(function (e) { return e.part === p; }); }).map(function (p) { return { value: p, label: DATA.parts[p].ar + ' — ' + DATA.parts[p].en }; }); }
+    if (st.part) { o.equip = DATA.equipment.filter(function (q) { return DATA.exercises.some(function (e) { return e.part === st.part && e.equipment === q.id; }); }).map(function (q) { return { value: q.id, label: q.ar + ' — ' + q.en }; }); }
+    if (st.equip) { o.ex = DATA.exercises.filter(function (e) { return e.part === st.part && e.equipment === st.equip; }).map(function (e) { return { value: e.id, label: e.ar }; }); }
+    return o;
+  }
   function renderSelects() {
     fill($('selDay'), 'اختر اليوم', DATA.days.map(function (d) {
       return { value: d.id, label: d.ar + ' — ' + d.en + (d.available ? '' : ' (قريبًا)'), disabled: !d.available };
     }), sel.day);
     $('selDay').disabled = false;
 
-    var gOpts = [];
-    if (sel.day) { var d = dayObj(); gOpts = d.groups.map(function (id) { var g = DATA.groups.filter(function (x) { return x.id === id; })[0]; return { value: g.id, label: g.ar + ' — ' + g.en }; }); }
-    fill($('selGroup'), sel.day ? 'اختر المجموعة العضلية' : 'اختر اليوم أول', gOpts, sel.group);
-
-    var pOpts = [];
-    // اليوم يقدر يحدد أجزاء معيّنة من المجموعة (مثلًا: الكتف الخلفي في Pull بس). إذا ما حدد، تظهر كل أجزاء المجموعة.
-    if (sel.group) { var dp = dayObj().parts; pOpts = ((dp && dp[sel.group]) || groupObj().parts).filter(function (p) { return DATA.exercises.some(function (e) { return e.part === p; }); }).map(function (p) { return { value: p, label: DATA.parts[p].ar + ' — ' + DATA.parts[p].en }; }); }
-    fill($('selPart'), sel.group ? 'اختر الجزء المستهدف' : 'اختر المجموعة أول', pOpts, sel.part);
-
-    var qOpts = [];
-    if (sel.part) { qOpts = DATA.equipment.filter(function (q) { return DATA.exercises.some(function (e) { return e.part === sel.part && e.equipment === q.id; }); }).map(function (q) { return { value: q.id, label: q.ar + ' — ' + q.en }; }); }
-    fill($('selEquip'), sel.part ? 'اختر نوع المعدات' : 'اختر الجزء أول', qOpts, sel.equip);
-
-    var xOpts = [];
-    if (sel.equip) { xOpts = DATA.exercises.filter(function (e) { return e.part === sel.part && e.equipment === sel.equip; }).map(function (e) { return { value: e.id, label: e.ar }; }); }
-    fill($('selEx'), sel.equip ? 'اختر التمرين' : 'اختر نوع المعدات أول', xOpts, sel.ex);
+    var co = cascadeOpts(sel.day, sel);
+    fill($('selGroup'), sel.day ? 'اختر المجموعة العضلية' : 'اختر اليوم أول', co.group, sel.group);
+    fill($('selPart'), sel.group ? 'اختر الجزء المستهدف' : 'اختر المجموعة أول', co.part, sel.part);
+    fill($('selEquip'), sel.part ? 'اختر نوع المعدات' : 'اختر الجزء أول', co.equip, sel.equip);
+    fill($('selEx'), sel.equip ? 'اختر التمرين' : 'اختر نوع المعدات أول', co.ex, sel.ex);
 
     var hint = $('guideHint');
     hint.hidden = !!sel.ex;
@@ -7821,7 +7837,9 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
     sb.innerHTML = active ? ('<span class="chip">عدد الحصص: ' + sm.total + '</span><span class="chip main">الحصص المعتمدة ✅: ' + sm.done + '</span>' +
       '<span class="chip">الحصص المتبقية: ' + sm.left + '</span><span class="chip">مجموع الجولات: ' + sm.rounds + '</span>') : '';
     $('startCard').hidden = active;
-    $('addMore').hidden = !active;
+    if (!active) $('pickCard').hidden = true;
+    $('addMore').hidden = !active || pickerOpen();
+    renderPicker();
     $('finishDay').textContent = 'إنهاء ' + dayPhrase(session.day) + ' وحفظه في السجل';
     if (!active) { $('confirmBox').hidden = true; $('discardBox').hidden = true; }
     $('finishDay').hidden = !sm.total || !$('confirmBox').hidden;
@@ -7945,17 +7963,68 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
   function focusCard(i) { var c = document.querySelector('#items article[data-i="' + i + '"]'); if (c && c.scrollIntoView) { try { c.scrollIntoView({ block: 'nearest' }); } catch (e) {} } }
 
   /* ---------- بدء تمرين يوم / إضافة حصة / إنهاء تمرين اليوم / حذف ---------- */
-  function goGuideForDay(dayId) {
-    if (validDay(dayId) && sel.day !== dayId) { sel = { day: dayId, group: '', part: '', equip: '', ex: '' }; renderSelects(); }
-    showTab('guide');
+  /* ---------- إضافة حصة من داخل «تماريني» ---------- */
+  // اليوم ما يتغيّر هنا: الاختيار دايمًا من مكتبة تمرين اليوم الشغّال، والحصة تنضاف تحت الحصص السابقة.
+  var pk = { group: '', part: '', equip: '', ex: '' };
+  function pickerOpen() { return !$('pickCard').hidden; }
+  function renderPicker() {
+    if (!pickerOpen()) return;
+    var dayId = session.day;
+    $('pickTitle').textContent = 'إضافة ' + sessionLabel(session.items.length + 1) + ' إلى ' + dayPhrase(dayId);
+    $('pickInfo').textContent = validDay(dayId) ? ('التمارين المعروضة من مكتبة ' + dayShort(dayId) + ' بس. نوع اليوم ثابت لين تنهي تمرين اليوم.')
+      : 'ما قدرنا نحدد نوع هذا التمرين (محفوظ بالنظام القديم). أضف الحصة من «الدليل»، أو أنهِ التمرين وابدأ تمرين يوم جديد.';
+    var co = cascadeOpts(dayId, pk);
+    fill($('pkGroup'), 'اختر المجموعة العضلية', co.group, pk.group);
+    fill($('pkPart'), pk.group ? 'اختر الجزء المستهدف' : 'اختر المجموعة أول', co.part, pk.part);
+    fill($('pkEquip'), pk.part ? 'اختر نوع المعدات' : 'اختر الجزء أول', co.equip, pk.equip);
+    fill($('pkEx'), pk.equip ? 'اختر الجهاز أو التمرين' : 'اختر نوع المعدات أول', co.ex, pk.ex);
+    var e = pk.ex ? exById(pk.ex) : null, note = $('pkNote'), btn = $('pkAdd');
+    btn.disabled = !e;
+    btn.textContent = e ? ('أضف ك' + sessionLabel(session.items.length + 1)) : 'أضف الحصة';
+    if (e) {
+      var where = []; session.items.forEach(function (it, i) { if (it.exId === e.id) where.push(ordinalAr(i + 1)); });
+      note.innerHTML = '<span class="ltr">' + esc(e.en) + '</span> · ' + esc(equipName(e.equipment)) +
+        (where.length ? '<br>هذا الجهاز موجود في الحصة ' + esc(where.join(' و')) + '، وبينضاف كحصة مستقلة (تكرار).' : '');
+      note.hidden = false;
+    } else { note.hidden = true; note.innerHTML = ''; }
   }
+  function openPicker() {
+    if (!workoutActive()) return;
+    pk = { group: '', part: '', equip: '', ex: '' };
+    $('pickCard').hidden = false; $('addMore').hidden = true;
+    renderPicker();
+    try { $('pickCard').scrollIntoView({ block: 'start' }); window.scrollBy(0, -90); } catch (e) {}
+  }
+  function closePicker() { $('pickCard').hidden = true; if (workoutActive()) $('addMore').hidden = false; }
+  ['group', 'part', 'equip', 'ex'].forEach(function (lv) {
+    var id = { group: 'pkGroup', part: 'pkPart', equip: 'pkEquip', ex: 'pkEx' }[lv];
+    $(id).addEventListener('change', function () {
+      pk[lv] = this.value;
+      var order = ['group', 'part', 'equip', 'ex'];
+      for (var i = order.indexOf(lv) + 1; i < order.length; i++) pk[order[i]] = '';
+      renderPicker();
+    });
+  });
+  $('pkCancel').addEventListener('click', function () { closePicker(); });
+  $('pkAdd').addEventListener('click', function () {
+    var e = pk.ex ? exById(pk.ex) : null;
+    if (!e || !workoutActive()) return;
+    if (!session.startedAt) session.startedAt = Date.now();
+    session.items.push(newItem(e.id)); // نفس تمرين اليوم، تحت الحصص السابقة؛ ما يتغيّر اليوم وما ينضاف شي للسجل
+    showNewMsg('');
+    var ok = persistSession(); updateBadge(); closePicker(); renderList();
+    var n = session.items.length;
+    var card = document.querySelector('#items article[data-i="' + (n - 1) + '"]');
+    if (card) { try { card.scrollIntoView({ block: 'start' }); window.scrollBy(0, -90); } catch (x) {} }
+    toast(ok ? ('انضافت ' + sessionLabel(n) + ' إلى ' + dayPhrase(session.day)) : 'تمت الإضافة، لكن الحفظ على الجهاز فشل');
+  });
   $('startDayBtn').addEventListener('click', function () {
     var d = $('startDaySel').value;
     if (!validDay(d)) { toast('اختر نوع اليوم أول'); return; }
-    startWorkout(d); renderList(); goGuideForDay(d);
+    startWorkout(d); renderList(); openPicker();
     toast('بدأ ' + dayPhrase(d) + '، اختر أول حصة');
   });
-  $('addMore').addEventListener('click', function () { goGuideForDay(session.day); });
+  $('addMore').addEventListener('click', function () { openPicker(); });
   function showNewMsg(txt, cls) { var m = $('newMsg'); m.textContent = txt; m.className = 'notice ' + (cls || ''); m.hidden = !txt; }
   $('finishDay').addEventListener('click', function () {
     showNewMsg(''); $('discardBox').hidden = true;
