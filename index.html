@@ -256,7 +256,7 @@ body.reporting #app { display: none; }
     <!-- الدليل -->
     <section id="v-guide" role="tabpanel" aria-labelledby="tab-guide">
       <div class="card">
-        <div class="field"><label for="selDay"><span class="n">1</span>اليوم</label><select id="selDay"></select></div>
+        <div class="field"><label for="selDay"><span class="n">1</span>نوع التمرين</label><select id="selDay"></select></div>
         <div class="field"><label for="selGroup"><span class="n">2</span>المجموعة العضلية</label><select id="selGroup"></select></div>
         <div class="field"><label for="selPart"><span class="n">3</span>الجزء المستهدف</label><select id="selPart"></select></div>
         <div class="field"><label for="selEquip"><span class="n">4</span>نوع المعدات</label><select id="selEquip"></select></div>
@@ -7715,7 +7715,7 @@ body.reporting #app { display: none; }
     return o;
   }
   function renderSelects() {
-    fill($('selDay'), 'اختر اليوم', DATA.days.map(function (d) {
+    fill($('selDay'), 'اختر التمرين', DATA.days.map(function (d) {
       return { value: d.id, label: d.ar + ' — ' + d.en + (d.available ? '' : ' (قريبًا)'), disabled: !d.available };
     }), sel.day);
     $('selDay').disabled = false;
