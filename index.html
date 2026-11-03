@@ -189,6 +189,10 @@ select option { background: #11171c; color: #fff; }
 select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
 .btn.primary { background: var(--accent); color: var(--accent-fg); box-shadow: 0 4px 16px rgba(63,216,204,.28); }
 .btn.ghost { border-color: rgba(63,216,204,.7); color: #8ff3ea; background: rgba(63,216,204,.06); }
+/* زر فتح الفيديو: أحمر يوتيوب، نفس حجم وزوايا الزر السابق (نفس سماكة الإطار) */
+.btn.yt { background: #FF0000; color: #fff; border: 1.5px solid #FF0000; }
+.btn.yt:active { background: #d90000; border-color: #d90000; }
+.btn.yt .yt-ic { flex: none; display: block; }
 .btn.second { background: rgba(255,255,255,.10); color: #fff; }
 .mist li, .video, .noimg { background: rgba(255,255,255,.06); border-color: var(--line); }
 .chip { background: rgba(255,255,255,.10); }
@@ -7785,7 +7789,7 @@ body.reporting #app { display: none; }
     if (e.video) {
       h += '<div class="video"><div class="t ltr" style="direction:ltr;text-align:left">' + esc(e.video.title) + '</div>';
       h += '<div class="meta">القناة: <span class="ltr">' + esc(e.video.channel) + '</span>' + (e.video.duration ? ' · المدة: <span class="ltr">' + esc(e.video.duration) + '</span>' : '') + '</div>';
-      h += '<a class="btn ghost" href="' + esc(e.video.url) + '" target="_blank" rel="noopener noreferrer">افتح الفيديو على يوتيوب</a>';
+      h += '<a class="btn yt" href="' + esc(e.video.url) + '" target="_blank" rel="noopener noreferrer"><svg class="yt-ic" viewBox="0 0 24 17" width="24" height="17" aria-hidden="true" focusable="false"><rect width="24" height="17" rx="4.5" fill="#fff"/><path d="M9.6 4.6v7.8l6.6-3.9z" fill="#FF0000"/></svg><span>افتح الفيديو على يوتيوب</span></a>';
       h += '<p class="small">فيديو مرشّح: تحققت من عنوانه وقناته فقط، وما أقدر أتأكد من تشغيله أو محتواه من عندي. شاهده وتأكد أنه يشرح نفس التمرين.' + (e.equipment === 'machine' ? ' شكل الجهاز في الفيديو قد يختلف عن الجهاز اللي عندك، المهم أن الحركة نفسها.' : '') + (e.video.note ? ' ' + esc(e.video.note) : '') + '</p></div>';
     } else {
       h += '<div class="video"><div class="t">الفيديو غير متوفر</div><p class="small">ما لقيت فيديو موثوق يشرح نفس التمرين.</p></div>';
