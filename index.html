@@ -375,6 +375,19 @@ body.reporting #app { display: none; }
           </div>
         </div>
       </div>
+
+      <!-- حذف السجل بالكامل: يمسح «سجل تماريني» فقط (تمرين اليوم والدليل والنسخ الاحتياطية ما تتأثر) -->
+      <div id="clearHistWrap" style="margin-top:16px;display:flex;flex-direction:column;gap:12px" hidden>
+        <button class="btn danger full" id="clearHist" type="button">حذف السجل بالكامل</button>
+        <div id="clearHistBox" class="confirm" role="alertdialog" aria-labelledby="clearHistText" hidden>
+          <p id="clearHistText"><strong>هل أنت متأكد من حذف جميع التمارين المحفوظة في السجل؟ لا يمكن التراجع عن هذا الإجراء.</strong></p>
+          <div class="actions">
+            <button class="btn danger" id="clearHistYes" type="button">نعم، احذف السجل بالكامل</button>
+            <button class="btn second" id="clearHistNo" type="button">إلغاء</button>
+          </div>
+        </div>
+      </div>
+      <div id="clearHistMsg" class="notice" style="margin-top:12px" hidden></div>
     </section>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
@@ -8181,6 +8194,9 @@ body.reporting #app { display: none; }
   function recDay(r) { return validDay(r.day) ? r.day : inferDay((r.items || []).map(function (i) { return i.exId; })); }
   function renderHistory() {
     renderReportsCard();
+    $('clearHistWrap').hidden = !history.length;
+    if (!history.length) { $('clearHistBox').hidden = true; $('clearHist').hidden = false; }
+    else if ($('clearHistMsg').className.indexOf('ok') >= 0) clearHistMsg('');
     $('histCount').textContent = history.length ? ('عدد التمارين المحفوظة: ' + history.length) : '';
     var w = $('histList');
     if (!history.length) { w.innerHTML = '<div class="card empty"><strong>ما فيه تمارين محفوظة</strong>لما تنهي تمرين اليوم من «تماريني» بزر «إنهاء … وحفظه في السجل»، ينحفظ هنا كمدخل واحد فيه كل حصصه.</div>'; return; }
@@ -8323,6 +8339,20 @@ body.reporting #app { display: none; }
   });
   $('rpPrint').addEventListener('click', function () { try { window.print(); } catch (e) { toast('الطباعة مو متاحة هنا. افتح الموقع في Safari وجرّب.'); } });
   $('rpClose').addEventListener('click', closeReport);
+
+  /* ---------- حذف السجل بالكامل (بعد تأكيد) ---------- */
+  function clearHistMsg(txt, cls) { var m = $('clearHistMsg'); m.textContent = txt || ''; m.className = 'notice ' + (cls || ''); m.hidden = !txt; }
+  $('clearHist').addEventListener('click', function () { clearHistMsg(''); $('clearHistBox').hidden = false; $('clearHist').hidden = true; });
+  $('clearHistNo').addEventListener('click', function () { $('clearHistBox').hidden = true; $('clearHist').hidden = false; });
+  $('clearHistYes').addEventListener('click', function () {
+    // يمسح السجل بس؛ تمرين اليوم (KEY_S) ما ينلمس
+    var saved = rawSet(KEY_H, '[]'), back = saved ? readJSON(KEY_H, null) : null;
+    if (!(Array.isArray(back) && back.length === 0)) { clearHistMsg('ما قدرت أحذف السجل من الجهاز، وما تغيّر شي.', 'bad'); return; }
+    var n = history.length; history = [];
+    $('clearHistBox').hidden = true; $('clearHist').hidden = false;
+    renderHistory();
+    clearHistMsg('انحذف السجل بالكامل (' + n + ' تمرين يوم). تمرين اليوم الحالي ما تأثر.', 'ok');
+  });
 
   /* ---------- النسخ الاحتياطي والاستعادة ---------- */
   var BK_FORMAT = 1, bkPending = null;
