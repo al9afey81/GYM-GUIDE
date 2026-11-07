@@ -7690,11 +7690,6 @@ body.reporting #app { display: none; }
     return it;
   }
   function setDone(it, i) { return !!(it.sets[i] && it.sets[i].done); }
-  function allSetsDone(it) {
-    if (!it.count) return false;
-    for (var i = 0; i < it.count; i++) { if (!setDone(it, i)) return false; }
-    return true;
-  }
   function inSession(exId) { return session.items.some(function (i) { return i.exId === exId; }); }
   function isComplete(it) {
     if (!it.count) return false;
@@ -7937,6 +7932,13 @@ body.reporting #app { display: none; }
   function rowEditOf(sets, s) { for (var k = 0; k < rowEdits.length; k++) { if (rowEdits[k].sets === sets && rowEdits[k].s === s) return rowEdits[k]; } return null; }
   function dropRowEdit(sets, s) { rowEdits = rowEdits.filter(function (r) { return !(r.sets === sets && (s == null || r.s === s)); }); }
   function hasRowEdit(sets) { return rowEdits.some(function (r) { return r.sets === sets; }); }
+  // اعتماد/حفظ الحصة: جولة مفتوحة بالقلم وفيها عدّات ووزن تنحفظ مثل ما دخلتها، والناقصة ترجع لقيمتها المحفوظة
+  function commitRowEdits(sets) {
+    rowEdits.forEach(function (r) { if (r.sets === sets && r.reps && r.weight && sets[r.s]) { sets[r.s].reps = r.reps; sets[r.s].weight = r.weight; } });
+    dropRowEdit(sets);
+  }
+  // الحصة المعتمدة: جولاتها المسجّلة تنعرض معتمدة ✅ (نفس اللي يسويه normItem عند التحميل)
+  function markSetsDone(it) { for (var k = 0; k < (it.count || 0); k++) { if (it.sets[k] && it.sets[k].reps && it.sets[k].weight) it.sets[k].done = true; } }
   function exOptions(cur) {
     // تمارين تمرين اليوم الشغّال بس (ما نخلط الأيام)؛ تمرين قديم ما عرفنا يومه: كل المكتبة
     var dayGroups = validDay(session.day) ? (dayById(session.day).groups || []) : DATA.groups.map(function (g) { return g.id; });
@@ -7989,9 +7991,7 @@ body.reporting #app { display: none; }
   function hintHtml(it) {
     if (it.approved) return '';
     if (!it.count) return '<div class="status">اختر عدد الجولات أول.</div>';
-    if (!isComplete(it)) return '<div class="status">اختر العدّات والوزن لكل جولة واضغط ✅ جنبها لاعتمادها.</div>';
-    if (hasRowEdit(it.sets)) return '<div class="status">احفظ تعديل الجولة بـ ✅ قبل اعتماد الحصة.</div>';
-    if (!allSetsDone(it)) return '<div class="status">اعتمد كل جولة بـ ✅ قبل «اعتماد الحصة».</div>';
+    if (!isComplete(it)) return '<div class="status">اختر العدّات والوزن لكل جولة، ثم اضغط «اعتماد الحصة».</div>';
     return '';
   }
   function editNoteHtml(idx, it) {
@@ -8002,7 +8002,6 @@ body.reporting #app { display: none; }
       h += '</div>';
     }
     if (it.approved && !draftComplete(d)) h += '<div class="status">كمّل العدّات والوزن لكل جولة عشان تحفظ والحصة تبقى معتمدة ✅.</div>';
-    else if (it.approved && !allSetsDone(d)) h += '<div class="status">اعتمد كل جولة بـ ✅ عشان تحفظ والحصة تبقى معتمدة.</div>';
     return h;
   }
   function editPanelHtml(idx, it) {
@@ -8137,11 +8136,11 @@ body.reporting #app { display: none; }
     var i = +t.getAttribute('data-i'); var act = t.getAttribute('data-act'); var it = session.items[i]; if (!it) return;
     if (act === 'sdone' || act === 'sedit' || act === 'ssave' || act === 'scancel') { setAction(act, i, it, +t.getAttribute('data-s'), t.getAttribute('data-m')); return; }
     if (act === 'approve') {
+      // يكفي اكتمال العدّات والوزن للجولات المحددة؛ ✅ الجولات اختيارية وما تشترط هنا.
+      commitRowEdits(it.sets);
       if (!isComplete(it)) { toast('اختر عدد الجولات ثم العدّات والوزن لكل جولة'); return; }
-      if (hasRowEdit(it.sets)) { toast('احفظ تعديل الجولة بـ ✅ أول'); return; }
-      if (!allSetsDone(it)) { toast('اعتمد كل جولة بـ ✅ قبل اعتماد الحصة'); return; }
       // اعتماد حصة وحدة فقط: تبقى في تمرين اليوم (مصغّرة ✅)، والسجل ما يتغيّر.
-      it.approved = true; delIdx = -1; persistSession(); renderList(); focusCard(i);
+      markSetsDone(it); it.approved = true; delIdx = -1; persistSession(); renderList(); focusCard(i);
       var sm = sessionSummary();
       toast('اعتُمدت ' + sessionLabel(i + 1) + ' ✅' + (sm.left ? (' · باقي ' + sessionsAr(sm.left)) : ' · كل الحصص معتمدة'));
     }
@@ -8154,11 +8153,10 @@ body.reporting #app { display: none; }
     if (act === 'edit') { delIdx = -1; editIdx = i; editRef = it; editDraft = cloneItem(it); renderList(); focusCard(i); }
     if (act === 'ecancel') { if (editDraft) dropRowEdit(editDraft.sets); editIdx = -1; editDraft = null; delIdx = -1; renderList(); focusCard(i); toast('ما تغيّر شي في ' + sessionLabel(i + 1)); }
     if (act === 'esave' && editDraft && editIdx === i && editRef === it) {
-      // الحصة المعتمدة تبقى معتمدة بعد الحفظ، بشرط تكون كل الجولات كاملة
-      if (it.approved && !draftComplete(editDraft)) { toast('كمّل العدّات والوزن لكل جولة قبل الحفظ'); return; }
-      if (hasRowEdit(editDraft.sets)) { toast('احفظ تعديل الجولة بـ ✅ أول'); return; }
-      if (it.approved && !allSetsDone(editDraft)) { toast('اعتمد كل جولة بـ ✅ قبل الحفظ'); return; }
-      applyDraft(it, editDraft);
+      // الحصة المعتمدة تبقى معتمدة بعد الحفظ، بشرط تكون العدّات والوزن كاملة (✅ الجولات مو شرط)
+      commitRowEdits(editDraft.sets);
+      if (it.approved && !draftComplete(editDraft)) { var es2 = $('esets' + i); if (es2) es2.innerHTML = setRowsHtml(i, editDraft.count, editDraft.sets, 'edit'); toast('كمّل العدّات والوزن لكل جولة قبل الحفظ'); return; }
+      applyDraft(it, editDraft); if (it.approved) markSetsDone(it);
       editIdx = -1; editDraft = null; delIdx = -1;
       var ok = persistSession(); renderList(); updateBadge(); focusCard(i);
       toast(!ok ? 'انحفظ التعديل مؤقتًا، لكن الحفظ على الجهاز فشل' : ('انحفظ تعديل ' + sessionLabel(i + 1) + (it.approved ? ' ✅ وباقية معتمدة' : '')));
