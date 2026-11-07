@@ -28,7 +28,7 @@ img { max-width: 100%; }
 /* التصميم: تطبيق جوال بعمود واحد، شريط علوي ثابت فيه ثلاث تبويبات (الدليل، تماريني، السجل).
    الخطوط: Cairo للعناوين وIBM Plex Sans Arabic للنص. اللون الأساسي أخضر مزرق (فولاذ)، وألوان الحالة منفصلة عنه. */
 :root {
-  --bg:#05090c; --surface:rgba(12,17,21,.64); --surface-2:rgba(255,255,255,.08); --fg:#ffffff; --muted:rgba(255,255,255,.70); --line:rgba(255,255,255,.15);
+  --bg:#05090c; --surface:rgba(10,14,18,.74); --surface-2:rgba(255,255,255,.08); --fg:#ffffff; --muted:rgba(255,255,255,.80); --line:rgba(255,255,255,.15);
   --accent:#3fd8cc; --accent-fg:#03211f; --accent-soft:rgba(63,216,204,.18);
   --ok:#62e3a0; --ok-soft:rgba(98,227,160,.16); --warn:#f3c969; --warn-soft:rgba(243,201,105,.16); --bad:#ff948a; --bad-soft:rgba(255,148,138,.16);
   --font-display:'Cairo','Geeza Pro','Segoe UI',Tahoma,sans-serif;
@@ -210,6 +210,22 @@ select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
 .chip.main { background: var(--accent-soft); color: #8ff3ea; }
 .imgbox img { background: #fff; }
 .listhead h2, .detail > h2 { color: #fff; }
+
+/* وضوح النصوص (WCAG AA): أي نص يطلع فوق صورة الخلفية مباشرة نعطيه خلفية زجاجية أغمق،
+   بدل ما نغيّر الصورة أو ألوان الثيم. */
+.listhead { background: rgba(8,12,16,.80); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); border: 1px solid var(--line); border-radius: 18px; padding: 0 14px 12px; box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+#addMore, #discardDay, #finishDay, .notice { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+#addMore, #discardDay { background: linear-gradient(rgba(255,255,255,.10), rgba(255,255,255,.10)), rgba(8,12,16,.80); }
+#finishDay { background: linear-gradient(rgba(63,216,204,.08), rgba(63,216,204,.08)), rgba(8,12,16,.80); }
+.notice { background-color: rgba(8,12,16,.80); background-image: linear-gradient(var(--warn-soft), var(--warn-soft)); }
+.notice.bad { background-color: rgba(8,12,16,.80); background-image: linear-gradient(var(--bad-soft), var(--bad-soft)); }
+.notice.ok { background-color: rgba(8,12,16,.80); background-image: linear-gradient(var(--ok-soft), var(--ok-soft)); }
+.rp-bar { background: rgba(8,12,16,.80); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--line); border-radius: 18px; padding: 12px; }
+/* زر الحذف: نفس اللون الأحمر، والنص غامق عشان يكون مقروء */
+.btn.danger { color: #2b0805; }
+.mist li { background: rgba(255,255,255,.04); }
+/* حدود الحقول وأزرار الجولات أوضح (3:1) */
+select, .bk-text, .rp-date, .sbtn { border-color: rgba(255,255,255,.38); }
 
 /* النسخ الاحتياطي والاستعادة */
 .backup { margin-top: 4px; display: flex; flex-direction: column; gap: 12px; }
