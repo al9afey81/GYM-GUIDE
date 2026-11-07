@@ -7946,7 +7946,8 @@ body.reporting #app { display: none; }
       var list = DATA.exercises.filter(function (x) { return x.group === g.id && (fitsActiveDay(x) || x.id === cur); });
       if (!list.length) return;
       h += '<optgroup label="' + esc(g.ar) + '">';
-      list.forEach(function (x) { h += '<option value="' + esc(x.id) + '"' + (x.id === cur ? ' selected' : '') + '>' + esc(x.ar) + ' — ' + esc(equipName(x.equipment)) + '</option>'; });
+      // الاسم بس (الأسماء ما تتكرر، ونوع المعدات يطلع تحت اسم الحصة)، عشان يكمل في القائمة مع خط Kufi
+      list.forEach(function (x) { h += '<option value="' + esc(x.id) + '"' + (x.id === cur ? ' selected' : '') + '>' + esc(x.ar) + '</option>'; });
       h += '</optgroup>';
     });
     return h;
