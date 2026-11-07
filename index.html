@@ -23,7 +23,8 @@ img { max-width: 100%; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Noto Kufi Arabic لواجهة التطبيق، وCairo وIBM Plex لتقارير PDF بس (عشان التقارير ما تتغيّر) -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;600;700;800&family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* التصميم: تطبيق جوال بعمود واحد، شريط علوي ثابت فيه ثلاث تبويبات (الدليل، تماريني، السجل).
    الخطوط: Cairo للعناوين وIBM Plex Sans Arabic للنص. اللون الأساسي أخضر مزرق (فولاذ)، وألوان الحالة منفصلة عنه. */
@@ -31,8 +32,12 @@ img { max-width: 100%; }
   --bg:#05090c; --surface:rgba(10,14,18,.74); --surface-2:rgba(255,255,255,.08); --fg:#ffffff; --muted:rgba(255,255,255,.80); --line:rgba(255,255,255,.15);
   --accent:#3fd8cc; --accent-fg:#03211f; --accent-soft:rgba(63,216,204,.18);
   --ok:#62e3a0; --ok-soft:rgba(98,227,160,.16); --warn:#f3c969; --warn-soft:rgba(243,201,105,.16); --bad:#ff948a; --bad-soft:rgba(255,148,138,.16);
-  --font-display:'Cairo','Geeza Pro','Segoe UI',Tahoma,sans-serif;
-  --font-body:'IBM Plex Sans Arabic','Geeza Pro','Segoe UI',Tahoma,sans-serif;
+  /* خط الواجهة: كوفي هندسي (Noto Kufi Arabic). فيه حروف لاتينية، فـ GYM GUIDE وPush تطلع بنفس النمط */
+  --font-display:'Noto Kufi Arabic','Geeza Pro','Segoe UI',Tahoma,sans-serif;
+  --font-body:'Noto Kufi Arabic','Geeza Pro','Segoe UI',Tahoma,sans-serif;
+  /* تقارير PDF تبقى على خطوطها السابقة */
+  --font-report-display:'Cairo','Geeza Pro','Segoe UI',Tahoma,sans-serif;
+  --font-report-body:'IBM Plex Sans Arabic','Geeza Pro','Segoe UI',Tahoma,sans-serif;
   --radius:12px;
   color-scheme: dark; /* الثيم الشخصي داكن فقط */
 }
@@ -40,7 +45,7 @@ img { max-width: 100%; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body {
-  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-weight: 500; font-size: 16px; line-height: 1.7;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: 0 40px; -webkit-text-size-adjust: 100%;
 }
@@ -72,7 +77,7 @@ section[hidden] { display: none; }
 /* القوائم */
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field + .field { margin-top: 12px; }
-.field label { font-size: 14px; font-weight: 600; color: var(--muted); }
+.field label { font-size: 14px; font-weight: 700; color: var(--muted); }
 .field label .n { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--surface-2); color: var(--fg); font-size: 12px; align-items: center; justify-content: center; margin-inline-end: 6px; font-variant-numeric: tabular-nums; }
 select { width: 100%; min-height: 48px; font-size: 16px; color: var(--fg); background-color: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; }
 select:disabled { opacity: .55; background-color: var(--surface-2); }
@@ -153,7 +158,7 @@ select:disabled { opacity: .55; background-color: var(--surface-2); }
 /* صورة التمرين داخل بطاقة الحصة */
 .item .exim { max-width: 420px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.actions .btn { flex: 1 1 140px; }
+.actions .btn { flex: 1 1 140px; padding-inline: 12px; } /* مساحة أكثر للنص مع خط Kufi الأعرض */
 .empty { text-align: center; color: var(--muted); padding: 28px 12px; }
 .empty strong { display: block; color: var(--fg); font-family: var(--font-display); font-size: 18px; margin-bottom: 4px; }
 .confirm { background: var(--warn-soft); border: 1.5px solid var(--warn); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
@@ -197,6 +202,8 @@ main { padding-top: 0; gap: 12px; }
 .field label { font-size: 12.5px; color: var(--muted); }
 select { min-height: 42px; border-radius: 12px; background-color: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.20); color: #fff; }
 select option { background: #11171c; color: #fff; }
+/* خط Kufi أعرض: الاسم الطويل في القائمة المسكّرة يختصر بـ «…» بدل ما ينقص الحرف */
+select { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 select:disabled { opacity: .5; background-color: rgba(255,255,255,.04); }
 .btn.primary { background: var(--accent); color: var(--accent-fg); box-shadow: 0 4px 16px rgba(63,216,204,.28); }
 .btn.ghost { border-color: rgba(63,216,204,.7); color: #8ff3ea; background: rgba(63,216,204,.06); }
@@ -243,7 +250,8 @@ body.reporting #app { display: none; }
 .rp-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
 .rp-bar .btn { flex: 1 1 140px; }
 .rp-file { flex-basis: 100%; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
-#reportSheet { background: #fff; color: #111; border-radius: 10px; padding: 18px 16px; max-width: 210mm; margin: 0 auto; font-size: 13px; line-height: 1.6; }
+#reportSheet { background: #fff; color: #111; border-radius: 10px; padding: 18px 16px; max-width: 210mm; margin: 0 auto; font-size: 13px; line-height: 1.6; font-family: var(--font-report-body); font-weight: 400; }
+#reportSheet h1, #reportSheet h2, #reportSheet h3 { font-family: var(--font-report-display); }
 #reportSheet h1 { font-size: 20px; margin: 2px 0 4px; color: #111; }
 #reportSheet h2 { font-size: 16px; margin: 18px 0 4px; color: #0d4f4a; border-bottom: 1px solid #cfd8dc; padding-bottom: 3px; break-after: avoid; page-break-after: avoid; }
 #reportSheet h3 { font-size: 14px; margin: 10px 0 2px; color: #111; break-after: avoid; }
@@ -7938,7 +7946,8 @@ body.reporting #app { display: none; }
       var list = DATA.exercises.filter(function (x) { return x.group === g.id && (fitsActiveDay(x) || x.id === cur); });
       if (!list.length) return;
       h += '<optgroup label="' + esc(g.ar) + '">';
-      list.forEach(function (x) { h += '<option value="' + esc(x.id) + '"' + (x.id === cur ? ' selected' : '') + '>' + esc(x.ar) + ' — ' + esc(equipName(x.equipment)) + '</option>'; });
+      // الاسم بس (الأسماء ما تتكرر، ونوع المعدات يطلع تحت اسم الحصة)، عشان يكمل في القائمة مع خط Kufi
+      list.forEach(function (x) { h += '<option value="' + esc(x.id) + '"' + (x.id === cur ? ' selected' : '') + '>' + esc(x.ar) + '</option>'; });
       h += '</optgroup>';
     });
     return h;
