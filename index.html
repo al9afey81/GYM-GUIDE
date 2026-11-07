@@ -141,6 +141,17 @@ select:disabled { opacity: .55; background-color: var(--surface-2); }
 .setrow .lab { font-weight: 600; padding-bottom: 12px; font-size: 14px; }
 .setrow .field label { font-size: 12px; }
 .setrow select { min-height: 44px; padding-inline: 8px; }
+/* اعتماد كل جولة: زر ✅ جنب الجولة، والمعتمدة مقفلة وجنبها ✏️ */
+.setrow { grid-template-columns: 62px 1fr 1fr 44px; }
+.setrow .flab { font-size: 12px; font-weight: 600; color: var(--muted); }
+.setrow .val { min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--ok); background: var(--ok-soft); font-weight: 700; font-variant-numeric: tabular-nums; }
+.setrow .ok-tick { font-size: 13px; }
+.sbtn { appearance: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,.20); background: rgba(255,255,255,.07); font-size: 19px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; -webkit-tap-highlight-color: transparent; }
+.sbtn.go { border-color: rgba(63,216,204,.7); background: rgba(63,216,204,.10); }
+.setrow.editing .lab { color: #8ff3ea; }
+.slink { grid-column: 1 / -1; appearance: none; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; text-decoration: underline; cursor: pointer; padding: 2px 0; justify-self: start; }
+/* صورة التمرين داخل بطاقة الحصة */
+.item .exim { max-width: 420px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .actions .btn { flex: 1 1 140px; }
 .empty { text-align: center; color: var(--muted); padding: 28px 12px; }
@@ -7633,6 +7644,7 @@ body.reporting #app { display: none; }
     var d = DATA.days.filter(function (d) { return es.every(function (e) { return dayHasEx(d.id, e); }); })[0];
     return d ? d.id : null;
   }
+  session.items.forEach(normItem);
   if (!validDay(session.day)) { session.day = session.items.length ? inferDay(session.items.map(function (i) { return i.exId; })) : null; }
   function ordinalAr(n) { var o = ['الأولى','الثانية','الثالثة','الرابعة','الخامسة','السادسة','السابعة','الثامنة','التاسعة','العاشرة']; return n >= 1 && n <= 10 ? o[n - 1] : String(n); }
   function sessionLabel(n) { return 'الحصة ' + ordinalAr(n); }
@@ -7641,7 +7653,24 @@ body.reporting #app { display: none; }
 
   function exById(id) { return DATA.exercises.filter(function (e) { return e.id === id; })[0]; }
   function equipName(id) { var q = DATA.equipment.filter(function (x) { return x.id === id; })[0]; return q ? q.ar : ''; }
-  function newItem(exId) { var sets = []; for (var i = 0; i < 5; i++) sets.push({ reps: null, weight: null }); return { exId: exId, addedAt: Date.now(), count: null, sets: sets, approved: false }; }
+  function newItem(exId) { var sets = []; for (var i = 0; i < 5; i++) sets.push({ reps: null, weight: null, done: false }); return { exId: exId, addedAt: Date.now(), count: null, sets: sets, approved: false }; }
+  // اعتماد الجولة (sets[i].done) منفصل عن اعتماد الحصة (approved).
+  // بيانات قديمة بدون done: نضيفه false، والحصة المعتمدة سابقًا تصير كل جولاتها معتمدة ✅.
+  function normItem(it) {
+    if (!Array.isArray(it.sets)) it.sets = [];
+    for (var i = 0; i < 5; i++) {
+      var st = it.sets[i] || (it.sets[i] = { reps: null, weight: null });
+      st.done = !!st.done && !!st.reps && !!st.weight;
+      if (it.approved && i < (it.count || 0) && st.reps && st.weight) st.done = true;
+    }
+    return it;
+  }
+  function setDone(it, i) { return !!(it.sets[i] && it.sets[i].done); }
+  function allSetsDone(it) {
+    if (!it.count) return false;
+    for (var i = 0; i < it.count; i++) { if (!setDone(it, i)) return false; }
+    return true;
+  }
   function inSession(exId) { return session.items.some(function (i) { return i.exId === exId; }); }
   function isComplete(it) {
     if (!it.count) return false;
@@ -7877,7 +7906,13 @@ body.reporting #app { display: none; }
   /* ---------- تعديل حصة / حذف حصة ---------- */
   // التعديل يصير على نسخة مؤقتة، وما ينحفظ إلا بعد «حفظ التعديلات» (نفس الحصة، ما تنضاف حصة جديدة)
   var editIdx = -1, editDraft = null, editRef = null, delIdx = -1, delRef = null;
-  function cloneItem(it) { return { exId: it.exId, count: it.count, sets: it.sets.map(function (x) { return { reps: x.reps, weight: x.weight }; }) }; }
+  function cloneItem(it) { return { exId: it.exId, count: it.count, sets: it.sets.map(function (x) { return { reps: x.reps, weight: x.weight, done: !!x.done }; }) }; }
+  /* تعديل جولة معتمدة بالقلم ✏️: نسخة مؤقتة لهذي الجولة بس، والجولة تبقى معتمدة بقيمها القديمة لين تضغط ✅ حفظ.
+     المفتاح هو مصفوفة الجولات نفسها (الحصة الحية أو نسخة لوحة التعديل). ما ينحفظ في التخزين. */
+  var rowEdits = [];
+  function rowEditOf(sets, s) { for (var k = 0; k < rowEdits.length; k++) { if (rowEdits[k].sets === sets && rowEdits[k].s === s) return rowEdits[k]; } return null; }
+  function dropRowEdit(sets, s) { rowEdits = rowEdits.filter(function (r) { return !(r.sets === sets && (s == null || r.s === s)); }); }
+  function hasRowEdit(sets) { return rowEdits.some(function (r) { return r.sets === sets; }); }
   function exOptions(cur) {
     // تمارين تمرين اليوم الشغّال بس (ما نخلط الأيام)؛ تمرين قديم ما عرفنا يومه: كل المكتبة
     var dayGroups = validDay(session.day) ? (dayById(session.day).groups || []) : DATA.groups.map(function (g) { return g.id; });
@@ -7895,22 +7930,43 @@ body.reporting #app { display: none; }
   function draftComplete(d) { return isComplete({ count: d.count, sets: d.sets }); }
   function groupName(id) { var g = DATA.groups.filter(function (x) { return x.id === id; })[0]; return g ? g.ar : ''; }
   // صفوف الجولات. mode 'live' = البطاقة قبل الاعتماد (تنحفظ فورًا)، 'edit' = لوحة التعديل (نسخة مؤقتة)
+  // كل جولة لها زر ✅ يعتمدها ويقفلها، والجولة المعتمدة يطلع جنبها ✏️ لتعديلها هي بس.
   function setRowsHtml(idx, count, sets, mode) {
     if (!count) return '';
-    var p = mode === 'edit' ? 'e' : '', h = '<div class="sets">';
+    var p = mode === 'edit' ? 'e' : '', m = mode === 'edit' ? 'edit' : 'live', h = '<div class="sets">';
     for (var s = 0; s < count; s++) {
+      var st = sets[s], re = st.done ? rowEditOf(sets, s) : null;
+      var btn = function (act, icon, label, cls) { return '<button class="sbtn' + (cls ? ' ' + cls : '') + '" type="button" data-act="' + act + '" data-i="' + idx + '" data-s="' + s + '" data-m="' + m + '" aria-label="' + label + '">' + icon + '</button>'; };
+      if (st.done && !re) {
+        h += '<div class="setrow locked"><div class="lab">جولة ' + (s + 1) + ' <span class="ok-tick" aria-label="معتمدة">✅</span></div>' +
+          '<div class="field"><span class="flab">العدّات</span><div class="val">' + esc(st.reps) + '</div></div>' +
+          '<div class="field"><span class="flab">الوزن (كجم)</span><div class="val">' + esc(st.weight) + '</div></div>' +
+          btn('sedit', '✏️', 'عدّل جولة ' + (s + 1)) + '</div>';
+        continue;
+      }
+      var reps = re ? re.reps : st.reps, weight = re ? re.weight : st.weight, rowAttr = re ? ' data-row="1"' : '';
       var a = mode === 'edit' ? ' data-edit="reps" data-s="' + s + '"' : ' data-act="reps" data-i="' + idx + '" data-s="' + s + '"';
       var b = mode === 'edit' ? ' data-edit="weight" data-s="' + s + '"' : ' data-act="weight" data-i="' + idx + '" data-s="' + s + '"';
-      h += '<div class="setrow"><div class="lab">جولة ' + (s + 1) + '</div>' +
-        '<div class="field"><label for="' + p + 'r' + idx + '_' + s + '">العدّات</label><select id="' + p + 'r' + idx + '_' + s + '"' + a + '>' + optRange(1, 30, 1, sets[s].reps) + '</select></div>' +
-        '<div class="field"><label for="' + p + 'w' + idx + '_' + s + '">الوزن (كجم)</label><select id="' + p + 'w' + idx + '_' + s + '"' + b + '>' + optRange(5, 200, 5, sets[s].weight) + '</select></div></div>';
+      h += '<div class="setrow' + (re ? ' editing' : '') + '"><div class="lab">جولة ' + (s + 1) + (re ? ' ✏️' : '') + '</div>' +
+        '<div class="field"><label for="' + p + 'r' + idx + '_' + s + '">العدّات</label><select id="' + p + 'r' + idx + '_' + s + '"' + a + rowAttr + '>' + optRange(1, 30, 1, reps) + '</select></div>' +
+        '<div class="field"><label for="' + p + 'w' + idx + '_' + s + '">الوزن (كجم)</label><select id="' + p + 'w' + idx + '_' + s + '"' + b + rowAttr + '>' + optRange(1, 200, 1, weight) + '</select></div>' +
+        (re ? btn('ssave', '✅', 'احفظ تعديل جولة ' + (s + 1), 'go') : btn('sdone', '✅', 'اعتمد جولة ' + (s + 1), 'go')) +
+        (re ? '<button class="slink" type="button" data-act="scancel" data-i="' + idx + '" data-s="' + s + '" data-m="' + m + '">إلغاء تعديل الجولة ' + (s + 1) + '</button>' : '') + '</div>';
     }
     return h + '</div>';
+  }
+  // صورة التمرين من «الدليل» نفسها (نفس الملفات)، تحت اسم الجهاز داخل البطاقة
+  function exImgHtml(e) {
+    if (!e || !e.image) return '<div class="status">ما فيه صورة لهذا التمرين في «الدليل».</div>';
+    return '<div class="imgs exim"><figure class="imgbox"><img src="' + esc(e.image.files[0]) + '" alt="' + esc(e.ar) + ' - الوضعية الأولى" loading="lazy"><figcaption>الوضعية الأولى</figcaption></figure>' +
+      '<figure class="imgbox"><img src="' + esc(e.image.files[1]) + '" alt="' + esc(e.ar) + ' - الوضعية الثانية" loading="lazy"><figcaption>الوضعية الثانية</figcaption></figure></div>';
   }
   function hintHtml(it) {
     if (it.approved) return '';
     if (!it.count) return '<div class="status">اختر عدد الجولات أول.</div>';
-    if (!isComplete(it)) return '<div class="status">اختر العدّات والوزن لكل جولة قبل الاعتماد.</div>';
+    if (!isComplete(it)) return '<div class="status">اختر العدّات والوزن لكل جولة واضغط ✅ جنبها لاعتمادها.</div>';
+    if (hasRowEdit(it.sets)) return '<div class="status">احفظ تعديل الجولة بـ ✅ قبل اعتماد الحصة.</div>';
+    if (!allSetsDone(it)) return '<div class="status">اعتمد كل جولة بـ ✅ قبل «اعتماد الحصة».</div>';
     return '';
   }
   function editNoteHtml(idx, it) {
@@ -7921,6 +7977,7 @@ body.reporting #app { display: none; }
       h += '</div>';
     }
     if (it.approved && !draftComplete(d)) h += '<div class="status">كمّل العدّات والوزن لكل جولة عشان تحفظ والحصة تبقى معتمدة ✅.</div>';
+    else if (it.approved && !allSetsDone(d)) h += '<div class="status">اعتمد كل جولة بـ ✅ عشان تحفظ والحصة تبقى معتمدة.</div>';
     return h;
   }
   function editPanelHtml(idx, it) {
@@ -7971,6 +8028,7 @@ body.reporting #app { display: none; }
     // لوحة التعديل/الحذف مربوطة بالحصة نفسها؛ إذا تغيّر تمرين اليوم (إنهاء، حذف، استرجاع) تنقفل
     if (editIdx >= 0 && session.items[editIdx] !== editRef) { editIdx = -1; editDraft = null; editRef = null; }
     if (delIdx >= 0 && session.items[delIdx] !== delRef) { delIdx = -1; delRef = null; }
+    rowEdits = rowEdits.filter(function (r) { return (editDraft && r.sets === editDraft.sets) || session.items.some(function (x) { return x.sets === r.sets; }); });
     session.items.forEach(function (it) { totalOf[it.exId] = (totalOf[it.exId] || 0) + 1; });
     session.items.forEach(function (it, idx) {
       var e = exById(it.exId);
@@ -7990,12 +8048,14 @@ body.reporting #app { display: none; }
       h += '<article class="item' + (it.approved ? ' done' : '') + '" data-i="' + idx + '">';
       if (editing) {
         h += '<div class="hd"><div class="tick" aria-hidden="true">' + (it.approved ? '✅' : '✏️') + '</div><div><div class="sub">' + esc(sessionLabel(idx + 1)) + (it.approved ? ' · معتمدة · مفتوحة للتعديل' : ' · تعديل') + '</div><div class="nm">' + esc(e.ar) + esc(again) + '</div>' + subLine + '</div></div>';
+        h += exImgHtml(e);
         h += editPanelHtml(idx, it);
         if (idx === delIdx) h += delConfirmHtml(idx, e, again);
         h += '</article>'; return;
       }
       // قبل الاعتماد: بطاقة كبيرة قابلة للتحرير
       h += '<div class="hd"><div class="tick" aria-hidden="true"></div><div><div class="sub">' + esc(sessionLabel(idx + 1)) + ' · لم تُعتمد بعد</div><div class="nm">' + esc(e.ar) + esc(again) + '</div>' + subLine + '</div></div>';
+      h += exImgHtml(e);
       h += '<div class="field"><label for="cnt' + idx + '">عدد الجولات</label><select id="cnt' + idx + '" data-act="count" data-i="' + idx + '">' + optRange(1, 5, 1, it.count) + '</select></div>';
       h += '<div id="sets' + idx + '">' + setRowsHtml(idx, it.count, it.sets, 'live') + '</div>';
       h += '<div class="actions"><button class="btn primary" type="button" data-act="approve" data-i="' + idx + '">اعتماد الحصة</button></div>';
@@ -8019,8 +8079,10 @@ body.reporting #app { display: none; }
       var v2 = t.value === '' ? null : t.value, ei = editIdx, eit = session.items[ei];
       if (ed === 'ex' && v2 && exById(v2)) editDraft.exId = v2;
       if (ed === 'count') { editDraft.count = v2 === null ? null : +v2; var es = $('esets' + ei); if (es) es.innerHTML = setRowsHtml(ei, editDraft.count, editDraft.sets, 'edit'); }
-      if (ed === 'reps') editDraft.sets[+t.getAttribute('data-s')].reps = v2 === null ? null : +v2;
-      if (ed === 'weight') editDraft.sets[+t.getAttribute('data-s')].weight = v2 === null ? null : +v2;
+      // جولة معتمدة مفتوحة بالقلم: نعدّل نسختها المؤقتة بس
+      var dTarget = (ed === 'reps' || ed === 'weight') ? (t.getAttribute('data-row') ? rowEditOf(editDraft.sets, +t.getAttribute('data-s')) : editDraft.sets[+t.getAttribute('data-s')]) : null;
+      if (dTarget && ed === 'reps') dTarget.reps = v2 === null ? null : +v2;
+      if (dTarget && ed === 'weight') dTarget.weight = v2 === null ? null : +v2;
       var en = $('enote' + ei); if (en && eit) en.innerHTML = editNoteHtml(ei, eit);
       return;
     }
@@ -8028,6 +8090,10 @@ body.reporting #app { display: none; }
     var i = +t.getAttribute('data-i'); var it = session.items[i]; if (!it) return;
     var v = t.value === '' ? null : +t.value;
     if (act === 'count') { it.count = v; var sc = $('sets' + i); if (sc) sc.innerHTML = setRowsHtml(i, it.count, it.sets, 'live'); }
+    if ((act === 'reps' || act === 'weight') && t.getAttribute('data-row')) {
+      // تعديل جولة معتمدة: ما ينحفظ شي لين تضغط ✅
+      var re = rowEditOf(it.sets, +t.getAttribute('data-s')); if (re) re[act] = v; return;
+    }
     if (act === 'reps') it.sets[+t.getAttribute('data-s')].reps = v;
     if (act === 'weight') it.sets[+t.getAttribute('data-s')].weight = v;
     if (it.approved && !isComplete(it)) { it.approved = false; persistSession(); renderList(); toast('انلغى اعتماد الحصة لأن فيه بيانات ناقصة، عبّها واعتمد من جديد'); return; }
@@ -8035,11 +8101,20 @@ body.reporting #app { display: none; }
     var hn = $('hint' + i); if (hn) hn.innerHTML = hintHtml(it);
     refreshSummary();
   });
+  $('items').addEventListener('error', function (ev) {
+    var img = ev.target; if (!img || img.tagName !== 'IMG') return;
+    var fb = document.createElement('div'); fb.className = 'noimg'; fb.style.gridColumn = 'auto'; fb.style.aspectRatio = '4 / 3';
+    fb.innerHTML = '<strong>صورة غير متوفرة</strong>';
+    if (img.parentNode) img.parentNode.replaceChild(fb, img);
+  }, true);
   $('items').addEventListener('click', function (ev) {
     var t = ev.target.closest ? ev.target.closest('button[data-act]') : null; if (!t) return;
     var i = +t.getAttribute('data-i'); var act = t.getAttribute('data-act'); var it = session.items[i]; if (!it) return;
+    if (act === 'sdone' || act === 'sedit' || act === 'ssave' || act === 'scancel') { setAction(act, i, it, +t.getAttribute('data-s'), t.getAttribute('data-m')); return; }
     if (act === 'approve') {
       if (!isComplete(it)) { toast('اختر عدد الجولات ثم العدّات والوزن لكل جولة'); return; }
+      if (hasRowEdit(it.sets)) { toast('احفظ تعديل الجولة بـ ✅ أول'); return; }
+      if (!allSetsDone(it)) { toast('اعتمد كل جولة بـ ✅ قبل اعتماد الحصة'); return; }
       // اعتماد حصة وحدة فقط: تبقى في تمرين اليوم (مصغّرة ✅)، والسجل ما يتغيّر.
       it.approved = true; delIdx = -1; persistSession(); renderList(); focusCard(i);
       var sm = sessionSummary();
@@ -8047,15 +8122,17 @@ body.reporting #app { display: none; }
     }
     if (act === 'unapprove') {
       // من البطاقة المفتوحة: نحفظ اللي غيّرته في اللوحة، وتصير الحصة غير معتمدة وقابلة للتحرير
-      if (editDraft && editIdx === i && editRef === it) applyDraft(it, editDraft);
+      if (editDraft && editIdx === i && editRef === it) { applyDraft(it, editDraft); dropRowEdit(editDraft.sets); }
       editIdx = -1; editDraft = null; editRef = null; delIdx = -1;
       it.approved = false; persistSession(); renderList(); focusCard(i); toast('انلغى اعتماد ' + sessionLabel(i + 1) + '، تقدر تعدّلها');
     }
     if (act === 'edit') { delIdx = -1; editIdx = i; editRef = it; editDraft = cloneItem(it); renderList(); focusCard(i); }
-    if (act === 'ecancel') { editIdx = -1; editDraft = null; delIdx = -1; renderList(); focusCard(i); toast('ما تغيّر شي في ' + sessionLabel(i + 1)); }
+    if (act === 'ecancel') { if (editDraft) dropRowEdit(editDraft.sets); editIdx = -1; editDraft = null; delIdx = -1; renderList(); focusCard(i); toast('ما تغيّر شي في ' + sessionLabel(i + 1)); }
     if (act === 'esave' && editDraft && editIdx === i && editRef === it) {
       // الحصة المعتمدة تبقى معتمدة بعد الحفظ، بشرط تكون كل الجولات كاملة
       if (it.approved && !draftComplete(editDraft)) { toast('كمّل العدّات والوزن لكل جولة قبل الحفظ'); return; }
+      if (hasRowEdit(editDraft.sets)) { toast('احفظ تعديل الجولة بـ ✅ أول'); return; }
+      if (it.approved && !allSetsDone(editDraft)) { toast('اعتمد كل جولة بـ ✅ قبل الحفظ'); return; }
       applyDraft(it, editDraft);
       editIdx = -1; editDraft = null; delIdx = -1;
       var ok = persistSession(); renderList(); updateBadge(); focusCard(i);
@@ -8072,7 +8149,35 @@ body.reporting #app { display: none; }
   });
   function applyDraft(it, d) {
     it.exId = d.exId; it.count = d.count;
-    for (var k = 0; k < it.sets.length; k++) { it.sets[k].reps = d.sets[k].reps; it.sets[k].weight = d.sets[k].weight; }
+    for (var k = 0; k < it.sets.length; k++) { it.sets[k].reps = d.sets[k].reps; it.sets[k].weight = d.sets[k].weight; it.sets[k].done = !!d.sets[k].done; }
+  }
+  /* اعتماد جولة واحدة ✅ / فتحها بالقلم ✏️ / حفظ تعديلها / إلغاء التعديل.
+     الجولات الثانية ما تتأثر، وما نعيد بناء إلا صفوف هذي الحصة. اعتماد الحصة كاملة يبقى بزر «اعتماد الحصة». */
+  function setAction(act, i, it, s, m) {
+    var draft = m === 'edit';
+    if (draft && !(editDraft && editIdx === i && editRef === it)) return;
+    var obj = draft ? editDraft : it, st = obj.sets[s], n = s + 1;
+    if (!st || s >= (obj.count || 0)) return;
+    if (act === 'sdone') {
+      if (!st.reps || !st.weight) { toast('اختر العدّات والوزن لجولة ' + n + ' أول'); return; }
+      st.done = true;
+    }
+    if (act === 'sedit') { if (!st.done || rowEditOf(obj.sets, s)) return; rowEdits.push({ sets: obj.sets, s: s, reps: st.reps, weight: st.weight }); }
+    if (act === 'ssave') {
+      var re = rowEditOf(obj.sets, s); if (!re) return;
+      if (!re.reps || !re.weight) { toast('اختر العدّات والوزن لجولة ' + n + ' أول'); return; }
+      st.reps = re.reps; st.weight = re.weight; st.done = true; dropRowEdit(obj.sets, s);
+    }
+    if (act === 'scancel') dropRowEdit(obj.sets, s);
+    var ok = true;
+    if (!draft && (act === 'sdone' || act === 'ssave')) ok = persistSession();
+    var box = $((draft ? 'esets' : 'sets') + i); if (box) box.innerHTML = setRowsHtml(i, obj.count, obj.sets, draft ? 'edit' : 'live');
+    if (draft) { var en = $('enote' + i); if (en) en.innerHTML = editNoteHtml(i, it); }
+    else { var hn = $('hint' + i); if (hn) hn.innerHTML = hintHtml(it); refreshSummary(); }
+    // ما نعطي القوائم focus برمجيًا (Safari على الآيفون يفتحها)
+    var row = box && box.querySelectorAll('.setrow')[s]; if (row && row.scrollIntoView) { try { row.scrollIntoView({ block: 'nearest' }); } catch (e) {} }
+    if (act === 'sdone') toast(ok ? ('اعتُمدت جولة ' + n + ' ✅') : 'اعتُمدت الجولة، لكن الحفظ على الجهاز فشل');
+    if (act === 'ssave') toast(ok ? ('انحفظ تعديل جولة ' + n + ' ✅' + (draft ? ' (يتثبت بعد «حفظ»)' : '')) : 'انحفظ التعديل مؤقتًا، لكن الحفظ على الجهاز فشل');
   }
   function focusCard(i) { var c = document.querySelector('#items article[data-i="' + i + '"]'); if (c && c.scrollIntoView) { try { c.scrollIntoView({ block: 'nearest' }); } catch (e) {} } }
 
@@ -8204,7 +8309,9 @@ body.reporting #app { display: none; }
     $('histCount').textContent = history.length ? ('عدد التمارين المحفوظة: ' + history.length) : '';
     var w = $('histList');
     if (!history.length) { w.innerHTML = '<div class="card empty"><strong>ما فيه تمارين محفوظة</strong>لما تنهي تمرين اليوم من «تماريني» بزر «إنهاء … وحفظه في السجل»، ينحفظ هنا كمدخل واحد فيه كل حصصه.</div>'; return; }
-    w.innerHTML = history.map(function (r) {
+    // العرض من الأقدم (فوق) إلى الأحدث (تحت) حسب وقت بدء التمرين الفعلي. ترتيب البيانات المحفوظة نفسها ما يتغيّر.
+    var shown = history.slice().sort(function (a, b) { return (recTime(a) - recTime(b)) || ((a.savedAt || 0) - (b.savedAt || 0)); });
+    w.innerHTML = shown.map(function (r) {
       var day = recDay(r), legacy = !validDay(r.day);
       var title = day ? dayTitle(day) : 'تمرين يوم';
       var done = r.items.filter(function (x) { return x.approved; }).length;
@@ -8434,9 +8541,10 @@ body.reporting #app { display: none; }
     o.session.items.forEach(function (it) {
       if (!it || typeof it.exId !== 'string' || !exById(it.exId)) { dropped++; return; }
       var count = numOrNull(it.count, 1, 5, 1), sets = [];
-      for (var k = 0; k < 5; k++) { var st = (Array.isArray(it.sets) && it.sets[k]) || {}; sets.push({ reps: numOrNull(st.reps, 1, 30, 1), weight: numOrNull(st.weight, 5, 200, 5) }); }
+      for (var k = 0; k < 5; k++) { var st = (Array.isArray(it.sets) && it.sets[k]) || {}; sets.push({ reps: numOrNull(st.reps, 1, 30, 1), weight: numOrNull(st.weight, 1, 200, 1), done: st.done === true }); }
       var n = { exId: it.exId, addedAt: (typeof it.addedAt === 'number' ? it.addedAt : Date.now()), count: count, sets: sets, approved: false };
       n.approved = !!it.approved && isComplete(n);
+      normItem(n);
       sItems.push(n);
     });
     var sDay = validDay(o.session.day) ? o.session.day : (sItems.length ? inferDay(sItems.map(function (x) { return x.exId; })) : null);
