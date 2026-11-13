@@ -295,6 +295,11 @@ body.reporting #app { display: none; }
 .rp-c { break-inside: avoid; page-break-inside: avoid; margin: 8px 0; }
 .rp-c ul { margin: 2px 0; padding-right: 18px; }
 .rp-res { margin: 2px 0; font-weight: 600; }
+.rp-bar a.btn[aria-disabled="true"] { opacity: .55; pointer-events: none; }
+#rpPdfMsg.ok { color: var(--ok); } #rpPdfMsg.bad { color: var(--bad); }
+/* نسخة مخفية من ورقة التقرير بعرض محتوى صفحة A4، منها نرسم ملف PDF (نفس قواعد الطباعة) */
+.rp-pdf-box #reportSheet { border-radius: 0; padding: 0; max-width: none; margin: 0; font-size: 11pt; }
+.rp-pdf-box #reportSheet ul { list-style: none; }
 @media print {
   @page { size: A4; margin: 14mm 12mm; }
   html, body { background: #fff !important; }
@@ -469,9 +474,12 @@ body.reporting #app { display: none; }
 <!-- معاينة التقرير (صفحة A4 للطباعة / حفظ PDF) -->
 <div id="reportView" dir="rtl" lang="ar" hidden>
   <div class="rp-bar">
-    <button class="btn primary" id="rpPrint" type="button">طباعة / حفظ PDF</button>
+    <button class="btn primary" id="rpShare" type="button" disabled>حفظ / مشاركة PDF</button>
+    <a class="btn second" id="rpDownload" href="#" download hidden>فتح / تنزيل PDF</a>
+    <button class="btn second" id="rpPrint" type="button">طباعة</button>
     <button class="btn second" id="rpClose" type="button">رجوع للسجل</button>
     <div class="rp-file" id="reportFile"></div>
+    <div class="rp-file" id="rpPdfMsg" role="status" aria-live="polite"></div>
   </div>
   <article id="reportSheet"></article>
 </div>
@@ -8578,8 +8586,10 @@ body.reporting #app { display: none; }
     if (rpPrevTitle === null) rpPrevTitle = document.title;
     document.title = fileName; // Safari يستخدم عنوان الصفحة كاسم لملف PDF
     document.body.classList.add('reporting'); $('reportView').hidden = false; window.scrollTo(0, 0);
+    pdfPrepare(fileName, title);
   }
   function closeReport() {
+    pdfReset();
     $('reportView').hidden = true; document.body.classList.remove('reporting'); $('reportSheet').innerHTML = '';
     if (rpPrevTitle !== null) { document.title = rpPrevTitle; rpPrevTitle = null; }
     showTab('history');
@@ -8620,7 +8630,192 @@ body.reporting #app { display: none; }
     body += compareHtml(list);
     openReport('تقرير فترة: من ' + fmtKey(f) + ' إلى ' + fmtKey(t), 'GYM-GUIDE-تقرير-فترة-' + f + '-إلى-' + t, body);
   });
-  $('rpPrint').addEventListener('click', function () { try { window.print(); } catch (e) { toast('الطباعة مو متاحة هنا. افتح الموقع في Safari وجرّب.'); } });
+  /* ---------- ملف PDF فعلي (يشتغل داخل تطبيق الشاشة الرئيسية على الآيفون) ----------
+     السبب: داخل تطبيق الشاشة الرئيسية (display: standalone) ما يعرض iOS شاشة الطباعة، فـ window.print()
+     ما يسوي شي وما يعطي خطأ. الحل: نرسم ورقة التقرير نفسها (نفس الخطوط والجداول واتجاه RTL) على canvas
+     صفحة A4 صفحة، ونكتب منها ملف PDF، ونفتح قائمة المشاركة (حفظ في الملفات / أي تطبيق) أو ننزّله.
+     كل هذا على الجهاز بدون مكتبات أو خادم، وما نلمس التخزين. ملاحظة: نصوص الملف صور (ما تنحدد أو تنبحث). */
+  var PX_MM = 96 / 25.4, PDF_W = 210, PDF_H = 297, PDF_MX = 12, PDF_MY = 14, PDF_SCALE = 2;
+  var rpPdf = null, rpPdfJob = 0, rpPdfBox = null;
+  function isStandalone() { try { return window.navigator.standalone === true || !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches); } catch (e) { return false; } }
+  function pdfMsg(txt, cls) { var m = $('rpPdfMsg'); m.textContent = txt || ''; m.className = 'rp-file' + (cls ? ' ' + cls : ''); }
+  function pdfReset() {
+    rpPdfJob++;
+    if (rpPdf && rpPdf.url) { try { URL.revokeObjectURL(rpPdf.url); } catch (e) {} }
+    rpPdf = null;
+    if (rpPdfBox && rpPdfBox.parentNode) rpPdfBox.parentNode.removeChild(rpPdfBox);
+    rpPdfBox = null;
+    $('rpShare').disabled = true; var a = $('rpDownload'); a.hidden = true; a.removeAttribute('href'); pdfMsg('');
+  }
+  function alphaOf(c) { var m = /rgba?\(([^)]+)\)/.exec(c || ''); if (!m) return 0; var p = m[1].split(/[\s,\/]+/).filter(Boolean); return p.length > 3 ? parseFloat(p[3]) : 1; }
+  // نسخة من الورقة بعرض محتوى A4 (186 مم) خارج الشاشة، عشان المتصفح يرتّب الأسطر والجداول مثل الطباعة
+  function pdfLayoutBox() {
+    var box = document.createElement('div'); box.className = 'rp-pdf-box'; box.setAttribute('aria-hidden', 'true');
+    box.setAttribute('dir', 'rtl'); box.setAttribute('lang', 'ar'); // مثل #reportView (الـ body نفسه LTR)
+    box.style.cssText = 'position:absolute;left:-30000px;top:0;width:' + ((PDF_W - 2 * PDF_MX) * PX_MM) + 'px;pointer-events:none;';
+    var c = $('reportSheet').cloneNode(true); // نفس id عشان تنطبق قواعد الورقة؛ getElementById يرجع الأصل لأنه قبلها
+    Array.prototype.forEach.call(c.querySelectorAll('li'), function (li) { li.insertBefore(document.createTextNode('• '), li.firstChild); });
+    box.appendChild(c); document.body.appendChild(box); return box;
+  }
+  // نجمع اللي نرسمه: خلفيات، حدود، وأسطر النص (كل سطر بمكانه الفعلي)، ومناطق ما ينفع تنقسم بين صفحتين
+  function pdfCollect(box) {
+    var o = box.getBoundingClientRect(), ox = o.left, oy = o.top, rects = [], texts = [], keep = [];
+    var sheet = box.firstChild, els = [sheet].concat(Array.prototype.slice.call(sheet.querySelectorAll('*')));
+    els.forEach(function (el) {
+      var cs = getComputedStyle(el), r = el.getBoundingClientRect(); if (!r.width || !r.height || cs.visibility === 'hidden') return;
+      var x = r.left - ox, y = r.top - oy;
+      if (alphaOf(cs.backgroundColor) > 0) rects.push({ x: x, y: y, w: r.width, h: r.height, c: cs.backgroundColor });
+      var bt = parseFloat(cs.borderTopWidth) || 0, br = parseFloat(cs.borderRightWidth) || 0, bb = parseFloat(cs.borderBottomWidth) || 0, bl = parseFloat(cs.borderLeftWidth) || 0;
+      if (bt && cs.borderTopStyle !== 'none') rects.push({ x: x, y: y, w: r.width, h: bt, c: cs.borderTopColor });
+      if (bb && cs.borderBottomStyle !== 'none') rects.push({ x: x, y: y + r.height - bb, w: r.width, h: bb, c: cs.borderBottomColor });
+      if (bl && cs.borderLeftStyle !== 'none') rects.push({ x: x, y: y, w: bl, h: r.height, c: cs.borderLeftColor });
+      if (br && cs.borderRightStyle !== 'none') rects.push({ x: x + r.width - br, y: y, w: br, h: r.height, c: cs.borderRightColor });
+      if (el.tagName === 'TR') keep.push({ top: y, bottom: y + r.height });
+      if (el.classList.contains('rp-t') || el.classList.contains('rp-c')) keep.push({ top: y, bottom: y + r.height, soft: true }); // break-inside: avoid
+      if (/^H[1-3]$/.test(el.tagName)) keep.push({ top: y, bottom: y + r.height + 48, soft: true }); // العنوان ما يبقى آخر الصفحة لحاله
+    });
+    var tw = document.createTreeWalker(sheet, NodeFilter.SHOW_TEXT, null, false), node, rg = document.createRange();
+    while ((node = tw.nextNode())) {
+      var pe = node.parentElement, cs2 = getComputedStyle(pe), str = node.data; if (!str.trim()) continue;
+      var font = cs2.fontStyle + ' ' + cs2.fontWeight + ' ' + cs2.fontSize + ' ' + cs2.fontFamily, lines = [], cur = null;
+      for (var i = 0; i < str.length; i++) {
+        var n = (str.charCodeAt(i) >= 0xD800 && str.charCodeAt(i) <= 0xDBFF) ? 2 : 1;
+        rg.setStart(node, i); rg.setEnd(node, Math.min(str.length, i + n));
+        var rr = rg.getBoundingClientRect(), ch = str.substr(i, n); i += n - 1;
+        if (!rr.width && !rr.height) { if (cur) cur.s += ch; continue; }
+        if (!cur || Math.abs(rr.top - cur.top) > rr.height * 0.5) { cur = { s: '', top: rr.top, h: rr.height, l: Infinity, r: -Infinity }; lines.push(cur); }
+        cur.s += ch;
+        if (ch.trim()) { cur.l = Math.min(cur.l, rr.left); cur.r = Math.max(cur.r, rr.right); cur.h = Math.max(cur.h, rr.height); }
+      }
+      lines.forEach(function (ln) {
+        var t = ln.s.replace(/\s+/g, ' ').trim(); if (!t || ln.r < ln.l) return;
+        var rtl = cs2.direction === 'rtl';
+        texts.push({ t: t, x: (rtl ? ln.r : ln.l) - ox, top: ln.top - oy, h: ln.h, font: font, c: cs2.color, dir: rtl ? 'rtl' : 'ltr', ls: cs2.letterSpacing });
+        keep.push({ top: ln.top - oy, bottom: ln.top - oy + ln.h });
+      });
+    }
+    return { rects: rects, texts: texts, keep: keep, height: sheet.getBoundingClientRect().height };
+  }
+  // تقسيم الصفحات بدون ما نقص سطر أو صف جدول، ونحاول ما نقسم الجدول أو المقارنة (إذا تكفيها صفحة)
+  function pdfPaginate(keep, total, H) {
+    var pages = [], s = 0, guard = 0;
+    while (s < total - 0.5 && guard++ < 400) {
+      var e = s + H;
+      if (e >= total) e = total;
+      else {
+        for (var it = 0; it < 30; it++) {
+          var ne = e;
+          keep.forEach(function (k) { if (k.top > s + 1 && k.top < ne && k.bottom > ne && !(k.soft && k.bottom - k.top > H)) ne = k.top; });
+          if (ne === e) break; e = ne;
+        }
+        if (e <= s + 1) e = s + H;
+      }
+      pages.push([s, e]); s = e;
+    }
+    return pages;
+  }
+  function pdfDrawPage(ops, s, e) {
+    var cw = (PDF_W - 2 * PDF_MX) * PX_MM, cv = document.createElement('canvas');
+    cv.width = Math.round(PDF_W * PX_MM * PDF_SCALE); cv.height = Math.round(PDF_H * PX_MM * PDF_SCALE); cv.setAttribute('dir', 'rtl');
+    var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, cv.width, cv.height);
+    g.scale(PDF_SCALE, PDF_SCALE); g.translate(PDF_MX * PX_MM, PDF_MY * PX_MM);
+    g.beginPath(); g.rect(-1, 0, cw + 2, e - s); g.clip(); g.translate(0, -s);
+    ops.rects.forEach(function (r) { if (r.y > e || r.y + r.h < s) return; g.fillStyle = r.c; g.fillRect(r.x, r.y, r.w, r.h); });
+    g.textBaseline = 'alphabetic';
+    ops.texts.forEach(function (t) {
+      if (t.top < s - 0.5 || t.top >= e - 0.5) return;
+      g.font = t.font; g.fillStyle = t.c; try { g.direction = t.dir; } catch (x) {}
+      if ('letterSpacing' in g) { try { g.letterSpacing = (t.ls && t.ls !== 'normal') ? t.ls : '0px'; } catch (x) {} }
+      g.textAlign = t.dir === 'rtl' ? 'right' : 'left';
+      var m = g.measureText(t.t), asc = m.fontBoundingBoxAscent, desc = m.fontBoundingBoxDescent;
+      var base = (asc && desc) ? t.top + (t.h - (asc + desc)) / 2 + asc : t.top + t.h * 0.78;
+      g.fillText(t.t, t.x, base);
+    });
+    return cv;
+  }
+  function canvasJpeg(cv) {
+    return new Promise(function (res, rej) {
+      function fromBlob(b) { if (!b) { rej(new Error('jpeg')); return; } var fr = new FileReader(); fr.onload = function () { res(new Uint8Array(fr.result)); }; fr.onerror = rej; fr.readAsArrayBuffer(b); }
+      try { if (cv.toBlob) { cv.toBlob(fromBlob, 'image/jpeg', 0.9); return; } } catch (e) {}
+      try { var d = atob(cv.toDataURL('image/jpeg', 0.9).split(',')[1]), u = new Uint8Array(d.length); for (var i = 0; i < d.length; i++) u[i] = d.charCodeAt(i); res(u); } catch (e) { rej(e); }
+    });
+  }
+  function utf16Hex(str) { var h = 'FEFF'; for (var i = 0; i < str.length; i++) h += ('000' + str.charCodeAt(i).toString(16).toUpperCase()).slice(-4); return '<' + h + '>'; }
+  // ملف PDF بسيط: كل صفحة A4 فيها صورة JPEG وحدة
+  function pdfFile(jpegs, wPx, hPx, title) {
+    var enc = new TextEncoder(), parts = [], pos = 0, offs = [], W = '595.28', H = '841.89', n = jpegs.length, kids = [];
+    function add(x) { var b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); pos += b.length; }
+    add('%PDF-1.4\n%âãÏÓ\n');
+    for (var k = 0; k < n; k++) kids.push((4 + 3 * k) + ' 0 R');
+    offs[1] = pos; add('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+    offs[2] = pos; add('2 0 obj\n<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + n + ' >>\nendobj\n');
+    offs[3] = pos; add('3 0 obj\n<< /Title ' + utf16Hex(title) + ' /Producer (GYM GUIDE) >>\nendobj\n');
+    jpegs.forEach(function (jpg, i) {
+      var p = 4 + 3 * i, c = p + 1, im = p + 2, cs = 'q ' + W + ' 0 0 ' + H + ' 0 0 cm /Im' + i + ' Do Q';
+      offs[p] = pos; add(p + ' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + W + ' ' + H + '] /Resources << /XObject << /Im' + i + ' ' + im + ' 0 R >> >> /Contents ' + c + ' 0 R >>\nendobj\n');
+      offs[c] = pos; add(c + ' 0 obj\n<< /Length ' + cs.length + ' >>\nstream\n' + cs + '\nendstream\nendobj\n');
+      offs[im] = pos; add(im + ' 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + wPx + ' /Height ' + hPx + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n'); add(jpg); add('\nendstream\nendobj\n');
+    });
+    var size = 4 + 3 * n, xref = pos, x = 'xref\n0 ' + size + '\n0000000000 65535 f \n';
+    for (var j = 1; j < size; j++) x += ('000000000' + offs[j]).slice(-10) + ' 00000 n \n';
+    add(x + 'trailer\n<< /Size ' + size + ' /Root 1 0 R /Info 3 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
+    return new Blob(parts, { type: 'application/pdf' });
+  }
+  function waitFonts() {
+    try { if (document.fonts && document.fonts.ready) return document.fonts.ready.then(function () {}, function () {}); } catch (e) {}
+    return Promise.resolve();
+  }
+  // يبدأ تلقائيًا مع فتح التقرير، عشان زر المشاركة يفتح القائمة فورًا من أول ضغطة (iOS يطلب ضغطة مباشرة)
+  function pdfPrepare(fileName, title) {
+    pdfReset(); var job = rpPdfJob;
+    $('rpPrint').hidden = isStandalone(); // الطباعة ما تشتغل داخل تطبيق الشاشة الرئيسية
+    pdfMsg('جاري تجهيز ملف PDF…');
+    var name = fileName + '.pdf';
+    setTimeout(function () {
+      if (job !== rpPdfJob) return;
+      var box = rpPdfBox = pdfLayoutBox();
+      waitFonts().then(function () {
+        if (job !== rpPdfJob) return;
+        var ops = pdfCollect(box), pages = pdfPaginate(ops.keep, ops.height, (PDF_H - 2 * PDF_MY) * PX_MM), jpegs = [], wPx = 0, hPx = 0;
+        if (box.parentNode) box.parentNode.removeChild(box); rpPdfBox = null;
+        return pages.reduce(function (p, pg) {
+          return p.then(function () {
+            if (job !== rpPdfJob) throw new Error('cancel');
+            var cv = pdfDrawPage(ops, pg[0], pg[1]); wPx = cv.width; hPx = cv.height;
+            return canvasJpeg(cv).then(function (u) { jpegs.push(u); cv.width = cv.height = 0; });
+          });
+        }, Promise.resolve()).then(function () {
+          if (job !== rpPdfJob) return;
+          var blob = pdfFile(jpegs, wPx, hPx, title), file = null;
+          try { file = new File([blob], name, { type: 'application/pdf' }); } catch (e) {}
+          var url = URL.createObjectURL(blob), a = $('rpDownload');
+          rpPdf = { blob: blob, file: file, url: url, name: name, title: title, pages: jpegs.length };
+          a.href = url; a.setAttribute('download', name); a.hidden = false; $('rpShare').disabled = false;
+          pdfMsg('ملف PDF جاهز: ' + jpegs.length + (jpegs.length === 1 ? ' صفحة' : ' صفحات') + ' · \u2068' + Math.max(1, Math.round(blob.size / 1024)) + ' KB\u2069', 'ok');
+        });
+      }).catch(function (e) {
+        if (job !== rpPdfJob || (e && e.message === 'cancel')) return;
+        if (rpPdfBox && rpPdfBox.parentNode) rpPdfBox.parentNode.removeChild(rpPdfBox); rpPdfBox = null;
+        pdfMsg('تعذّر تجهيز ملف PDF على هذا الجهاز.' + (isStandalone() ? ' افتح الموقع في Safari واستخدم «طباعة».' : ' استخدم «طباعة».'), 'bad');
+        $('rpPrint').hidden = false;
+      });
+    }, 30);
+  }
+  $('rpShare').addEventListener('click', function () {
+    var p = rpPdf; if (!p) return;
+    // المشاركة لازم تنطلب مباشرة من الضغطة، فالملف جاهز مسبقًا
+    try {
+      if (p.file && navigator.share && navigator.canShare && navigator.canShare({ files: [p.file] })) {
+        navigator.share({ files: [p.file], title: p.title })
+          .then(function () { pdfMsg('تمت المشاركة. للحفظ اختر «حفظ في الملفات».', 'ok'); })
+          .catch(function (e) { if (e && e.name === 'AbortError') return; pdfMsg('ما انفتحت قائمة المشاركة. استخدم «فتح / تنزيل PDF».', 'bad'); });
+        return;
+      }
+    } catch (e) { /* ننزل للطريقة البديلة */ }
+    $('rpDownload').click();
+    pdfMsg('المشاركة مو مدعومة هنا، فبدأ تنزيل الملف. إذا ما ظهر شي، اضغط «فتح / تنزيل PDF».');
+  });
+  $('rpPrint').addEventListener('click', function () { try { window.print(); } catch (e) { toast('الطباعة مو متاحة هنا. استخدم «حفظ / مشاركة PDF».'); } });
   $('rpClose').addEventListener('click', closeReport);
 
   /* ---------- حذف السجل بالكامل (بعد تأكيد) ---------- */
