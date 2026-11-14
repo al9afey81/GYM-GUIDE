@@ -11,7 +11,6 @@ var CORE = [
  "icons/icon-512.png",
  "icons/apple-touch-icon.png",
  "img/hero.jpg",
- "img/anatomy/muscles-front-back.svg",
  "img/anatomy/body-front.jpg",
  "img/anatomy/body-back.jpg",
  "img/ek-0005-relaxation.png",
