@@ -2,7 +2,7 @@
    - الملفات الثابتة (الصور والأيقونات): من الذاكرة أول، وتتحدّث من الشبكة بالخلفية.
    - الصفحة نفسها: من الشبكة أول عشان توصلك التحديثات، وإذا ما فيه إنترنت تنفتح من الذاكرة.
    بيانات تمارينك مو هنا؛ هي في localStorage وما يلمسها هذا الملف. */
-var CACHE = 'gym-guide-v2';
+var CACHE = 'gym-guide-v3';
 var CORE = [
  "./",
  "index.html",
@@ -11,6 +11,8 @@ var CORE = [
  "icons/icon-512.png",
  "icons/apple-touch-icon.png",
  "img/hero.jpg",
+ "img/anatomy/body-front.jpg",
+ "img/anatomy/body-back.jpg",
  "img/ek-0005-relaxation.png",
  "img/ek-0005-tension.png",
  "img/ek-0008-relaxation.png",

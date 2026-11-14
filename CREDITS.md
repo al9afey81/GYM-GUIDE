@@ -99,6 +99,13 @@
 | 0216 | Hammer Curls with Rope and Cable | هامر كيرل بالحبل والكيبل (`rope-hammer-curl`) |
 | 0257 | Biceps Curl: Dumbbell (Reverse) | كيرل عكسي بالدمبل (`reverse-curl`) |
 
+## الرسم التشريحي لـ«دليل العضلات» / Anatomy figure
+- **الملفات:** `img/anatomy/muscles-front-back.svg` (منظر أمامي وخلفي للعضلات)، و`img/anatomy/body-front.jpg` و`img/anatomy/body-back.jpg` (نفس الرسم محوّل إلى صورة رمادية جاهزة، لكل منظر صورة، عشان يظهر الجسم كامل في كل المتصفحات).
+- **المصدر / Source:** [Wikimedia Commons: Muscles front and back.svg](https://commons.wikimedia.org/wiki/File:Muscles_front_and_back.svg)
+- **صاحب العمل / Author:** OpenStax (الرسم الأصلي)، أعاد رسمه وعدّله Tomáš Kebert وumimeto.org.
+- **الترخيص / License:** [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — نسخة من نص الترخيص في [img/LICENSE-CC-BY-SA-4.0.md](img/LICENSE-CC-BY-SA-4.0.md).
+- **التعديلات / Changes:** الملف نفسه منسوخ بدون تعديل. التطبيق يعرض صورتي `body-front.jpg` و`body-back.jpg` (نفس الرسم بعد تحويله للرمادي)، وفوقها مناطق حمراء رسمها GYM GUIDE لتحديد كل جزء عضلي في كل منظر (مخزّنة في بيانات `gg-muscles` داخل `index.html`)، والأجزاء العميقة بخط متقطع. ملف SVG الأصلي باقي في المستودع كمصدر للصورتين. هذي المناطق عمل مشتق ومتاحة بنفس الترخيص CC BY-SA 4.0.
+
 ## ما لم يُستخدم
 لم تُستخدم صور free-exercise-db في هذه النسخة، لأن حقوق صورها غير مؤكدة.
 
