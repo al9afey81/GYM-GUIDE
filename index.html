@@ -341,6 +341,7 @@ body.muscles-on main { padding-top: 14px; }
 .mg-bv svg { display: block; width: 100%; height: auto; max-height: 74vh; }
 .mg-bv figcaption { font-size: 12.5px; font-weight: 700; color: #37474f; padding: 4px 2px 2px; text-align: center; }
 .mg-bv.none figcaption { color: #607d8b; font-weight: 500; }
+.mg-imgerr { margin: 6px 4px 2px; font-size: 12.5px; font-weight: 700; color: #b71c1c; text-align: center; }
 .mg-fig2 .mg-hl { fill: #e0202e; fill-opacity: .9; stroke: #8a0d16; stroke-width: 1.2px; vector-effect: non-scaling-stroke; }
 .mg-fig2 .mg-deep { stroke: #c1121f; stroke-width: 1.4px; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
 .mg-figbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
@@ -9197,7 +9198,14 @@ body.muscles-on main { padding-top: 14px; }
     if (el && !el.hidden && el.scrollIntoView) { try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); } }
   });
   $('v-muscles').addEventListener('error', function (ev) {
-    var img = ev.target; if (!img || img.tagName !== 'IMG') return;
+    var img = ev.target;
+    // صورة الجسم ما تحمّلت (انقطاع اتصال مثلًا): رسالة واضحة بدل مساحة بيضاء فيها الأحمر بس
+    if (img && img.tagName && img.tagName.toLowerCase() === 'image') {
+      var fig = img.closest ? img.closest('.mg-bv') : null;
+      if (fig && !fig.querySelector('.mg-imgerr')) { fig.classList.add('err'); fig.insertAdjacentHTML('beforeend', '<p class="mg-imgerr" role="alert">تعذّر تحميل صورة الجسم. تأكد من الاتصال وافتح الصفحة من جديد.</p>'); }
+      return;
+    }
+    if (!img || img.tagName !== 'IMG') return;
     var fb = document.createElement('div'); fb.className = 'noimg'; fb.style.gridColumn = 'auto'; fb.style.aspectRatio = '4 / 3';
     fb.innerHTML = '<strong>صورة غير متوفرة</strong>';
     if (img.parentNode) img.parentNode.replaceChild(fb, img);
