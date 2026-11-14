@@ -9153,28 +9153,51 @@ body.muscles-on main { padding-top: 14px; }
     h += '<p class="imgnote">رسومات التمارين: <bdi dir="ltr">Everkinetic (Greg Priday)</bdi>، ترخيص <bdi dir="ltr">CC BY-SA 4.0</bdi>، نفس صور «الدليل».</p>';
     return h;
   }
-  // النطق الصوتي المدمج في المتصفح (بدون خدمات خارجية). على الآيفون لازم يبدأ من ضغطة، وهذا اللي يصير هنا.
-  var mgVoice = null;
+  /* النطق الصوتي المدمج في المتصفح (بدون خدمات خارجية).
+     ملاحظات iOS Safari (المتصفح وتطبيق الشاشة الرئيسية):
+     - النطق لازم يبدأ مباشرة من الضغطة، فـ speak() تنطلب داخل حدث الضغط نفسه.
+     - cancel() ثم speak() بنفس اللحظة يضيّع الجملة الجديدة بدون أي خطأ، فما نلغي إلا إذا فيه كلام شغال، ونأخر الجملة الجديدة شوي.
+     - قائمة الأصوات توصل متأخر، فنختار الصوت وقت الضغط من القائمة الحالية، ونتجنب الأصوات الغريبة.
+     - بعد ما يرجع التطبيق من الخلفية ممكن يبقى النطق «موقف»، فنكمّله بـ resume().
+     - الوضع الصامت في الآيفون يكتم النطق، فإذا ما بدأ الصوت نطلع رسالة توضيحية. */
+  var mgUtter = null, mgWatch = null; // نحتفظ بالجملة عشان ما تضيع أحداثها قبل ما تخلص
+  var MG_ODD = /albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley/i;
   function mgPickVoice() {
     try {
       var vs = window.speechSynthesis.getVoices() || [];
-      var en = vs.filter(function (v) { return /^en[-_]US/i.test(v.lang); });
-      if (!en.length) en = vs.filter(function (v) { return /^en/i.test(v.lang); });
-      mgVoice = en.filter(function (v) { return /samantha|alex|google us english/i.test(v.name); })[0] || en.filter(function (v) { return v.localService; })[0] || en[0] || null;
-    } catch (e) { mgVoice = null; }
+      var en = vs.filter(function (v) { return /^en[-_]US/i.test(v.lang) && !MG_ODD.test(v.name); });
+      if (!en.length) en = vs.filter(function (v) { return /^en/i.test(v.lang) && !MG_ODD.test(v.name); });
+      return en.filter(function (v) { return /samantha|alex|ava|allison|susan|nicky|google us english/i.test(v.name); })[0] ||
+        en.filter(function (v) { return v.localService; })[0] || en[0] || null;
+    } catch (e) { return null; }
   }
-  if ('speechSynthesis' in window) { mgPickVoice(); try { window.speechSynthesis.addEventListener('voiceschanged', mgPickVoice); } catch (e) {} }
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.getVoices(); } catch (e) {} // يطلب تحميل الأصوات مبكرًا
+    try { if (window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', function () {}); } catch (e) {}
+  }
+  function mgSpeakDone(btn) { clearTimeout(mgWatch); if (btn) btn.classList.remove('on'); }
   function mgSpeak(text, btn) {
     if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) { toast('النطق الصوتي غير مدعوم في هذا المتصفح'); return; }
-    var ss = window.speechSynthesis;
-    try { ss.cancel(); } catch (e) {}
-    if (!mgVoice) mgPickVoice();
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = (mgVoice && mgVoice.lang) || 'en-US'; u.rate = 0.82; u.pitch = 1;
-    if (mgVoice) u.voice = mgVoice;
-    u.onstart = function () { if (btn) btn.classList.add('on'); };
-    u.onend = u.onerror = function () { if (btn) btn.classList.remove('on'); };
-    ss.speak(u);
+    var ss = window.speechSynthesis, started = false;
+    var u = new SpeechSynthesisUtterance(text), v = mgPickVoice();
+    u.lang = (v && v.lang) || 'en-US'; u.rate = 0.85; u.pitch = 1; u.volume = 1;
+    if (v) { try { u.voice = v; } catch (e) {} } // صوت غير صالح؟ نكمل بلغة en-US
+    u.onstart = function () { started = true; if (btn) btn.classList.add('on'); };
+    u.onend = function () { mgSpeakDone(btn); };
+    u.onerror = function (e) { mgSpeakDone(btn); if (e && (e.error === 'interrupted' || e.error === 'canceled')) return; toast('تعذّر تشغيل النطق. جرّب مرة ثانية.'); };
+    mgUtter = u;
+    var go = function () {
+      try { if (ss.paused) ss.resume(); } catch (e) {}
+      ss.speak(u);
+      clearTimeout(mgWatch);
+      mgWatch = setTimeout(function () { // ما بدأ الصوت خلال ثانيتين
+        if (started || ss.speaking) return;
+        mgSpeakDone(btn);
+        toast('ما اشتغل الصوت: تأكد إن الآيفون مو على الوضع الصامت وإن الصوت مرفوع.');
+      }, 2000);
+    };
+    if (ss.speaking || ss.pending) { try { ss.cancel(); } catch (e) {} setTimeout(go, 150); }
+    else go(); // أول ضغطة: نبدأ فورًا داخل الضغطة نفسها (شرط iOS)
   }
   $('v-muscles').addEventListener('click', function (ev) {
     var t = ev.target.closest ? ev.target.closest('button') : null; if (!t) return;
