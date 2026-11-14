@@ -2,7 +2,7 @@
    - الملفات الثابتة (الصور والأيقونات): من الذاكرة أول، وتتحدّث من الشبكة بالخلفية.
    - الصفحة نفسها: من الشبكة أول عشان توصلك التحديثات، وإذا ما فيه إنترنت تنفتح من الذاكرة.
    بيانات تمارينك مو هنا؛ هي في localStorage وما يلمسها هذا الملف. */
-var CACHE = 'gym-guide-v3';
+var CACHE = 'gym-guide-v4';
 var CORE = [
  "./",
  "index.html",
@@ -13,6 +13,27 @@ var CORE = [
  "img/hero.jpg",
  "img/anatomy/body-front.jpg",
  "img/anatomy/body-back.jpg",
+ "audio/muscles/upper-chest.mp3",
+ "audio/muscles/middle-chest.mp3",
+ "audio/muscles/lower-chest.mp3",
+ "audio/muscles/front-delts.mp3",
+ "audio/muscles/side-delts.mp3",
+ "audio/muscles/rear-delts.mp3",
+ "audio/muscles/triceps.mp3",
+ "audio/muscles/lats.mp3",
+ "audio/muscles/traps.mp3",
+ "audio/muscles/mid-back.mp3",
+ "audio/muscles/lower-back.mp3",
+ "audio/muscles/biceps.mp3",
+ "audio/muscles/forearms.mp3",
+ "audio/muscles/quads.mp3",
+ "audio/muscles/hamstrings.mp3",
+ "audio/muscles/adductors.mp3",
+ "audio/muscles/abductors.mp3",
+ "audio/muscles/glutes.mp3",
+ "audio/muscles/hip-flexors.mp3",
+ "audio/muscles/calves.mp3",
+ "audio/muscles/tibialis.mp3",
  "img/ek-0005-relaxation.png",
  "img/ek-0005-tension.png",
  "img/ek-0008-relaxation.png",
@@ -199,6 +220,9 @@ self.addEventListener('fetch', function (e) {
   var url = new URL(req.url);
   var isFont = /(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if (url.origin !== location.origin && !isFont) return;
+  // الصوت (MP3): Safari على الآيفون يطلب الملف بأجزاء (Range) ويتوقع 206، فنقطّع الملف المحفوظ له.
+  // باقي الطلبات ما تتغيّر.
+  if (req.headers.get('range')) { e.respondWith(rangeResponse(req)); return; }
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).then(function (r) {
       var copy = r.clone(); caches.open(CACHE).then(function (c) { c.put('index.html', copy); }); return r;
@@ -213,3 +237,24 @@ self.addEventListener('fetch', function (e) {
     return hit || net;
   }));
 });
+
+function rangeResponse(req) {
+  return caches.open(CACHE).then(function (c) {
+    return c.match(req.url).then(function (hit) {
+      if (hit) return hit;
+      return fetch(req.url).then(function (r) { if (r && r.ok) c.put(req.url, r.clone()); return r; });
+    });
+  }).then(function (r) {
+    if (!r || !r.ok) return fetch(req);
+    var type = r.headers.get('Content-Type') || 'audio/mpeg';
+    return r.arrayBuffer().then(function (buf) {
+      var total = buf.byteLength, m = /bytes=(\d*)-(\d*)/.exec(req.headers.get('range') || '');
+      var start = m && m[1] ? parseInt(m[1], 10) : 0, end = m && m[2] ? parseInt(m[2], 10) : total - 1;
+      if (m && !m[1] && m[2]) { start = Math.max(0, total - parseInt(m[2], 10)); end = total - 1; } // bytes=-N
+      end = Math.min(end, total - 1);
+      if (start > end || start >= total) return new Response(null, { status: 416, headers: { 'Content-Range': 'bytes */' + total } });
+      return new Response(buf.slice(start, end + 1), { status: 206, statusText: 'Partial Content', headers: {
+        'Content-Type': type, 'Content-Range': 'bytes ' + start + '-' + end + '/' + total, 'Content-Length': String(end - start + 1), 'Accept-Ranges': 'bytes' } });
+    });
+  }).catch(function () { return fetch(req); });
+}
